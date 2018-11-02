@@ -5,7 +5,7 @@ The user should be able to navigate to http://proj-319-048.misc.iastate.edu/ and
 Should contain links to the login and creating an account.
 
 Test 2: Successful Login
-The user should be able to login using rh as username and black12 as password.  The page should redirect to the user's home page.
+The user should be able to login using rh as username and abc as password.  The page should redirect to the user's home page.
 
 Test 3: Unsuccessful Login
 The user should attempt to login with an incorrect password.  The login page should return an error indicating the username/password wrong.

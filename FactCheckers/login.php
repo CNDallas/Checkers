@@ -16,7 +16,7 @@
     if($matches == 1){
       #session_register("user");
       $_SESSION['login'] = $user;
-      header("Location: home.php");
+      header("Location: userHome.html");
       #die();
       #$error = "correct";
     }
