@@ -5,16 +5,17 @@
   if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = mysqli_real_escape_string($database, $_POST['username']);
-    $pass = mysqli_real_escape_string($database, $_POST['password']);
+    $textpass = mysqli_real_escape_string($database, $_POST['password']);
 
-    $mysql = "SELECT idusers FROM users WHERE username = '$user' and password = '$pass'";
+    $mysql = "SELECT * FROM users WHERE username = '$user'";
     $result = mysqli_query($database, $mysql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     $matches = mysqli_num_rows($result);
 
-    if($matches == 1){
+    if($matches == 1 && password_verify($textpass, $row['password'])){
       #session_register("user");
+    
       $_SESSION['login'] = $user;
       header("Location: userHome.html");
       die();

@@ -26,7 +26,7 @@
       array_push($error, "Passwords do not match");
     }
 
-    $mysql = "SELECT idusers FROM users WHERE username = '$user' OR email = '$email'";
+    $mysql = "SELECT * FROM users WHERE username = '$user' OR email = '$email' LIMIT 1";
     $result = mysqli_query($database, $mysql);
     $userexists = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -77,7 +77,12 @@
       <input type="submit" value="Submit" />
     </fieldset>
   </form>
-
+  <div style = "font-size:11px; color:#cc0000; margin-top:10px"><p>
+    <?php
+      foreach ($error as $key => $err) {
+        echo "$err<br>";
+      }
+    ?></p></div>
 
 </body>
 </html>
