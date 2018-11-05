@@ -17,7 +17,7 @@
       #session_register("user");
       $_SESSION['login'] = $user;
       header("Location: userHome.html");
-      #die();
+      die();
       #$error = "correct";
     }
     else {
@@ -40,10 +40,10 @@
      <fieldset>
        <legend>Login</legend>
        <label for="username">Username:</label>
-       <input type="text" name="username" id="username" maxlength="16"/>
+       <input type="text" name="username" id="username" maxlength="16" required/>
 
        <label for="password">Password:</label>
-       <input type="password" name="password" id="password" maxlength="16"/>
+       <input type="password" name="password" id="password" maxlength="16" required/>
 
        <input type="submit" value="Submit" />
      </fieldset>
