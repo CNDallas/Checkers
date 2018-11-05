@@ -26,21 +26,28 @@
       array_push($error, "Passwords do not match");
     }
 
-    $mysql = "SELECT idusers FROM users WHERE username = '$user' and password = '$pass'";
+    $mysql = "SELECT idusers FROM users WHERE username = '$user' OR email = '$email'";
     $result = mysqli_query($database, $mysql);
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $userexists = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-    $matches = mysqli_num_rows($result);
-
-    if($matches == 1){
-      #session_register("user");
-      $_SESSION['login'] = $user;
-      header("Location: userHome.html");
-      die();
-      #$error = "correct";
+    if($userexists){
+      if($userexists['username'] === $user){
+        array_push($error, "Username taken already");
+      }
+      if($userexists['email'] === $email){
+        array_push($error, "Email already associated with an account");
+      }
     }
-    else {
-      $error = "Incorrect username/password";
+
+
+    if(count($error) == 0){
+      $passtostore = password_hash($pass, PASSWORD_DEFAULT);
+      $sqlquery = "INSERT INTO users (username, password, email)
+                   VALUES('$user', '$passtostore', '$email')";
+      mysqli_query($database, $sqlquery);
+      $_SESSION['username'] = $user;
+      $_SESSION['message'] = "Added user to database";
+      header('location: userHome.html');
     }
 
   }
