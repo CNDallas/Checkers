@@ -2,6 +2,10 @@
   include("config.php");
   session_start();
   #header("location: userHome.html");
+  if(isset($_SESSION['login'])){
+     header("Location: userHome.php");
+  }
+
   if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = mysqli_real_escape_string($database, $_POST['username']);
@@ -15,9 +19,9 @@
 
     if($matches == 1 && password_verify($textpass, $row['password'])){
       #session_register("user");
-    
+
       $_SESSION['login'] = $user;
-      header("Location: userHome.html");
+      header("Location: userHome.php");
       die();
       #$error = "correct";
     }
@@ -28,15 +32,17 @@
   }
 
  ?>
- <html>
+ <!DOCTYPE html>
+ <html lang="en">
  <head>
-   <title>Fact Checkers</title>
+     <meta charset="UTF-8">
+     <title>Logint</title>
  </head>
  <body>
    <h1>Fact Checkers - Login</h1>
-   <p>Use rh as username and abc as password </p>
+   <p>Haven't created an account yet? <a href="new_account.php">Register now!</a></p>
+   <!--<p><a href="reset.php">Forgot Password?</a></p>-->
 
-   <p>TODO: Create an Account</p>
    <form action="" method="POST">
      <fieldset>
        <legend>Login</legend>
@@ -49,6 +55,16 @@
        <input type="submit" value="Submit" />
      </fieldset>
    </form>
-    <div style = "font-size:11px; color:#cc0000; margin-top:10px"><p><?php echo $error;?></p></div>
+    <div style = "font-size:12px; color:#cc0000; margin-top:10px">
+      <p>
+        <?php echo $error;?>
+      </p>
+    </div>
+
+    <div id="backhome">
+      <br>
+      <br>
+      <a href="index.html">Home</a>
+    </div>
  </body>
 </html>

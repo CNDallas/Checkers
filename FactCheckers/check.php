@@ -8,9 +8,9 @@
    $result = mysqli_fetch_array($sql,MYSQLI_ASSOC);
 
    $matches = mysqli_num_rows($result);
-  
 
-   if(!isset($_SESSION['login']) || $row == 1){
+
+   if(!isset($_SESSION['login']) || $row == 0){
       header("Location: login.php");
    }
 ?>
