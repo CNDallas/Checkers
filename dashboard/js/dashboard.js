@@ -1,3 +1,11 @@
+import react, {Component } from 'react';
+
+class dashboard extends component {
+    render(){
+        //the webpage and what not
+    }
+}
+
 var socket = io('/dashboard');
 var games = {};
 var onlineUsers = {};
@@ -24,7 +32,7 @@ socket.on('joinLobby', (userID)=>{
    // updateUserList();
 });
 
-
+export default dashboard;
 
 
 // var updateUserList = function() {
