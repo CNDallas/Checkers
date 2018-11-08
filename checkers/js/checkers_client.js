@@ -25,9 +25,9 @@ function initBoard() {
     if ((Math.floor(i / 8) % 2) != (i % 2)) {
       cell.style.backgroundColor = "black";
       if (i < 24) {
-        cell.innerHTML = '<img src="img/p1_img.png"/>';
+        cell.innerHTML = '<img src="/img/p1_img.png"/>';
       } else if (i >= 40) {
-        cell.innerHTML = '<img src="img/p2_img.png"/>';
+        cell.innerHTML = '<img src="/img/p2_img.png"/>';
       }
     } else {
       cell.backgroundColor = "white";
@@ -38,7 +38,7 @@ function initBoard() {
 function selectCell(cell) {
   if (cell.style.backgroundColor == "black") {
     if (selectedCell != null) {
-      if (selectedCell != cell) {
+      if (selectedCell != cell&&isValid(selectedCell, cell)) {
         doMove(selectedCell, cell);
       }
       selectedCell.style.borderColor = "";
@@ -51,7 +51,10 @@ function selectCell(cell) {
       selectedCell = null;
     }
 }
-
+function isValid(origin,destination)
+{
+	return (destination.innerHTML == ""&&(Math.abs(parseInt(origin.id.substr(4))-parseInt(destination.id.substr(4)))===7||Math.abs(parseInt(origin.id.substr(4))-parseInt(destination.id.substr(4)))===9));
+}
 function doMove(origin, destination) {
   if (destination.innerHTML == "") {
     destination.innerHTML = origin.innerHTML;
