@@ -7,7 +7,7 @@
 <body>
 
   <h1><?php echo "$user's Home"; ?></h1>
-  <p>Find Game</p>
+  <a href="dashboard.html">Find Game</a>
   <a href="logout.php">Logout</a>
 </body>
 </html>

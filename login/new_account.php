@@ -4,7 +4,8 @@
   $error = array();
 
   if(isset($_SESSION['login'])){
-     header("Location: userHome.php");
+     header("Location: ../dashboard/userHome.php");
+     die();
   }
 
   if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -51,7 +52,8 @@
       mysqli_query($database, $sqlquery);
       $_SESSION['login'] = $user;
       $_SESSION['message'] = "Added user to database";
-      header('location: userHome.php');
+      header('location: ../dashboard/userHome.php');
+      die();
     }
 
   }

@@ -3,7 +3,8 @@
   session_start();
   #header("location: userHome.html");
   if(isset($_SESSION['login'])){
-     header("Location: userHome.php");
+     header("Location: ../dashboard/userHome.php");
+    die();
   }
 
   if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -21,7 +22,7 @@
       #session_register("user");
 
       $_SESSION['login'] = $user;
-      header("Location: userHome.php");
+      header("Location: ../dashboard/userHome.php");
       die();
       #$error = "correct";
     }
@@ -41,13 +42,13 @@
  <body>
    <h1>Fact Checkers - Login</h1>
    <p>Haven't created an account yet? <a href="new_account.php">Register now!</a></p>
-   <!--<p><a href="reset.php">Forgot Password?</a></p>-->
+
 
    <form action="" method="POST">
      <fieldset>
        <legend>Login</legend>
        <label for="username">Username:</label>
-       <input type="text" name="username" id="username" maxlength="16" required/>
+       <input type="text" name="username" id="username" value="<?php echo $user; ?>" maxlength="16" required/>
 
        <label for="password">Password:</label>
        <input type="password" name="password" id="password" maxlength="16" required/>

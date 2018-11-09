@@ -1,14 +1,14 @@
-import react, {Component } from 'react';
-
-class checkers extends component {
-	render(){
-		//the webpage and what not
-	}
-}
-
-var socket = io('/checkers');
-
-export default checkers;
+// import react, {Component } from 'react';
+//
+// class checkers extends component {
+// 	render(){
+// 		//the webpage and what not
+// 	}
+// }
+//
+// var socket = io('/checkers');
+//
+// export default checkers;
 
 var selectedCell = null;
 
@@ -25,9 +25,9 @@ function initBoard() {
     if ((Math.floor(i / 8) % 2) != (i % 2)) {
       cell.style.backgroundColor = "black";
       if (i < 24) {
-        cell.innerHTML = '<img src="/img/p1_img.png"/>';
+        cell.innerHTML = '<img src="img/p1_img.png"/>';
       } else if (i >= 40) {
-        cell.innerHTML = '<img src="/img/p2_img.png"/>';
+        cell.innerHTML = '<img src="img/p2_img.png"/>';
       }
     } else {
       cell.backgroundColor = "white";
