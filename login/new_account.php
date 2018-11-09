@@ -31,6 +31,14 @@
       array_push($error, "Passwords do not match");
     }
 
+    if(strlen($user) < 3){
+      array_push($error, "Username needs to be at least 3 characters");
+    }
+
+    if(strlen($user) > 16){
+      array_push($error, "Username can not be more than 16 characters");
+    }
+
     $mysql = "SELECT * FROM users WHERE username = '$user' OR email = '$email' LIMIT 1";
     $result = mysqli_query($database, $mysql);
     $userexists = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -63,7 +71,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New Account</title>
+    <title>Fact Checkers - Register</title>
 </head>
 <body>
   <h1>Fact Checkers - Register</h1>
@@ -72,13 +80,13 @@
     <fieldset>
       <legend>Register</legend>
       <label for="username">Username:</label>
-      <input type="text" name="username" id="username" value="<?php echo $user; ?>" maxlength="16" minlength="3" required pattern="[a-zA-Z0-9]+"/>
+      <input type="text" name="username" id="username" value="<?php echo $user; ?>" maxlength="16" minlength="3" required pattern="[a-zA-Z0-9]+{3,16}"/>
       <br>
       <label for="password">Password:</label>
-      <input type="password" name="password" id="password" maxlength="16" minlength="6" required pattern="[a-zA-Z0-9]+"/>
+      <input type="password" name="password" id="password" maxlength="16" minlength="6" required pattern="[a-zA-Z0-9]+{6,16}"/>
       <br>
       <label for="password2">Confirm Password:</label>
-      <input type="password" name="password2" id="password2" maxlength="16" minlength="6" required pattern="[a-zA-Z0-9]+"/>
+      <input type="password" name="password2" id="password2" maxlength="16" minlength="6" required pattern="[a-zA-Z0-9]+{6,16}"/>
       <br>
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" maxlength ="80" required/>

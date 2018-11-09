@@ -37,7 +37,7 @@
  <html lang="en">
  <head>
      <meta charset="UTF-8">
-     <title>Logint</title>
+     <title>Fact Checkers - Login</title>
  </head>
  <body>
    <h1>Fact Checkers - Login</h1>

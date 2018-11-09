@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class LoginPageTests {
+public class RegisterPageTests {
 
 	/*
 	public static void main(String[] args) {
@@ -68,24 +68,18 @@ public class LoginPageTests {
 		driver.close();
 	}
 	
-	@Test
-	public void visitLogin() {
-		driver.get("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Login")).click();
-        
-		assertEquals("Can't get from index.html to login", driver.getCurrentUrl(), "http://proj-319-048.misc.iastate.edu/login/login.php");
-		
-	}
+
 	
 	@Test
-	public void navigateToLoginFromRegister() {
+	public void navigateToRegisterFromLogin() {
 		driver.get("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Create an Account")).click();
-        driver.findElement(By.partialLinkText("Login")).click();
+		driver.findElement(By.linkText("Login")).click();
+        driver.findElement(By.partialLinkText("Register")).click();
+        
         
         driver.getTitle();
         
-		assertEquals("Can't get from register page to login", "Fact Checkers - Login", driver.getTitle());
+		assertEquals("Can't get from login page to register", "Fact Checkers - Register", driver.getTitle());
 	}
 	
 	@Test
@@ -98,21 +92,68 @@ public class LoginPageTests {
 	}
 	
 	@Test
-	public void badPassword() {
+	public void registerNewUser() {
 		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Login")).click();
+        driver.findElement(By.linkText("Create an Account")).click();
 		element = driver.findElement(By.name("username"));
-		element.sendKeys("rhilb11");
+		element.sendKeys("selenium2");
 		element = driver.findElement(By.name("password"));
-		element.sendKeys("password");
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("password2"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("email"));
+		element.sendKeys("selenium2@selenium2.com");
 		element.submit();
 		
-		assertTrue("Login did not return incorrect password error",
-				driver.getPageSource().contains("Incorrect username/password"));
-		assertEquals("Not at login page", "Fact Checkers - Login", driver.getTitle());
+		
+		
+		assertEquals("Not at user home page", "Home", driver.getTitle());
+		assertTrue("Home doesn't contain username", driver.getPageSource().contains("selenium2"));
+		
+		driver.navigate().to("http://proj-319-048.misc.iastate.edu/login/deleteUser.php");
+		driver.navigate().to("http://proj-319-048.misc.iastate.edu/dashboard/logout.php");
+		
 		
 	}
 	
+	@Test
+	public void validationUsername() {
+		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
+        driver.findElement(By.linkText("Create an Account")).click();
+		
+		element = driver.findElement(By.name("username"));
+		element.sendKeys("as");	//too short
+		element = driver.findElement(By.name("password"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("password2"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("email"));
+		element.sendKeys("selenium2@selenium2.com");
+		element.submit();
+        
+		assertEquals("Not at registration page", "Fact Checkers - Register", driver.getTitle());
+        
+		
+        
+        element = driver.findElement(By.name("username"));
+        element.clear();
+		element.sendKeys("selenium");	//selenium already taken
+		element = driver.findElement(By.name("password"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("password2"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("email"));
+		element.sendKeys("selenium2@selenium2.com");
+		element.submit();
+		
+		
+		
+		assertTrue("Username taken error did not appear", driver.getPageSource().contains(
+				"Username taken already"));
+		assertEquals("Not at registration page", "Fact Checkers - Register", driver.getTitle());
+			
+	}
+	/*
 	@Test
 	public void invalidUsername() {
 		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
@@ -167,6 +208,6 @@ public class LoginPageTests {
 		
 		assertEquals("Logout unsucessful", "Fact Checkers", driver.getTitle());
 	}
-	
+	*/
 
 }
