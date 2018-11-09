@@ -13,46 +13,6 @@ import static org.junit.Assert.*;
 
 public class RegisterPageTests {
 
-	/*
-	public static void main(String[] args) {
-        // Create a new instance of the Firefox driver
-        // Notice that the remainder of the code relies on the interface, 
-        // not the implementation.
-		System.setProperty("webdriver.chrome.driver", "C:/Program Files/apache-maven-3.6.0/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-
-        // And now use this to visit Google
-        driver.get("http://www.google.com");
-        // Alternatively the same thing can be done like this
-        // driver.navigate().to("http://www.google.com");
-
-        // Find the text input element by its name
-        WebElement element = driver.findElement(By.name("q"));
-
-        // Enter something to search for
-        element.sendKeys("Cheese!");
-
-        // Now submit the form. WebDriver will find the form for us from the element
-        element.submit();
-
-        // Check the title of the page
-        System.out.println("Page title is: " + driver.getTitle());
-        
-        // Google's search is rendered dynamically with JavaScript.
-        // Wait for the page to load, timeout after 10 seconds
-        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getTitle().toLowerCase().startsWith("cheese!");
-            }
-        });
-
-        // Should see: "cheese! - Google Search"
-        System.out.println("Page title is: " + driver.getTitle());
-        
-        //Close the browser
-        driver.quit();
-    }
-	*/
 	
  	private static WebDriver driver;
  	WebElement element;
@@ -287,61 +247,35 @@ public class RegisterPageTests {
 		
 	}
 	
-	/*
 	@Test
-	public void invalidUsername() {
+	public void redirectUserAlreadyRegistered() {
 		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Login")).click();
+        driver.findElement(By.linkText("Create an Account")).click();
 		element = driver.findElement(By.name("username"));
-		element.sendKeys("banjo");
+		element.sendKeys("selenium2");
 		element = driver.findElement(By.name("password"));
-		element.sendKeys("password");
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("password2"));
+		element.sendKeys("selenium2");
+		element = driver.findElement(By.name("email"));
+		element.sendKeys("selenium2@selenium2.com");
 		element.submit();
 		
-		assertTrue("Login did not return incorrect username error",
-				driver.getPageSource().contains("Incorrect username/password"));
-		assertEquals("Not at login page", "Fact Checkers - Login", driver.getTitle());
-	}
-	
-	@Test
-	public void successfulLogin() {
-		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Login")).click();
-		element = driver.findElement(By.name("username"));
-		element.sendKeys("selenium");
-		element = driver.findElement(By.name("password"));
-		element.sendKeys("selenium");
-		element.submit();
 		
-		assertFalse("Login returned error",
-				driver.getPageSource().contains("Incorrect username/password"));
-		assertEquals("Not at user homepage", "Home", driver.getTitle());
 		
-		driver.navigate().to("http://proj-319-048.misc.iastate.edu/dashboard/logout.php");
+		assertEquals("Not at user home page", "Home", driver.getTitle());
+		assertTrue("Home doesn't contain username", driver.getPageSource().contains("selenium2"));
 		
-		assertEquals("Logout unsucessful", "Fact Checkers", driver.getTitle());
-		//selenium
-	}
-	
-	@Test
-	public void redirectUserAlreadyLoggedIn() {
-		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
-        driver.findElement(By.linkText("Login")).click();
-		element = driver.findElement(By.name("username"));
-		element.sendKeys("selenium");
-		element = driver.findElement(By.name("password"));
-		element.sendKeys("selenium");
-		element.submit();
 		
 		driver.navigate().to("http://proj-319-048.misc.iastate.edu");
-		driver.findElement(By.linkText("Login")).click();
+		driver.findElement(By.linkText("Create an Account")).click();
 		
 		assertEquals("Not at user homepage", "Home", driver.getTitle());
 		
+		driver.navigate().to("http://proj-319-048.misc.iastate.edu/login/deleteUser.php");
 		driver.navigate().to("http://proj-319-048.misc.iastate.edu/dashboard/logout.php");
 		
 		assertEquals("Logout unsucessful", "Fact Checkers", driver.getTitle());
 	}
-	*/
 
 }
