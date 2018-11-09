@@ -39,6 +39,18 @@
       array_push($error, "Username can not be more than 16 characters");
     }
 
+    if(strlen($pass) < 6){
+      array_push($error, "Password needs to be at least 6 characters");
+    }
+
+    if(strlen($pass) > 16){
+      array_push($error, "Password can not be more than 16 characters");
+    }
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      array_push($error, "Not a valid email address");
+    }
+
     $mysql = "SELECT * FROM users WHERE username = '$user' OR email = '$email' LIMIT 1";
     $result = mysqli_query($database, $mysql);
     $userexists = mysqli_fetch_array($result, MYSQLI_ASSOC);
