@@ -3,3 +3,43 @@
 	width: 50%;
 	margin: 50px auto;
 }
+
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.card {
+	flex: 1 0 500px;
+	box-sizing: border-box;
+	margin: 1rem 1em;
+	border-style: ridge;
+}
+
+.bordered{
+	border: solid 20em transparent;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.bordered::before{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+}
+
+
+@media screen and (min-width: 40em) {
+	.card {
+		max-width: calc(15% -  1em);
+	}
+}
+
+@media screen and (min-width: 60em) {
+	.card {
+		max-width: calc(25% - 1em);
+	}
+}
