@@ -10,7 +10,7 @@ var socket = io('/checkers');
 
 export default checkers;*/
 
-var spaces = []; //each element is either a piece object or null
+var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
 var turn = 0;
@@ -20,36 +20,39 @@ function onCreate() {
 }
 
 function initBoard() {
-	var i = 0;
-	for (i = 0; i < 64; i++) {
-		console.log(Math.floor(i / 8));
-		var cell = document.getElementById("board").rows[Math.floor(i / 8)].cells[i % 8];
+	var x = 0;
+	var y = 0;
+	for (y = 0; y < 8; y++) {
+		for (x = 0; x < 8; x++) {
+			console.log(y);
+			var cell = document.getElementById("board").rows[y].cells[x];
 
-		if ((Math.floor(i / 8) % 2) != (i % 2)) {
-			cell.style.backgroundColor = "black";
-			if (i < 24) {
-				spaces[i] = /*piece : */{
-					id: "piece" + i,
-					isKing: false,
-					isP1: true,
-					posX: Math.floor(i / 8),
-					posY: i % 8
-				};
-				cell.innerHTML = '<img src="../img/p1_img.png"/>';
-			} else if (i >= 40) {
-				spaces[i] = /*piece : */{
-					id: "piece" + i,
-					isKing: false,
-					isP1: false,
-					posX: Math.floor(i / 8),
-					posY: i % 8
-				};
-				cell.innerHTML = '<img src="../img/p2_img.png"/>';
+			if ((y % 2) != (x % 2)) {
+				cell.style.backgroundColor = "black";
+				if (y < 3) {
+					spaces[y][x] = /*piece : */{
+						id: "piece" + (y*8 + x),
+						isKing: false,
+						isP1: true,
+						posX: x,
+						posY: y
+					};
+					cell.innerHTML = '<img src="img/p1_img.png"/>';
+				} else if (y >= 6) {
+					spaces[y][x] = /*piece : */{
+						id: "piece" + (y*8 + x),
+						isKing: false,
+						isP1: false,
+						posX: x,
+						posY: y
+					};
+					cell.innerHTML = '<img src="img/p2_img.png"/>';
+				}
+			} else {
+				cell.backgroundColor = "white";
 			}
-		} else {
-			cell.backgroundColor = "white";
+			console.log(spaces[y][x]);
 		}
-		console.log(spaces[i]);
 	}
 }
 
