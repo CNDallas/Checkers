@@ -83,40 +83,64 @@ function doMove(origin, destination) {
 		return;
 	}
 
-	if (destination.innerHTML === "" && (Math.abs(parseInt(origin.id.substr(4)) - parseInt(destination.id.substr(4))) === 7 || Math.abs(parseInt(origin.id.substr(4)) - parseInt(destination.id.substr(4))) === 9)) {
+	var originId = parseInt(origin.id.substr(4));
+	var originY = Math.floor(originId / 8);
+	var originX = originId % 8;
+	var destinationId = parseInt(destination.id.substr(4));
+	var destinationY = Math.floor(destinationId / 8);
+	var destinationX = destinationId % 8;
+
+	if (destination.innerHTML === "" && (Math.abs(originId - destinationId) === 7 || Math.abs(originId - destinationId) === 9)) {
 		destination.innerHTML = origin.innerHTML;
 		origin.innerHTML = "";
-		turn = Math.abs(turn - 1);
+		spaces[destinationY][destinationX] = spaces[destinationY][destinationX];
+		spaces[originY][originX] = null;
+
+		turn = 1 - turn;
 		return;
 	}
+
 	var str
-	str = destination.id.replace(destination.id.substr(4), parseInt(origin.id.substr(4)) + (parseInt(destination.id.substr(4)) - parseInt(origin.id.substr(4))) / 2);
-	//str2=destination.id.replace(destination.id.substr(4),parseInt(origin.id.substr(4))-(parseInt(destination.id.substr(4))-parseInt(origin.id.substr(4)))/2);
+	str = destination.id.replace(destination.id.substr(4), originId + (destinationId - originId) / 2);
+	//str2=destination.id.replace(destination.id.substr(4),originId-(destinationId-originId)/2);
 	var i = document.getElementById(str);
-	if (turn == 0 && (parseInt(destination.id.substr(4)) - parseInt(origin.id.substr(4))) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
+
+	if (turn == 0 && (destinationId - originId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
-		turn = Math.abs(turn - 1);
+		spaces[destinationY][destinationX] = spaces[destinationY][destinationX];
+		spaces[originY][originX] = null;
+
+		turn = 1 - turn;
 	}
-	else if (turn == 1 && (parseInt(origin.id.substr(4)) - parseInt(destination.id.substr(4))) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
+	else if (turn == 1 && (originId - destinationId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
-		turn = Math.abs(turn - 1);
+		spaces[destinationY][destinationX] = spaces[destinationY][destinationX];
+		spaces[originY][originX] = null;
+
+		turn = 1 - turn;
 	}
-	else if (turn == 0 && (parseInt(destination.id.substr(4)) - parseInt(origin.id.substr(4))) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
+	else if (turn == 0 && (destinationId - originId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
-		turn = Math.abs(turn - 1);
+		spaces[destinationY][destinationX] = spaces[destinationY][destinationX];
+		spaces[originY][originX] = null;
+
+		turn = 1 - turn;
 	}
-	else if (turn == 1 && (parseInt(origin.id.substr(4)) - parseInt(destination.id.substr(4))) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
+	else if (turn == 1 && (originId - destinationId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
-		turn = Math.abs(turn - 1);
+		spaces[destinationY][destinationX] = spaces[destinationY][destinationX];
+		spaces[originY][originX] = null;
+
+		turn = 1 - turn;
 	}
 	var d = document.getElementById(str).innerHTML;
-	var t = Math.abs(parseInt(origin.id.substr(4)) - parseInt(destination.id.substr(4)));
+	var t = Math.abs(originId - destinationId);
 }
