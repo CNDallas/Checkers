@@ -3,17 +3,17 @@ import {AUTHENTICATE, CREATE_GAME, JOIN_GAME} from '../api/Events'
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 
-const socketUrl = "http://localhost:8080"
-
+const socketUrl = "http://localhost:8081"
 class Controller extends Component {
+
 	initSocket = () => {
 		const socket = io(socketUrl)
 		const sessionID = "TestID" //remove testing and make this work with the PHP cookie
 		const username = "TestUser" //remove testing and make this work with the PHP cookie
-		this.socket.on('connect', () => {
+		socket.on('connect', () => {
 			console.log("Connected")
 		})
-		this.socket.on(AUTHENTICATE, sessionID, username)
+		socket.on(AUTHENTICATE, sessionID, username)
 		socket.username = username
 		this.setState(socket)
 	}
@@ -26,6 +26,11 @@ class Controller extends Component {
 		const game = true;
 		this.props.socket.emit(JOIN_GAME, event.target.value)
 		this.setState(game)
+	}
+	joinLobby = () => {
+		const lobby = true
+		this.socket  = io('/dashboard')
+		this.setState(lobby,this.socket)
 	}
 
 	constructor(props, context) {
@@ -44,6 +49,7 @@ class Controller extends Component {
 	render() {
 		const {socket} = this.state
 		const {game} = this.state
+		const {lobby} = this.state
 		return (
 			<div className="display">
 				{

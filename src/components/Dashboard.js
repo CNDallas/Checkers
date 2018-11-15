@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {REFRESH_LOBBY, UPDATE_LOBBY} from '../api/Events'
 import OpenGameCard from './OpenGameCard'
-//import NavBar from "./NavBar"
 import "./css/Dashboard.css"
 import "tachyons"
-import io from 'socket.io'
+import io from 'socket.io-client'
 
 class Dashboard extends Component {
 
@@ -24,7 +23,6 @@ class Dashboard extends Component {
 
 	constructor(props, context) {
 		super(props, context)
-		this.props.socket = io('/dashboard')
 		this.state = {
 			gameLobbies: {},
 			createGame: false
