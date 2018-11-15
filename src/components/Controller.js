@@ -1,16 +1,39 @@
 import React, {Component} from 'react'
-import {JOIN_LOBBY, LOGOUT} from '../api/Events'
+import {AUTHENTICATE, CREATE_GAME, JOIN_GAME} from '../api/Events'
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
-//import Login from './Login'
 
-const socketUrl = "http://localhost:8081"
+const socketUrl = "http://localhost:8080"
+
 class Controller extends Component {
+	initSocket = () => {
+		const socket = io(socketUrl)
+		const sessionID = "TestID" //remove testing and make this work with the PHP cookie
+		const username = "TestUser" //remove testing and make this work with the PHP cookie
+		this.socket.on('connect', () => {
+			console.log("Connected")
+		})
+		this.socket.on(AUTHENTICATE, sessionID, username)
+		socket.username = username
+		this.setState(socket)
+	}
+	createGame = () => {
+		const game = true;
+		this.props.socket.emit(CREATE_GAME, this.socket.username)
+		this.setState(game)
+	}
+	joinGame = (event) => {
+		const game = true;
+		this.props.socket.emit(JOIN_GAME, event.target.value)
+		this.setState(game)
+	}
+
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
 			socket: null,
-			player: null
+			game: false,
+			lobby: true
 		};
 	}
 
@@ -18,36 +41,15 @@ class Controller extends Component {
 		this.initSocket()
 	}
 
-	initSocket = () => {
-		const socket = io(socketUrl)
-
-		socket.on('connect', () => {
-			console.log("Connected")
-		})
-		this.setState({socket})
-	}
-
-	setLogin = (name) => {
-		const {socket} = this.state
-		socket.emit(JOIN_LOBBY, name)
-		this.setState({name})
-	}
-
-	logout = () => {
-		const {socket} = this.state
-		socket.emit(LOGOUT)
-		this.setState({name: null})
-	}
-
-
 	render() {
-		const {socket} = this.state;
+		const {socket} = this.state
+		const {game} = this.state
 		return (
 			<div className="display">
 				{
 					//!name?
 					//<Login socket={socket} setLogin={this.setLogin}/>:
-					<Dashboard socket ={socket} name={this.setLogin} logout={this.logout} />
+					<Dashboard socket={socket} createGame={this.createGame} joinGame={this.joinGame}/>
 
 				}
 			</div>

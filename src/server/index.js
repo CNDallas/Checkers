@@ -1,29 +1,19 @@
-/* Sets up the server and keeps it running */
-
-import http from 'http'
-import app from '../../app';
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 const PORT = 8080
 
 
-/*Basic logger*/
-function log(message) {
-	process.stdout.write(`${message}\n`);
-}
-
-app.set('port',PORT);
-const server = http.createServer(app);
-
-function startServer(serverPort) {
-	server.listen(PORT);
-}
-startServer(PORT);
-
 /* starts up the function to handle socket events */
-var io = module.exports.io = require('socket.io')(server)
-const SocketManager = require('./SocketManager')
-io.on('connection', SocketManager)
+//io = module.exports.io = require('socket.io')(server)
+//const SocketManager = require('./SocketManager')
+//io.on('connection', SocketManager)
 
+server.listen(PORT, function () {
+	console.log('Successful Connection');
+});
 
 
 //TODO once we get closer to end developement. Add more security and attack prevention. Such as domain checks or using https.

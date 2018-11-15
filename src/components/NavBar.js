@@ -8,7 +8,9 @@ class NavBar extends Component {
 		return (
 			<div>
 
-				<a href="game.html"><button onClick={this.props.createGame} className="create grow shadow-1">Create Game</button></a>
+				<a href="game.html">
+					<button onClick={this.props.createGame} className="create grow shadow-1">Create Game</button>
+				</a>
 
 			</div>
 		)

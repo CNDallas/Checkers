@@ -1,58 +1,50 @@
-const io = require('./index.js').io
+const io = require('./index.js')
+const uuidv4 = require('uuid/v4');
 
-const {USER_VERIFY, JOIN_LOBBY, NEW_USER_LOBBY, CREATE_GAME, JOIN_GAME, USER_DISCONNECTED, LOGOUT} = require('../api/Events')
 
-const {createUser, createGame} = require('../api/Factories')
-
+const {AUTHENTICATE, USER_VERIFY, JOIN_LOBBY, NEW_USER_LOBBY, CREATE_GAME, JOIN_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, UPDATE_LOBBY, MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events')
 
 /* Handles communication with clients */
-
 module.exports = function (socket) {
-	loginScreen[socket.id] = socket
-	console.log("Socket Id:" + socket.id)
+	var nsp = io.of('/dashboard');
+	console.log("User has joined");
 
-
-	socket.on(USER_VERIFY, (name, callback) => {
-		if (isPlayer(connectedPlayers, name)) {
-			console.log(name)
-			callback({isUser: true, login: null})
+	socket.on(AUTHENTICATE, (sessionId, username) => {
+		if (checkConnectedUsers) {
+			//TODO redirect disconnected users to correct location
 		} else {
-			addPlayer(connectedPlayers)
-			callback({isUser: false, login: createUser({login: name, socketId: socket.id})})
+			addConnectedUser(sessionId, username)
 		}
-	})
-	/* User joins the dashboard and updates the LobbyUser Object */
-	socket.on(JOIN_LOBBY, (player) => {
-		console.log("joined Lobby:" + player);
-		player.socketId = socket.id;
-		socket.playerList = addPlayer(inLobby, player);
+		console.log("authenticated");
 	})
 
-	socket.on(CREATE_GAME, (name, callback) => {
-		console.log("Created Game")
-		addPlayer(game, name)
-		return game;
+	socket.on(CREATE_GAME, (username) => {
+		socket.LobbyID = uuidv4()
+		socket.join(socket.LobbyID)
+		addGame(username, socket.LobbyID)
 	})
 
-	socket.on('disconnect', () => {
-		console.log("Disconnected!");
+	socket.on(JOIN_GAME, (lobbyID) => {
+		socket.LobbyID = lobbyID
+		socket.join(socket.LobbyID)
+		joinGame(socket.LobbyID)
 	})
-}
+
+	socket.on(REFRESH_LOBBY, () => {
+		socket.emit(UPDATE_LOBBY, gameCollection.gameList)
+	})
+
+	socket.on(MAKE_MOVE, (fromX, fromY, toX, toY) => {
+		io.to(socket.LobbyID).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
+	})
 
 
-function removePlayer(userList, name) {
-	delete userList[name];
-	return userList;
+	//
+	// socket.on('disconnect', () => {
+	// 	console.log("Disconnected!");
+	// })
 }
 
-function addPlayer(userList, player) {
-	userList[player.name] = player;
-	return userList;
-}
-
-function isPlayer(userList, name) {
-	return name in userList
-}
 
 /*A series of object's that store collections of games or users*/
 
@@ -61,9 +53,32 @@ function isPlayer(userList, name) {
 const gameCollection = new function () {
 	//TODO
 	this.totalgameCount = 0,
-		this.gameList = {}
+		this.gameList = {
+			ID: {
+				'host': "",
+				'foundOpp': false
+			}
+		}
 
 };
+
+function addGame(Creator, lobbyID) {
+	gameCollection.totalgameCount++
+	gameCollection.gameList[lobbyID] = {host: Creator, foundOpp: false}
+}
+
+function joinGame(lobbyID) {
+	gameCollection.gameList[lobbyID].foundOpp = true
+}
+
+function endGame(lobbyID) {
+	gameCollection.totalgameCount--
+	delete gameCollection.gameList[lobbyID]
+}
+
+function getGame() {
+	return gameCollection.gameList
+}
 
 /*Collection of users in lobby
   immediately invoke at runtime */
@@ -78,7 +93,21 @@ const lobbyUsers = new function () {
 /*Collection of all logged in users*/
 const connectedUsers = new function () {
 	//TODO
-	this.totalgameCount = 0,
-		this.gameList = {}
+	this.connectedUsersCount = 0,
+		this.userList = {
+			sessionID: {
+				userName: ""
+			}
+		}
+};
 
+function checkConnectedUsers(sessionId) {
+	return sessionId in connectedUsers.userList
 }
+
+function addConnectedUser(sessionId, login) {
+	connectedUsers.connectedUsersCount++
+	this.userList[sessionId].userName = login;
+}
+
+

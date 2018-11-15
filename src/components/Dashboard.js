@@ -1,30 +1,38 @@
 import React, {Component} from 'react'
-import {CREATE_GAME} from '../api/Events'
+import {REFRESH_LOBBY, UPDATE_LOBBY} from '../api/Events'
 import OpenGameCard from './OpenGameCard'
 //import NavBar from "./NavBar"
 import "./css/Dashboard.css"
 import "tachyons"
-
+import io from 'socket.io'
 
 class Dashboard extends Component {
+
+	refreshLobby = () => {
+		this.props.socket.emit(REFRESH_LOBBY, () => {
+			this.props.socket.on(UPDATE_LOBBY, (gameLobbies) => {
+				this.setState(gameLobbies)
+			})
+		});
+	}
+	createGame = () => {
+		this.props.createGame();
+	}
+	joinGame = () => {
+		this.props.joinGame();
+	}
+
 	constructor(props, context) {
 		super(props, context)
+		this.props.socket = io('/dashboard')
 		this.state = {
-			games: {Name: "Name"}
-
+			gameLobbies: {},
+			createGame: false
 		}
 	}
 
-
-	createGame() {
-		//const games = ["Name"]
-		this.props.socket.emit(CREATE_GAME, "Filler Name", (games) => {
-			this.setState(games)
-		})
-	}
-
-
 	render() {
+		const {gameLobbies} = this.state;
 		return (
 			<React.Fragment>
 				<div className="cards">
