@@ -15,24 +15,9 @@ class Controller extends Component {
 		})
 		socket.on(AUTHENTICATE, sessionID, username)
 		socket.username = username
-		this.setState(socket)
+		console.log(socket.username)
+		this.setState({socket})
 	}
-	createGame = () => {
-		const game = true;
-		this.props.socket.emit(CREATE_GAME, this.socket.username)
-		this.setState(game)
-	}
-	joinGame = (event) => {
-		const game = true;
-		this.props.socket.emit(JOIN_GAME, event.target.value)
-		this.setState(game)
-	}
-	joinLobby = () => {
-		const lobby = true
-		this.socket  = io('/dashboard')
-		this.setState(lobby,this.socket)
-	}
-
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
@@ -46,10 +31,10 @@ class Controller extends Component {
 		this.initSocket()
 	}
 
+
+
 	render() {
-		const {socket} = this.state
-		const {game} = this.state
-		const {lobby} = this.state
+		const {socket, game, lobby} = this.state
 		return (
 			<div className="display">
 				{

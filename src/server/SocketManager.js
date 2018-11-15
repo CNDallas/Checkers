@@ -1,4 +1,4 @@
-const io = require('./index.js')
+const io = require('./index.js').io
 const uuidv4 = require('uuid/v4');
 
 
@@ -22,6 +22,7 @@ module.exports = function (socket) {
 		socket.LobbyID = uuidv4()
 		socket.join(socket.LobbyID)
 		addGame(username, socket.LobbyID)
+		console.log("Game Create: " + socket.LobbyID)
 	})
 
 	socket.on(JOIN_GAME, (lobbyID) => {
@@ -30,8 +31,10 @@ module.exports = function (socket) {
 		joinGame(socket.LobbyID)
 	})
 
-	socket.on(REFRESH_LOBBY, () => {
-		socket.emit(UPDATE_LOBBY, gameCollection.gameList)
+	socket.on(REFRESH_LOBBY, (callback) => {
+		const outgoing = getGames();
+		callback({gameLobbies: outgoing});
+		console.log("Lobby Refresh Requested")
 	})
 
 	socket.on(MAKE_MOVE, (fromX, fromY, toX, toY) => {
@@ -53,18 +56,15 @@ module.exports = function (socket) {
 const gameCollection = new function () {
 	//TODO
 	this.totalgameCount = 0,
-		this.gameList = {
-			ID: {
-				'host': "",
-				'foundOpp': false
-			}
-		}
+		this.gameList = []
+
 
 };
 
 function addGame(Creator, lobbyID) {
 	gameCollection.totalgameCount++
-	gameCollection.gameList[lobbyID] = {host: Creator, foundOpp: false}
+	gameCollection.gameList.push({Id:lobbyID, hostname: Creator, isChallenged: false})
+	console.log(gameCollection.gameList.find(g => g.Id === lobbyID))
 }
 
 function joinGame(lobbyID) {
@@ -76,9 +76,10 @@ function endGame(lobbyID) {
 	delete gameCollection.gameList[lobbyID]
 }
 
-function getGame() {
-	return gameCollection.gameList
+function getGames() {
+	return gameCollection.gameList.filter(g => g.isChallenged !== true)
 }
+
 
 /*Collection of users in lobby
   immediately invoke at runtime */

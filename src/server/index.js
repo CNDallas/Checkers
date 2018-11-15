@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
+const io = module.exports.io = require('socket.io')(server)
 
 const PORT = 8081
 
 
 /* starts up the function to handle socket events */
-const io = module.exports.io = require('socket.io')(server)
+
 const SocketManager = require('./SocketManager')
 io.on('connection', SocketManager)
 
