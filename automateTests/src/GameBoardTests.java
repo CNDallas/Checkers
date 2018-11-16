@@ -46,7 +46,8 @@ public class GameBoardTests {
         assertTrue("check should not be set",  noimg);
 	}
 	
-	@Test public void turnChange() {
+	@Test 
+	public void turnChange() {
 		driver.get("file:///C:/Users/Ryan/Documents/se319/project-main/Group18/src/game.html");
 		moveChecker(21,30);
 		element = driver.findElement(By.id("turn"));
@@ -54,6 +55,39 @@ public class GameBoardTests {
 		moveChecker(44, 37);
 		element = driver.findElement(By.id("turn"));
 		assertEquals("Should be blue's turn", "blue's turn", element.getText());
+	}
+	
+	@Test
+	public void obtainKing() {
+		driver.get("file:///C:/Users/Ryan/Documents/se319/project-main/Group18/src/game.html");
+		moveChecker(21,30);
+		moveChecker(46,39);
+		moveChecker(30,37);
+		moveChecker(55,46);
+		moveChecker(37,55);
+		
+		
+		
+	}
+	
+	@Test
+	public void performJump() {
+		driver.get("file:///C:/Users/Ryan/Documents/se319/project-main/Group18/src/game.html");
+		moveChecker(21,30);
+		moveChecker(46,39);
+		moveChecker(30,37);
+		moveChecker(55,46);
+		moveChecker(37,55);
+		boolean noimg = false;
+        try {
+        	driver.findElement(By.xpath("//*[@id='cell46']/img"));
+        }
+        catch (Exception e) {
+        	noimg = true;
+        }
+        
+        assertTrue("checker should not be set",  noimg);
+        
 	}
 	
 	
