@@ -143,6 +143,77 @@ public class GameBoardTests {
         
 	}
 	
+	@Test
+	public void declareWinner() {
+		driver.get("file:///C:/Users/Ryan/Documents/se319/project-main/Group18/src/game.html");
+		moveChecker(21,30);
+		moveChecker(46,39);
+		moveChecker(30,37);
+		moveChecker(55,46);
+		moveChecker(37,55);
+		moveChecker(53,46);
+		moveChecker(17,24);
+		moveChecker(62,53);
+		moveChecker(55,62);
+		
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell62']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p1_king_img.png"));
+	
+        moveChecker(40,33);
+        moveChecker(62,55);
+        
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell55']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p1_king_img.png"));
+	
+        moveChecker(33,26);
+        moveChecker(12,21);
+        moveChecker(26,12);
+        moveChecker(21,28);
+        moveChecker(42,35);
+        moveChecker(14,21);
+        moveChecker(39,30);
+        moveChecker(5,14);
+        moveChecker(12,5);
+        moveChecker(23,37);
+        moveChecker(5,23);
+        moveChecker(28,42);
+        moveChecker(51,33);
+        moveChecker(24,42);
+        moveChecker(49,35);
+        moveChecker(21,28);
+        moveChecker(35,21);
+        moveChecker(3,12);
+        moveChecker(21,3);
+        moveChecker(7,14);
+        moveChecker(23,5);
+        moveChecker(37,51);
+        moveChecker(60,42);
+        moveChecker(55,37);
+        moveChecker(3,17);
+        moveChecker(37,46);
+        moveChecker(53,39);
+        moveChecker(1,10);
+        moveChecker(17,3);
+        moveChecker(8,17);
+        moveChecker(3,10);
+        moveChecker(17,26);
+        moveChecker(10,19);
+        moveChecker(26,35);
+        moveChecker(42,28);
+	}
+	
 	
 	private void moveChecker(int source, int destination) {
 		String start = "cell" + source;
