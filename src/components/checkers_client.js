@@ -146,25 +146,14 @@ function doMove(origin, destination) {
 		if (p2PiecesLeft === 0) {
 			winner(1);
 		}
-		var doubleJump = false;
-		if(destinationY < 6 && destinationY > 1){
-			var possibleXLeft = destinationX - 1;
-			var possibleXRight = destinationX + 1;
-			var possibleY = destinationY + 1;
-			if(possibleXLeft > 0 && possibleXLeft < 7){
-				var pSpace = spaces[possibleY][possibleXLeft];
-				if(pSpace != null && !pSpace.isP1 && spaces[possibleY + 1][possibleXLeft - 1] === null){
-					doubleJump = true;
-				}
-			}
-		}
+
 
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
 		}
-		if(doubleJump === false){
-			turn = 1 - turn;
-		}
+
+		turn = 1 - turn;
+
 
 		update_board();
 	}
