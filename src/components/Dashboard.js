@@ -64,9 +64,12 @@ class Dashboard extends Component {
 	render() {
 		const {gameLobbies} = this.state;
 		const {socket} = this.props
-		var cards = gameLobbies.map(games =>
+		var cards = gameLobbies.length ===0?
+			<h1>No games found. Why not create one</h1>:
+			gameLobbies.map(games =>
 				<OpenGameCard socket = {socket} host= {games.hostname} id={games.Id} moveToGame={this.joinGame}/>
 	)
+
 		return (
 			<React.Fragment>
 				<div className="navigation" >
@@ -74,8 +77,6 @@ class Dashboard extends Component {
 				</div>
 				<div className="cards">
 					{cards}
-
-
 				</div>
 			</React.Fragment>
 		);
