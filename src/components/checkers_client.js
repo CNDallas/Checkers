@@ -80,9 +80,9 @@ function update_board()
 		}
 	}
 	var t1=(turn)? "red":"blue";
-	
-	document.getElementById("turn").innerHTML=t1+"'s turn";
-	
+	t1 = "<p>" + t1 + "'s turn</p>"
+	document.getElementById("turn").innerHTML= t1;
+
 }
 function selectCell(cell) {
 	if (cell.style.backgroundColor == "black") {
@@ -108,7 +108,7 @@ function selectCell(cell) {
 
 function doMove(origin, destination) {
 
-	
+
 
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
