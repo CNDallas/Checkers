@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import './css/OpenGameCard.css'
+import {IS_OPEN} from '../api/Events'
 import 'tachyons'
 
 
@@ -10,8 +11,16 @@ class OpenGameCard extends Component {
 	}
 
 	joinGame = () => {
-		console.log(this.props.id)
-		this.props.moveToGame(this.props.id)
+		const {socket, id} = this.props
+		console.log(id)
+		socket.emit(IS_OPEN, id, (isOpen) => {
+				if (isOpen) {
+					this.props.moveToGame(this.props.id)
+				}
+
+		})
+
+
 }
 	render() {
 		return (

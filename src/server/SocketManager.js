@@ -2,7 +2,7 @@ const io = require('./index.js').io
 const uuidv4 = require('uuid/v4');
 
 
-const {AUTHENTICATE, USER_VERIFY, JOIN_LOBBY, NEW_USER_LOBBY, CREATE_GAME, JOIN_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, UPDATE_LOBBY, MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events')
+const {AUTHENTICATE, USER_VERIFY, JOIN_LOBBY, NEW_USER_LOBBY, CREATE_GAME, JOIN_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, UPDATE_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_OPEN} = require('../api/Events')
 
 /* Handles communication with clients */
 module.exports = function (socket) {
@@ -21,6 +21,7 @@ module.exports = function (socket) {
 	socket.on(CREATE_GAME, (username, callback) => {
 		const lobbyId = uuidv4()
 		socket.join(lobbyId)
+		socket.lobbyId = lobbyId
 		addGame(username, lobbyId)
 		console.log("Game Create: " + lobbyId)
 		callback(lobbyId)
@@ -28,9 +29,16 @@ module.exports = function (socket) {
 
 	socket.on(JOIN_GAME, (lobbyId) => {
 		socket.LobbyId = lobbyId
-		socket.join(socket.LobbydD)
+		socket.join(socket.lobbyId)
 		joinGame(socket.LobbyId)
 	})
+
+	socket.on(IS_OPEN, (id, callback) => {
+		const open = isOpen(id)
+		console.log(id + " isOpen: " + open)
+		callback(open)
+		}
+	)
 
 	socket.on(REFRESH_LOBBY, (callback) => {
 		const outgoing = getGames()
@@ -64,14 +72,17 @@ const gameCollection = new function () {
 
 function addGame(Creator, lobbyId) {
 	gameCollection.totalgameCount++
-	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isChallenged: false})
+	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isOpen: true})
 	console.log(gameCollection.gameList.find(g => g.Id === lobbyId))
 }
 
 function joinGame(lobbyId) {
 	console.log(lobbyId)
+	gameCollection.gameList.find(g => g.Id === lobbyId).isOpen = false;
+}
 
-	gameCollection.gameList.find(g => g.Id === lobbyId).isChallenged = true;
+function isOpen(lobbyId){
+	return gameCollection.gameList.find(g => g.Id === lobbyId).isOpen
 }
 
 function endGame(lobbyId) {
@@ -80,7 +91,7 @@ function endGame(lobbyId) {
 }
 
 function getGames() {
-	return gameCollection.gameList.filter(g => g.isChallenged !== true)
+	return gameCollection.gameList.filter(g => g.isOpen !== false)
 }
 
 

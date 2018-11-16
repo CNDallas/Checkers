@@ -41,7 +41,7 @@ class Controller extends Component {
 
 
 	render() {
-		const {socket, lobbyId, game, lobby} = this.state
+		const {socket, lobbyId, game} = this.state
 		return (
 			<div className="display">
 				{

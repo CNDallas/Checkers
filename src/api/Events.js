@@ -11,5 +11,6 @@ module.exports = {
 	REFRESH_LOBBY: "REFRESH_LOBBY",
 	UPDATE_LOBBY: "UPDATE_LOBBY",
 	MAKE_MOVE: "MAKE_MOVE",
-	RECEIVE_MOVE: "RECEIVE_MOVE"
+	RECEIVE_MOVE: "RECEIVE_MOVE",
+	IS_OPEN: "IS_OPEN" //Used to check if a game is open
 };
