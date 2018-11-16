@@ -6,7 +6,28 @@ var turn = 0;
 function onCreate() {
 	initBoard();
 }
-
+function update_board()
+{
+	var i;
+	var k;
+	for(i=0;i<8;i++)
+	{
+		for(k=0;k<8;i++)
+		{
+			var cell = document.getElementById("board").rows[i].cells[k];
+			if(spaces[i][k])//this assumes that cells without pieces are null
+			{
+				cell.innerHTML=(spaces[i][k].isP1)?cell.innerHTML = '<img src="img/p1_img.png"/>':'<img src="img/p1_img.png"/>';
+			}
+			else
+			{
+				cell=null;
+			}
+		}
+	}
+	
+	
+}
 function initBoard() {
 	var x = 0;
 	var y = 0;
@@ -46,7 +67,7 @@ function initBoard() {
 
 function selectCell(cell) {
 	if (cell.style.backgroundColor == "black") {
-		if (selectedCell != null) {
+		if (selectedCell !== null) {
 			if ((turn === 0 && selectedCell.innerHTML.includes("p1_img")) || (turn === 1) && selectedCell.innerHTML.includes("p2_img")) {
 
 				if (selectedCell != cell) {
@@ -59,7 +80,7 @@ function selectCell(cell) {
 
 		cell.style.borderColor = "rgb(255, 0, 0)";
 		selectedCell = cell;
-	} else if (selectedCell != null) {
+	} else if (selectedCell !== null) {
 		selectedCell.style.borderColor = "";
 		selectedCell = null;
 	}
@@ -93,7 +114,7 @@ function doMove(origin, destination) {
 	//str2=destination.id.replace(destination.id.substr(4),originId-(destinationId-originId)/2);
 	var i = document.getElementById(str);
 
-	if (turn == 0 && (destinationId - originId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
+	if (turn === 0 && (destinationId - originId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
@@ -102,7 +123,7 @@ function doMove(origin, destination) {
 
 		turn = 1 - turn;
 	}
-	else if (turn == 1 && (originId - destinationId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
+	else if (turn === 1 && (originId - destinationId) === 14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
@@ -111,7 +132,7 @@ function doMove(origin, destination) {
 
 		turn = 1 - turn;
 	}
-	else if (turn == 0 && (destinationId - originId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
+	else if (turn === 0 && (destinationId - originId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
@@ -120,7 +141,7 @@ function doMove(origin, destination) {
 
 		turn = 1 - turn;
 	}
-	else if (turn == 1 && (originId - destinationId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
+	else if (turn === 1 && (originId - destinationId) === 18 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
 		destination.innerHTML = origin.innerHTML;
 		document.getElementById(str).innerHTML = "";
 		origin.innerHTML = "";
