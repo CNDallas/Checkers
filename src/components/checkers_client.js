@@ -67,9 +67,6 @@ function update_board()
 			var cell = document.getElementById("board").rows[y].cells[x];
 			if(spaces[y][x] && typeof(spaces[y][x]) !== typeof(spaces[0][0]))//this assumes that cells without pieces are null
 			{
-				var t3 = typeof(spaces[y][x])!=="piece";
-				var t2 = typeof(spaces[y][x])
-				var t = spaces[y][x];
 				if (spaces[y][x].isP1) {
 					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = '<img src="img/p1_king_img.png"/>' : '<img src="img/p1_img.png"/>';
 				} else {
@@ -82,16 +79,16 @@ function update_board()
 			}
 		}
 	}
-
-
+	var t1=(turn)? "red":"blue";
+	
+	document.getElementById("turn").innerHTML=t1+"'s turn";
+	
 }
 function selectCell(cell) {
 	if (cell.style.backgroundColor == "black") {
 		if (selectedCell !== null) {
-			if ((turn === 0 && selectedCell.innerHTML.includes("p1_img")) ||
-					(turn === 0 && selectedCell.innerHTML.includes("p1p1_king_img")) ||
-					(turn === 1 && selectedCell.innerHTML.includes("p2_img")) ||
-					(turn === 1 && selectedCell.innerHTML.includes("p2p1_king_img"))) {
+			if ((turn === 0 && selectedCell.innerHTML.includes("p1"))  ||(turn === 1 && selectedCell.innerHTML.includes("p2")))
+			{
 
 				if (selectedCell != cell) {
 					doMove(selectedCell, cell);
@@ -111,9 +108,7 @@ function selectCell(cell) {
 
 function doMove(origin, destination) {
 
-	if (destination.innerHTML !== "") {
-		return;
-	}
+	
 
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
@@ -123,11 +118,12 @@ function doMove(origin, destination) {
 	var destinationX = destinationId % 8;
 	var to_move=spaces[originY][originX];
 	var abs_dif=Math.abs(originId - destinationId)
+	if(spaces[destinationY][destinationX])return;
 	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
 	if (!spaces[destinationY][destinationY] && (abs_dif === 7 || abs_dif === 9)) {
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
-		if ((turn === 0 && destinationY == 7) || (turn === 1 && destinationX == 0)) {
+		if ((turn === 0 && destinationY == 7) || (turn === 1 && destinationY == 0)) {
 			spaces[destinationY][destinationX].isKing = true;
 		}
 
@@ -141,23 +137,23 @@ function doMove(origin, destination) {
 	var to_kill=originId + (destinationId - originId) / 2;
 	var to_killY=Math.floor(to_kill / 8);
 	var to_killX=Math.floor(to_kill%8);
-
-	if (turn === 0 && abs_dif === 18||abs_dif===14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("2")) {
+	to_kill =spaces[to_killY][to_killX];
+	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_kill && !to_kill.isP1) {
 		spaces[to_killY][to_killX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
-		if (p2PiecesLeft == 0) {
+		if (p2PiecesLeft === 0) {
 			winner(1);
 		}
-		if (destinationY == 7) {
+		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
 		}
 
 		turn = 1 - turn;
 		update_board();
 	}
-	else if (turn === 1 && (originId - destinationId) === 18||abs_dif===14 && document.getElementById(str).innerHTML !== "" && document.getElementById(str).innerHTML.includes("1")) {
+	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_kill && to_kill.isP1) {
 		spaces[to_killY][to_killX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
@@ -179,7 +175,7 @@ function doMove(origin, destination) {
 function winner(player) {
 	console.log("player " + player + " won!");
 	//update player stats (wins, losses)
-	//make some sort of while loop for until you navigate away
+	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
 	//maybe turn = 2?
 }
