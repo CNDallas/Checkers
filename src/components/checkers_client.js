@@ -1,15 +1,3 @@
-/*import react, {Component } from 'react';
-
-class checkers extends component {
-	render(){
-		//the webpage and what not
-	}
-}
-
-var socket = io('/checkers');
-
-export default checkers;*/
-
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;

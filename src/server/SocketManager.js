@@ -18,27 +18,29 @@ module.exports = function (socket) {
 		console.log("authenticated");
 	})
 
-	socket.on(CREATE_GAME, (username) => {
-		socket.LobbyID = uuidv4()
-		socket.join(socket.LobbyID)
-		addGame(username, socket.LobbyID)
-		console.log("Game Create: " + socket.LobbyID)
+	socket.on(CREATE_GAME, (username, callback) => {
+		socket.LobbyId = uuidv4()
+		const {lobbyId} =socket.LobbyId
+		socket.join(socket.LobbyId)
+		addGame(username, lobbyId)
+		console.log("Game Create: " + lobbyId)
+		callback({lobbyId: lobbyId})
 	})
 
-	socket.on(JOIN_GAME, (lobbyID) => {
-		socket.LobbyID = lobbyID
-		socket.join(socket.LobbyID)
-		joinGame(socket.LobbyID)
+	socket.on(JOIN_GAME, (lobbyId) => {
+		socket.LobbyId = lobbyId
+		socket.join(socket.LobbydD)
+		joinGame(socket.LobbyId)
 	})
 
 	socket.on(REFRESH_LOBBY, (callback) => {
-		const outgoing = getGames();
-		callback({gameLobbies: outgoing});
+		const outgoing = getGames()
+		callback({gameLobbies: outgoing})
 		console.log("Lobby Refresh Requested")
 	})
 
 	socket.on(MAKE_MOVE, (fromX, fromY, toX, toY) => {
-		io.to(socket.LobbyID).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
+		io.to(socket.LobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
 	})
 
 
@@ -61,19 +63,19 @@ const gameCollection = new function () {
 
 };
 
-function addGame(Creator, lobbyID) {
+function addGame(Creator, lobbyId) {
 	gameCollection.totalgameCount++
-	gameCollection.gameList.push({Id:lobbyID, hostname: Creator, isChallenged: false})
-	console.log(gameCollection.gameList.find(g => g.Id === lobbyID))
+	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isChallenged: false})
+	console.log(gameCollection.gameList.find(g => g.Id === lobbyId))
 }
 
-function joinGame(lobbyID) {
-	gameCollection.gameList[lobbyID].foundOpp = true
+function joinGame(lobbyId) {
+	gameCollection.gameList[lobbyId].foundOpp = true
 }
 
-function endGame(lobbyID) {
+function endGame(lobbyId) {
 	gameCollection.totalgameCount--
-	delete gameCollection.gameList[lobbyID]
+	delete gameCollection.gameList[lobbyId]
 }
 
 function getGames() {

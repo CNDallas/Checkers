@@ -21,7 +21,8 @@ class Dashboard extends Component {
 	createGame = () => {
 		const { socket } = this.props
 		//const game = true;
-		socket.emit(CREATE_GAME, socket.username)
+		socket.emit(CREATE_GAME, socket.username, this.props.moveToGame)
+
 	}
 
 	joinGame = (event) => {
@@ -51,6 +52,7 @@ class Dashboard extends Component {
 
 	constructor(props, context) {
 		super(props, context)
+		this.refreshLobby()
 		this.state = {
 			gameLobbies: [],
 			createGame: false

@@ -1,0 +1,13 @@
+Be sure to import ../api/Evens with something such as:
+const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events')
+
+you can make a move with socket.emit(MAKE_MOVE, fromX, fromY, toX, toY)
+Note that this just sends a move to the opponent. All validity checks
+are still client based
+to receive a move use socket.on(RECEIVE_MOVE,fromX, fromY, toX, toY)
+
+To run locally open a terminal and navigate to the working directory
+start the server - npm run server
+and then react - npm start
+If it fails, check that port 8081 is available for the server. As of
+right now the server is not smart enough to find an open port

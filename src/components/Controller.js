@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {AUTHENTICATE, CREATE_GAME, JOIN_GAME} from '../api/Events'
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
-
+import Checkers from './Checkers'
 const socketUrl = "http://localhost:8081"
 class Controller extends Component {
 
@@ -18,12 +18,19 @@ class Controller extends Component {
 		console.log(socket.username)
 		this.setState({socket})
 	}
+
+	moveToGame = (lobbyId) => {
+		const game = true
+		console.log("Moving to:" + lobbyId)
+		this.setState({game, lobbyId})
+	}
+
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
 			socket: null,
+			lobbyId: '',
 			game: false,
-			lobby: true
 		};
 	}
 
@@ -34,13 +41,14 @@ class Controller extends Component {
 
 
 	render() {
-		const {socket, game, lobby} = this.state
+		const {socket, lobbyId, game, lobby} = this.state
 		return (
 			<div className="display">
 				{
-					//!name?
+					!game?<Dashboard socket={socket} moveToGame={this.moveToGame} />:
+						<Checkers socket={socket} />
 					//<Login socket={socket} setLogin={this.setLogin}/>:
-					<Dashboard socket={socket} createGame={this.createGame} joinGame={this.joinGame}/>
+
 
 				}
 			</div>
