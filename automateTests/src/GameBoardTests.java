@@ -212,6 +212,8 @@ public class GameBoardTests {
         moveChecker(10,19);
         moveChecker(26,35);
         moveChecker(42,28);
+        element = driver.findElement(By.id("turn"));
+		assertEquals("Player 2 won game", "Player 2 won!", element.getText());
 	}
 	
 	

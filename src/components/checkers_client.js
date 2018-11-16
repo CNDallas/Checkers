@@ -174,6 +174,10 @@ function doMove(origin, destination) {
 
 function winner(player) {
 	console.log("player " + player + " won!");
+	update_board();
+	var declareWinner = "<p>Player " + player + " won!</p>"
+	document.getElementById("turn").innerHTML= declareWinner;
+	exit();
 	//update player stats (wins, losses)
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
