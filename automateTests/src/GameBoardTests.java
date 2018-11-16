@@ -65,9 +65,62 @@ public class GameBoardTests {
 		moveChecker(30,37);
 		moveChecker(55,46);
 		moveChecker(37,55);
+		moveChecker(53,46);
+		moveChecker(17,24);
+		moveChecker(62,53);
+		moveChecker(55,62);
 		
-		
-		
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell62']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p1_king_img.png"));
+	
+        moveChecker(40,33);
+        moveChecker(62,55);
+        
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell55']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p1_king_img.png"));
+	
+        moveChecker(33,26);
+        moveChecker(12,21);
+        moveChecker(26,12);
+        moveChecker(21,28);
+        moveChecker(42,35);
+        moveChecker(14,21);
+        moveChecker(39,30);
+        moveChecker(5,14);
+        moveChecker(12,5);
+        
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell5']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p2_king_img.png"));
+        
+        moveChecker(23,37);
+        moveChecker(5,23);
+        
+        try {
+        	element = driver.findElement(By.xpath("//*[@id='cell23']/img"));
+        }
+        catch (Exception e) {
+        	
+        }
+        
+        assertTrue("King image should be displayed", element.getAttribute("src").contains("img/p2_king_img.png"));
 	}
 	
 	@Test
