@@ -4,6 +4,15 @@ import 'tachyons'
 
 
 class OpenGameCard extends Component {
+	constructor(props, context) {
+		super(props, context);
+
+	}
+
+	joinGame = () => {
+		console.log(this.props.id)
+		this.props.moveToGame(this.props.id)
+}
 	render() {
 		return (
 			<div className="center">
@@ -18,7 +27,7 @@ class OpenGameCard extends Component {
 					<div className="userName" id="userName">{this.props.host}</div>
 					<div className="rank" id="rank">{this.props.id}</div>
 					<div className="actions">
-						<button className="btn" id='join'>Join Game</button>
+						<button onClick= {this.joinGame}className="btn" id='join'>Join Game</button>
 						<button className="btn" id='message'>Send Message</button>
 					</div>
 				</div>

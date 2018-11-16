@@ -46,7 +46,7 @@ class Controller extends Component {
 			<div className="display">
 				{
 					!game?<Dashboard socket={socket} moveToGame={this.moveToGame} />:
-						<Checkers socket={socket} />
+						<Checkers socket={socket} lobbyId = {lobbyId}/>
 					//<Login socket={socket} setLogin={this.setLogin}/>:
 
 

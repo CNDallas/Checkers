@@ -19,12 +19,11 @@ module.exports = function (socket) {
 	})
 
 	socket.on(CREATE_GAME, (username, callback) => {
-		socket.LobbyId = uuidv4()
-		const {lobbyId} =socket.LobbyId
-		socket.join(socket.LobbyId)
+		const lobbyId = uuidv4()
+		socket.join(lobbyId)
 		addGame(username, lobbyId)
 		console.log("Game Create: " + lobbyId)
-		callback({lobbyId: lobbyId})
+		callback(lobbyId)
 	})
 
 	socket.on(JOIN_GAME, (lobbyId) => {
@@ -70,7 +69,9 @@ function addGame(Creator, lobbyId) {
 }
 
 function joinGame(lobbyId) {
-	gameCollection.gameList[lobbyId].foundOpp = true
+	console.log(lobbyId)
+
+	gameCollection.gameList.find(g => g.Id === lobbyId).isChallenged = true;
 }
 
 function endGame(lobbyId) {

@@ -21,16 +21,18 @@ class Dashboard extends Component {
 	createGame = () => {
 		const { socket } = this.props
 		//const game = true;
-		socket.emit(CREATE_GAME, socket.username, this.props.moveToGame)
+		socket.emit(CREATE_GAME, socket.username, (lobbyId) => {
+			this.props.moveToGame(lobbyId)
+		})
 
 	}
 
-	joinGame = (event) => {
+	joinGame = (Id) => {
 		const { socket } = this.props
-		//const game = true;
-		socket.emit(JOIN_GAME, event.target.value)
-		this.setState({socket})
+		socket.emit(JOIN_GAME, Id)
+		this.props.moveToGame(Id)
 	}
+
 	joinLobby = () => {
 		const lobby = true
 		const socket  = io('/dashboard')
@@ -63,7 +65,7 @@ class Dashboard extends Component {
 		const {gameLobbies} = this.state;
 		const {socket} = this.props
 		var cards = gameLobbies.map(games =>
-				<OpenGameCard socket = {socket} host= {games.hostname}/>
+				<OpenGameCard socket = {socket} host= {games.hostname} id={games.Id} moveToGame={this.joinGame}/>
 	)
 		return (
 			<React.Fragment>
