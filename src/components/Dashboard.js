@@ -15,7 +15,8 @@ class Dashboard extends Component {
 
 	updateLobby = (gameLobbies) => {
 		console.log(gameLobbies);
-		this.setState(gameLobbies)
+		this.setState({isDataFetched : true});
+		this.setState(gameLobbies);
 	};
 
 	createGame = () => {
@@ -67,17 +68,21 @@ class Dashboard extends Component {
 		this.refreshLobby();
 		this.state = {
 			gameLobbies: [],
-			createGame: false
-		}
+			createGame: false,
+			isDataFetched: false
+		};
 	}
 
 	render() {
 		const {gameLobbies} = this.state;
 		const {socket} = this.props;
-		let cards = gameLobbies.length ===  0 ?
-			<h1>No games found. Why not create one</h1>:
-			gameLobbies.map(games =>
-				<OpenGameCard socket = {socket} key={games.hostname} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
+		let cards = !this.state.isDataFetched ? null :
+			(
+				gameLobbies.length ===  0 ?
+				<h1>No games found. Why not create one</h1>:
+				gameLobbies.map(games =>
+				<OpenGameCard socket = {socket} key={games.Id} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
+			)
 	);
 
 		return (
