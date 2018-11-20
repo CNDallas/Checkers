@@ -4,6 +4,7 @@ import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 import Checkers from './Checkers'
 const socketUrl = "http://localhost:8081";
+
 class Controller extends Component {
 
 	initSocket = () => {
@@ -23,6 +24,10 @@ class Controller extends Component {
 		const game = true;
 		console.log("Moving to:" + lobbyId);
 		this.setState({game, lobbyId})
+	};
+
+	logout = () => {
+		//TODO
 	};
 
 	constructor(props, context) {
@@ -45,7 +50,7 @@ class Controller extends Component {
 		return (
 			<div className="display">
 				{
-					!game?<Dashboard socket={socket} moveToGame={this.moveToGame} />:
+					!game?<Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout}/>:
 						<Checkers socket={socket} lobbyId = {lobbyId}/>
 					//<Login socket={socket} setLogin={this.setLogin}/>:
 				}

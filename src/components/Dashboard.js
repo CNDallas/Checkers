@@ -1,14 +1,13 @@
 import React, {Component} from 'react'
-import {CREATE_GAME, IS_OPEN, JOIN_GAME, REFRESH_LOBBY} from '../api/Events';
+import {CREATE_GAME, IS_GAME_OPEN, REFRESH_LOBBY} from '../api/Events';
 import OpenGameCard from './OpenGameCard'
 import "./css/Dashboard.css"
 import "tachyons"
 import NavBar from "./NavBar"
-import io from "socket.io-client"
 
 class Dashboard extends Component {
 
-	refreshLobby = () => {
+	refreshLobbyHandler = () => {
 		const {socket} = this.props;
 		socket.emit(REFRESH_LOBBY, this.updateLobby)
 	};
@@ -19,51 +18,43 @@ class Dashboard extends Component {
 		this.setState(gameLobbies);
 	};
 
-	createGame = () => {
+	createGameHandler = () => {
 		const { socket } = this.props;
 		socket.emit(CREATE_GAME, socket.username, (lobbyId) => {
 			this.props.moveToGame(lobbyId)
 		})
 	};
 
-	joinGame = (Id) => {
-		const { socket } = this.props;
-		socket.emit(JOIN_GAME, Id);
-		this.props.moveToGame(Id)
-	};
-
-	joinLobby = () => {
-		const lobby = true;
-		const socket  = io('/dashboard');
-		this.setState({lobby, socket})
-	};
-
 	joinGameHandler = (Id) => {
 		const {socket} = this.props;
 		console.log(Id);
-		socket.emit(IS_OPEN, Id, (isOpen) => {
+		socket.emit(IS_GAME_OPEN, Id, (isOpen) => {
 			if (isOpen) {
 				this.props.moveToGame(Id)
 			}
 		});
 	};
 
-	logout = () => {
-		//TODO
-	};
 
 	viewStats = () => {
 		//TODO
 	};
 
-	renderGames = (lobby) => {
-		const {socket} = this.props;
-		return <OpenGameCard socket = {socket} host={lobby.host}/>
+	renderGames = (gameLobbies) => {
+		return (
+			!this.state.isDataFetched ? null : (
+				gameLobbies.length ===  0 ?
+				<h1 className='white'>No games found. Why not create one</h1>:
+				gameLobbies.map(games =>
+					<OpenGameCard key={games.Id} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
+				)
+			)
+		);
 	};
 
 	constructor(props, context) {
 		super(props, context);
-		this.refreshLobby();
+		this.refreshLobbyHandler();
 		this.state = {
 			gameLobbies: [],
 			createGame: false,
@@ -71,24 +62,14 @@ class Dashboard extends Component {
 		};
 	}
 
-
-
-
-
 	render() {
 		const {gameLobbies} = this.state;
-		let cards = !this.state.isDataFetched ? null :
-			(
-				gameLobbies.length ===  0 ?
-				<h1>No games found. Why not create one</h1>:
-				gameLobbies.map(games =>
-				<OpenGameCard key={games.Id} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
-			)
-	);
+		let cards = this.renderGames(gameLobbies);
+
 		return (
 			<React.Fragment>
 				<div className="navigation" >
-					<NavBar creategame = {this.createGame} refreshlobby = {this.refreshLobby} viewstats= {this.viewStats} logout= {this.logout}/>
+					<NavBar creategame = {this.createGameHandler} refreshlobby = {this.refreshLobbyHandler} viewstats= {this.viewStats} logout= {this.props.logout}/>
 				</div>
 				<div className="cards">
 					{cards}

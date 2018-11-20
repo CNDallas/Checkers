@@ -1,14 +1,15 @@
-const io = require('./index.js').io
-const uuidv4 = require('uuid/v4');
+import {AUTHENTICATE, CREATE_GAME,  USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE} from "../api/Events";
+import uuidv4 from 'uuid/v4'
 
+const io = require('./index.js').io;
 
-const {AUTHENTICATE, USER_VERIFY, JOIN_LOBBY, NEW_USER_LOBBY, CREATE_GAME, JOIN_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, UPDATE_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_OPEN} = require('../api/Events')
 
 /* Handles communication with clients */
 module.exports = function (socket) {
 	var nsp = io.of('/dashboard');
 	console.log("User has joined");
 
+	//Account control listeners
 	socket.on(AUTHENTICATE, (sessionId, username) => {
 		if (checkConnectedUsers) {
 			//TODO redirect disconnected users to correct location
@@ -16,46 +17,52 @@ module.exports = function (socket) {
 			addConnectedUser(sessionId, username)
 		}
 		console.log("authenticated");
-	})
+	});
 
+	socket.on('disconnect', () => {
+		//TODO
+		console.log("Disconnected!");
+	});
+
+	//Game Lobby listeners
 	socket.on(CREATE_GAME, (username, callback) => {
-		const lobbyId = uuidv4()
-		socket.join(lobbyId)
-		socket.lobbyId = lobbyId
-		addGame(username, lobbyId)
-		console.log("Game Create: " + lobbyId)
+		const lobbyId = uuidv4();
+		socket.join(lobbyId);
+		socket.lobbyId = lobbyId;
+		addGame(username, lobbyId);
+		console.log("Game Create: " + socket.lobbyId);
 		callback(lobbyId)
-	})
+	});
 
-	socket.on(JOIN_GAME, (lobbyId) => {
-		socket.LobbyId = lobbyId
-		socket.join(socket.lobbyId)
-		joinGame(socket.LobbyId)
-	})
-
-	socket.on(IS_OPEN, (id, callback) => {
-		const open = isOpen(id)
-		console.log(id + " isOpen: " + open)
-		callback(open)
+	socket.on(IS_GAME_OPEN, (id, callback) => {
+		const open = isOpen(id);
+		socket.lobbyId = open ? joinGame(id):null;
+		socket.join(id);
+		console.log(socket.lobbyId + " isOpen: " + open);
+		callback(open);
 		}
-	)
+	);
 
 	socket.on(REFRESH_LOBBY, (callback) => {
-		const outgoing = getGames()
-		callback({gameLobbies: outgoing})
+		const outgoing = getGames();
+		callback({gameLobbies: outgoing});
 		console.log("Lobby Refresh Requested")
-	})
+	});
 
+
+	//Checker's game listeners
 	socket.on(MAKE_MOVE, (fromX, fromY, toX, toY) => {
-		io.to(socket.LobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
-	})
+		socket.to(socket.lobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
+	});
+
+	socket.on(SEND_MESSAGE, (message) => {
+		socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE, message);
+		console.log("Message passed: " + message + " to lobby: " + socket.lobbyId);
+	});
 
 
-	//
-	// socket.on('disconnect', () => {
-	// 	console.log("Disconnected!");
-	// })
-}
+
+};
 
 
 /*A series of object's that store collections of games or users*/
@@ -66,19 +73,18 @@ const gameCollection = new function () {
 	//TODO
 	this.totalgameCount = 0,
 		this.gameList = []
-
-
 };
 
 function addGame(Creator, lobbyId) {
-	gameCollection.totalgameCount++
-	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isOpen: true})
+	gameCollection.totalgameCount++;
+	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isOpen: true});
 	console.log(gameCollection.gameList.find(g => g.Id === lobbyId))
 }
 
 function joinGame(lobbyId) {
-	console.log(lobbyId)
+	console.log(lobbyId);
 	gameCollection.gameList.find(g => g.Id === lobbyId).isOpen = false;
+	return lobbyId;
 }
 
 function isOpen(lobbyId){
@@ -86,7 +92,7 @@ function isOpen(lobbyId){
 }
 
 function endGame(lobbyId) {
-	gameCollection.totalgameCount--
+	gameCollection.totalgameCount--;
 	delete gameCollection.gameList[lobbyId]
 }
 
@@ -121,7 +127,7 @@ function checkConnectedUsers(sessionId) {
 }
 
 function addConnectedUser(sessionId, login) {
-	connectedUsers.connectedUsersCount++
+	connectedUsers.connectedUsersCount++;
 	this.userList[sessionId].userName = login;
 }
 
