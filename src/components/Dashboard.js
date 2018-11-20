@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {CREATE_GAME, IS_OPEN, JOIN_GAME, REFRESH_LOBBY, UPDATE_LOBBY} from '../api/Events';
+import {CREATE_GAME, IS_OPEN, JOIN_GAME, REFRESH_LOBBY} from '../api/Events';
 import OpenGameCard from './OpenGameCard'
 import "./css/Dashboard.css"
 import "tachyons"
@@ -21,11 +21,9 @@ class Dashboard extends Component {
 
 	createGame = () => {
 		const { socket } = this.props;
-		//const game = true;
 		socket.emit(CREATE_GAME, socket.username, (lobbyId) => {
 			this.props.moveToGame(lobbyId)
 		})
-
 	};
 
 	joinGame = (Id) => {
@@ -73,22 +71,24 @@ class Dashboard extends Component {
 		};
 	}
 
+
+
+
+
 	render() {
 		const {gameLobbies} = this.state;
-		const {socket} = this.props;
 		let cards = !this.state.isDataFetched ? null :
 			(
 				gameLobbies.length ===  0 ?
 				<h1>No games found. Why not create one</h1>:
 				gameLobbies.map(games =>
-				<OpenGameCard socket = {socket} key={games.Id} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
+				<OpenGameCard key={games.Id} host={games.hostname} id={games.Id} joinGame={this.joinGameHandler.bind(this,games.Id)}/>
 			)
 	);
-
 		return (
 			<React.Fragment>
 				<div className="navigation" >
-					<NavBar socket={socket} creategame = {this.createGame} refreshlobby = {this.refreshLobby} viewstats= {this.viewStats} logout= {this.logout}/>
+					<NavBar creategame = {this.createGame} refreshlobby = {this.refreshLobby} viewstats= {this.viewStats} logout= {this.logout}/>
 				</div>
 				<div className="cards">
 					{cards}
