@@ -132,7 +132,7 @@ function getAllGames(){
 
 
 /*Collection of all logged in users with location*/
-let connectedUsers = new function () {
+const connectedUsers = new function () {
 	//TODO
 	this.userCount = 0;
 	this.lobbyCount = 0;

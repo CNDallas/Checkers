@@ -3,12 +3,15 @@ import "tachyons"
 import "./css/NavBar.css"
 
 const navBar = (props) =>  {
+
+	let navBarArray = props.linkItems.map(nav =>
+		(
+		<button onClick={nav.func} key={nav.key} className="create shadow-1">{nav.text}</button>
+		));
+
 	return (
 		<div>
-			<button onClick={props.creategame} className="create shadow-1">Create Game</button>
-			<button onClick={props.refreshlobby} className="create shadow-1">Refresh Games</button>
-			<button onClick={props.viewstats} className="create shadow-1">View Stats</button>
-			<button onClick={props.logout} className="create shadow-1">Logout</button>
+			{navBarArray}
 		</div>
 	);
 };

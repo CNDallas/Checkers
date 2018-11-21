@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import {AUTHENTICATE} from '../api/Events'
+import "../App.css"
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 import Checkers from './Checkers'
 import uuidv4 from 'uuid/v4'
 const socketUrl = "http://localhost:8081";
+
 
 
 class Controller extends Component {
@@ -31,13 +33,18 @@ class Controller extends Component {
 		//TODO
 	};
 
-	constructor(props, context) {
+	updateNavigationBar = (navigationBar) => {
+		this.setState({navigationBar})
+	};
+
+	constructor(props, context){
 		super(props, context);
 		this.state = {
 			socket: null,
 			lobbyId: '',
 			game: false,
-		};
+			navigationBar: null
+		}
 	}
 
 	componentWillMount() {
@@ -47,15 +54,14 @@ class Controller extends Component {
 
 
 	render() {
-		const {socket, lobbyId, game} = this.state;
+		const {socket, navigationBar, lobbyId, game} = this.state;
+		let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout} updateNavigationBar={this.updateNavigationBar}/>;
+			if (game) {
+				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar}/>;
+			}
+
 		return (
-			<div className="display">
-				{
-					!game?<Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout}/>:
-						<Checkers socket={socket} lobbyId = {lobbyId}/>
-					//<Login socket={socket} setLogin={this.setLogin}/>:
-				}
-			</div>
+			<React.Fragment><div className='navigation'>{navigationBar}</div><div className='main'>{mainDisplay}</div>></React.Fragment>
 		);
 	}
 
