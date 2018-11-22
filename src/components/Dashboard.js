@@ -75,7 +75,7 @@ class Dashboard extends Component {
 
 	navigationBarUpdater = () => {
 		const navItems = [
-			{func: this.createGameHandler, text: 'CreateGame', key: uuidv4()},
+			{func: this.createGameHandler, text: 'Create Game', key: uuidv4()},
 			{func: this.refreshLobbyHandler, text: 'Refresh Lobby', key: uuidv4()},
 			{func: this.viewStats, text: 'View Stats', key: uuidv4()},
 			{func: this.props.logout, text: 'Logout', key: uuidv4()}
