@@ -18,7 +18,7 @@ class Checkers extends Component {
 
 	navigationBarUpdater = () => {
 		const navItems = [
-			{func: this.createGameHandler, text: 'Exit Game', key: uuidv4()},
+			{func: this.props.exitGame, text: 'Exit Game', key: uuidv4()},
 			{func: this.viewStats, text: 'View Stats', key: uuidv4()},
 			{func: this.props.logout, text: 'Logout', key: uuidv4()}
 		];
@@ -63,14 +63,13 @@ class Checkers extends Component {
 		this.setState({sendMessage});
 	};
 
-
 	keyPressHandler = (event) => {
 		console.log("KeyPressed");
 		if(event.keyCode === 13){
 			const message = event.target.value;
 			console.log("Message being sent: "+ message);
 			this.sendMessage(message);
-		};
+		}
 	};
 
 	render(){
@@ -78,9 +77,9 @@ class Checkers extends Component {
 		const {lobbyId} = this.props;
 		return (
 			<div>
-		<h1 className = 'white'>CHECKERS! - {lobbyId}</h1>
+		<h1>CHECKERS! - {lobbyId}</h1>
 		<input type='text' onKeyDown={this.keyPressHandler} onChange={this.onChangeHandler} value={sendMessage}/>
-				<p className = 'white'>{recMessage}</p>
+				<p>{recMessage}</p>
 			</div>
 		//PUT WHAT TO BE DISPLAYED HERE
 		)}

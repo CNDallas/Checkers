@@ -3,16 +3,16 @@ import "tachyons"
 import "./css/NavBar.css"
 
 const navBar = (props) =>  {
-
-	let navBarArray = props.linkItems.map(nav =>
+	const {linkItems} = props;
+	let navBarArray = linkItems.map(nav =>
 		(
-		<button onClick={nav.func} key={nav.key} className="create shadow-1">{nav.text}</button>
+			<li className='nav_list_item' onClick={nav.func} key={nav.key}><span className="navIcon">{"◀"}</span>{nav.text}<id name="border"> {}</id></li>
 		));
 
 	return (
-		<div>
+		<ul className="navigation">
 			{navBarArray}
-		</div>
+		</ul>
 	);
 };
 

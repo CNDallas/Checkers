@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {AUTHENTICATE} from '../api/Events'
 import "../App.css"
+import "./css/NavBar.css";
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 import Checkers from './Checkers'
@@ -9,7 +10,19 @@ const socketUrl = "http://localhost:8081";
 
 
 
+
 class Controller extends Component {
+
+	state = {
+		socket: null,
+		lobbyId: "Dashboard",
+		game: false,
+		navigationBar: null
+	};
+
+	componentWillMount() {
+		this.initSocket()
+	}
 
 	initSocket = () => {
 		const socket = io(socketUrl);
@@ -34,34 +47,25 @@ class Controller extends Component {
 	};
 
 	updateNavigationBar = (navigationBar) => {
-		this.setState({navigationBar})
+		this.setState({navigationBar});
 	};
 
-	constructor(props, context){
-		super(props, context);
-		this.state = {
-			socket: null,
-			lobbyId: '',
-			game: false,
-			navigationBar: null
-		}
-	}
-
-	componentWillMount() {
-		this.initSocket()
-	}
-
+	exitGameHandler = () => { //TODO Need to send information to server
+		const lobbyId = "Dashboard";
+		const game = false;
+		this.setState({game,lobbyId});
+	};
 
 
 	render() {
 		const {socket, navigationBar, lobbyId, game} = this.state;
 		let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout} updateNavigationBar={this.updateNavigationBar}/>;
 			if (game) {
-				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar}/>;
+				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar} exitGame={this.exitGameHandler}/>;
 			}
 
 		return (
-			<React.Fragment><div className='navigation'>{navigationBar}</div><div className='main'>{mainDisplay}</div>></React.Fragment>
+			<div className="App"><div className='banner'></div>{navigationBar}<div className='main'>{mainDisplay}</div></div>
 		);
 	}
 

@@ -1,0 +1,28 @@
+.navigation {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: blue;
+}
+
+.nav_list_item {
+    z-index: 1;
+    top:5vw;
+    min-height: 100px;
+    float:bottom;
+    color: #FFA700;
+    font-size: 1.5em;
+    display: inline;
+    font-weight: 700;
+    padding: 2em;
+    text-shadow: 4px 4px 4px #000a12;
+}
+
+.navIcon {
+    padding: 10px;
+    font-weight: 900;
+    color: #FFA700;
+}

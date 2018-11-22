@@ -9,7 +9,16 @@ import uuidv4 from 'uuid/v4';
 
 class Dashboard extends Component {
 
+	state = {
+		gameLobbies: [],
+		createGame: false,
+		isDataFetched: false
+	};
 
+	componentDidMount(){
+		this.refreshLobbyHandler();
+		this.navigationBarUpdater();
+	};
 
 	refreshLobbyHandler = () => {
 		const {socket} = this.props;
@@ -72,31 +81,16 @@ class Dashboard extends Component {
 			{func: this.props.logout, text: 'Logout', key: uuidv4()}
 		];
 		const nBar = <NavBar linkItems={navItems}/>;
-		this.props.updateNavigationBar(nBar)
+		this.props.updateNavigationBar(nBar);
 	};
-
-
-	constructor(props, context) {
-		super(props, context);
-		this.refreshLobbyHandler();
-		this.navigationBarUpdater();
-		this.state = {
-			gameLobbies: [],
-			createGame: false,
-			isDataFetched: false
-		};
-	}
 
 	render() {
 		const {gameLobbies} = this.state;
 		let cards = this.renderGames(gameLobbies);
 		return (
-			<React.Fragment>
-
-				<div className="cards">
+			<div className="cards">
 					{cards}
 				</div>
-			</React.Fragment>
 		);
 	}
 }
