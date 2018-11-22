@@ -1,28 +1,48 @@
 .navigation {
+    top:5vw;
     list-style: none;
-    padding: 0;
+    padding: 16px;
     margin: 0;
     position: sticky;
-    top: 0;
     z-index: 1;
-    background-color: blue;
+    background-color: #1a2c82;
 }
 
 .nav_list_item {
+    background: radial-gradient(circle farthest-side, rgba(11, 34, 82, 0.3), rgba(0, 0, 0, 0));
+    padding: 16px;
     z-index: 1;
-    top:5vw;
-    min-height: 100px;
-    float:bottom;
     color: #FFA700;
     font-size: 1.5em;
     display: inline;
-    font-weight: 700;
-    padding: 2em;
-    text-shadow: 4px 4px 4px #000a12;
+    font-weight: 500;
+    padding-inline-end: 1em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 2px #000a12;
+    border-inline-end-style: solid;
+    letter-spacing: 2px;
+    cursor: pointer;
 }
 
+.nav_list_item:last-child{
+    border-inline-end-style: none;
+
+}
+
+.nav_list_item:hover{
+    background: radial-gradient(circle farthest-side, rgba(255, 167, 0, 0.15), rgba(0, 0, 0, 0));
+}
+
+
+
 .navIcon {
-    padding: 10px;
+    display: inline-block;
+    height: 1.5em;
+    vertical-align: middle;
+    font-size: .5em;
+    padding-inline-end: 1em;
+    padding-inline-start: 1em;
     font-weight: 900;
     color: #FFA700;
 }
+

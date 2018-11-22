@@ -60,7 +60,7 @@ class Dashboard extends Component {
 			return null;
 		}
 		else if (gameLobbies.length === 0) {
-			return <h1 className='white'>No games found. Why not create one</h1>
+			return <h1>No games found. Why not create one</h1>
 		} else {
 			return (
 				gameLobbies.map(games => (

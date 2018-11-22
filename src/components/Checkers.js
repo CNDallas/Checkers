@@ -77,11 +77,11 @@ class Checkers extends Component {
 		const {lobbyId} = this.props;
 		return (
 			<div>
-		<h1>CHECKERS! - {lobbyId}</h1>
-		<input type='text' onKeyDown={this.keyPressHandler} onChange={this.onChangeHandler} value={sendMessage}/>
-				<p>{recMessage}</p>
+		CHECKERS! - {lobbyId}
+				<br /><input type='text' onKeyDown={this.keyPressHandler} onChange={this.onChangeHandler} value={sendMessage}/>
+				<br />{recMessage}
 			</div>
-		//PUT WHAT TO BE DISPLAYED HERE
+
 		)}
 }
 
