@@ -1,23 +1,19 @@
-import React, {Component} from 'react'
+import React from 'react'
 import "tachyons"
 import "./css/NavBar.css"
 
-class NavBar extends Component {
+const navBar = (props) =>  {
+	const {linkItems} = props;
+	let navBarArray = linkItems.map(nav =>
+		(
+			<li className='nav_list_item' onClick={nav.func} key={nav.key}><span className="navIcon">{"◀"}</span>{nav.text}</li>
+		));
 
+	return (
+		<ul className="navigation">
+			{navBarArray}
+		</ul>
+	);
+};
 
-	render() {
-		return (
-			<div>
-
-					<button onClick={this.props.creategame} className="create shadow-1">Create Game</button>
-					<button onClick={this.props.refreshlobby} className="create shadow-1">Refresh Games</button>
-					<button onClick={this.props.viewstats} className="create shadow-1">View Stats</button>
-					<button onClick={this.props.logout} className="create shadow-1">Logout</button>
-
-
-			</div>
-		)
-	}
-}
-
-export default NavBar;
+export default navBar;

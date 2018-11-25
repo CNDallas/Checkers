@@ -1,21 +1,20 @@
 .center {
-    margin: 50px;
+    margin: 32px;
     height: 299px;
     width: 320px;
     background: #263238;
     border-radius: 8px;
     overflow: hidden;
     transition: .5s ease-in-out;
-    box-shadow: 10px 10px 15px 0 rgba(255, 100, 52, 0.3);
-    color: #ff6434;
+    box-shadow: 10px 10px 15px 0 rgba(255, 167, 0, 0.3);
+    color: #FFA700;
     border-style: inset;
     padding-left: 1px;
 }
 
 .center:hover {
-
     transition: .5s ease-in-out;
-    box-shadow: 20px 20px 30px 0 rgba(255, 100, 52, 0.2);
+    box-shadow: 20px 20px 30px 0 rgba(255, 167, 0, 0.2);
 }
 
 .profile {
@@ -79,12 +78,12 @@
     height: 30px;
     margin: 0 auto 10px auto;
     background: none;
-    border: 1px solid #ff6434;
+    border: 1px solid #FFA700;
     border-radius: 15px;
     font-size: 12px;
     font-weight: 600;
     box-sizing: border-box;
-    color: #ff6434;
+    color: #FFA700;
 }
 
 .profile .actions .btn:hover {
@@ -102,7 +101,7 @@
     box-sizing: border-box;
     width: 220%;
     height: 99px;
-    background: #ff6434;
+    background: #FFA700;
     text-align: center;
     padding-top: 28px;
     transition: all .4s ease-in-out;
@@ -113,7 +112,7 @@
 }
 
 .stats .box:hover {
-    background: #E1CFC2;
+    background: #f9e7d8;
     cursor: pointer;
 }
 
@@ -124,8 +123,4 @@
 .stats span {
     display: block;
 }
-
-
-
-
 
