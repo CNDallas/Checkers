@@ -1,7 +1,7 @@
 .navigation {
     top:0;
     list-style: none;
-    padding: 16px;
+    padding: 1vw;
     margin: 0;
     position: sticky;
     z-index: 1;
@@ -10,18 +10,20 @@
 
 .nav_list_item {
     background: radial-gradient(circle farthest-side, rgba(11, 34, 82, 0.3), rgba(0, 0, 0, 0));
-    padding: 16px;
+    padding: 1vw;
     z-index: 1;
     color: #FFA700;
-    font-size: 1.5em;
+    font-size: 2vw;
     display: inline;
     font-weight: 500;
-    padding-inline-end: 1em;
+    padding-inline-end: 1vmin;
     text-transform: uppercase;
     text-shadow: 2px 2px 2px #000a12;
     border-inline-end-style: solid;
-    letter-spacing: 2px;
+    letter-spacing: .1vmin;
     cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .nav_list_item:last-child{
@@ -37,11 +39,11 @@
 
 .navIcon {
     display: inline-block;
-    height: 1.5em;
+    height: 2vw;
     vertical-align: middle;
-    font-size: .5em;
-    padding-inline-end: 1em;
-    padding-inline-start: 1em;
+    font-size: 1.5vw;
+    padding-inline-end: 1.33vw;
+    padding-inline-start: 1.33vw;
     font-weight: 900;
     color: #FFA700;
 }

@@ -39,18 +39,22 @@ html, body {
 
 .header {
     position: relative;
-    font-size: 5rem;
+    font-size: 10vh;
     font-weight: 700;
     top: 5vh;
 }
 
 .main {
+    display: block;
     background: radial-gradient(#345EB0, #113989);
     z-index: 0;
     width: 90vw;
     height: 100%;
     margin: auto;
     vertical-align: center;
+    overflow:hidden;
+
+
 }
 
 
