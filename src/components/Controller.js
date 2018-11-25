@@ -65,7 +65,7 @@ class Controller extends Component {
 			}
 
 		return (
-			<div className="App"><div className='banner'></div>{navigationBar}<div className='main'>{mainDisplay}</div></div>
+			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>{navigationBar}<div className='main'>{mainDisplay}</div></div>
 		);
 	}
 
