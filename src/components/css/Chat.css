@@ -25,6 +25,7 @@
     min-width:16em;
     width: 25vw;
     overflow-y: scroll;
+    overflow-x:hidden;
 }
 
 .chat-header {
@@ -41,8 +42,6 @@
     font-weight: 900;
     color: red;
     cursor: pointer;
-
-
 }
 
 
