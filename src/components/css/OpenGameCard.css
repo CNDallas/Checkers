@@ -47,13 +47,15 @@
     border-style: solid;
     border-radius: 50%;
     transition: .7s ease-in-out;
+
 }
 
 .profile .image:active .circle-1:active{
     transition: .7s ease-in-out;
     width: 250%;
-
 }
+
+
 
 .profile .image img {
     display: block;

@@ -5,8 +5,10 @@ import "./css/NavBar.css";
 import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 import Checkers from './Checkers'
+import Chat from "./Chat";
 import uuidv4 from 'uuid/v4'
 const socketUrl = "http://localhost:8081";
+
 
 
 
@@ -65,7 +67,7 @@ class Controller extends Component {
 			}
 
 		return (
-			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>{navigationBar}<div className='main'>{mainDisplay}</div></div>
+			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>{navigationBar}<div className='main'>{mainDisplay}<Chat socket={socket}/></div></div>
 		);
 	}
 

@@ -1,0 +1,80 @@
+.toggle-chat {
+    background-color: #555;
+    color: #ffa700;
+    padding: 1vh 1vw;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    position: fixed;
+    bottom: 5px;
+    right: 1.5vw;
+    width: 15vw;
+    font-weight: 600;
+}
+
+.chat-open {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    opacity:.7;
+    max-height:70vh;
+    background: radial-gradient(#345EB0, #859ec8);
+    min-width:16em;
+    width: 25vw;
+    overflow-y: scroll;
+}
+
+.chat-header {
+    font-size: 1vw;
+    font-weight: 600;
+    padding: 5px;
+}
+
+.chat-header .btn-close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px;
+    font-weight: 900;
+    color: red;
+    cursor: pointer;
+
+
+}
+
+
+.chat-open .chat-box {
+    position: sticky;
+    bottom: 0;
+    min-width:16em;
+    width: 25vw;
+    height: 1em;
+
+}
+.chat-open .chat-line{
+    min-width:16vw;
+    list-style: none;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+.chat-open .chat-message {
+    display: inline-block;
+    text-align: right;
+    width: 65%;
+    overflow-wrap: break-word;
+}
+
+.chat-open .chat-username {
+    display: inline-block;
+    text-align: left;
+    vertical-align: top;
+    width: 35%;
+    horiz-align: left;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
