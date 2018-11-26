@@ -5,7 +5,7 @@ var turn = 0;
 var p1PiecesLeft = 12;
 var p2PiecesLeft = 12;
 
-function onCreate() {
+export function onCreate() {
 	initBoard();
 }
 class piece {
@@ -17,7 +17,7 @@ class piece {
 	this.posY=posY;
   }
 }
-function initBoard() {
+export function initBoard() {
 	var x = 0;
 	var y = 0;
 	for (y = 0; y < 8; y++) {
@@ -34,7 +34,8 @@ function initBoard() {
 				}
 				else
 				{
-						spaces[y][x]
+					//TODO
+						spaces[y][x] = new piece ("piece" + (y*8 + x),false,false,x,y);
 				}
 			} else {
 				cell.backgroundColor = "white";
@@ -44,10 +45,11 @@ function initBoard() {
 	}
 	update_board();
 }
-function update_board()
+export function update_board()
 {
 	var i;
 	var k;
+	var y,x;
 	for(y=0;y<8;y++)
 	{
 		for(x=0;x<8;x++)
@@ -74,7 +76,7 @@ function update_board()
 	document.getElementById("turn").innerHTML=t1+"'s turn";
 
 }
-function selectCell(cell) {
+export function selectCell(cell) {
 	if (cell.style.backgroundColor == "black") {
 		if (selectedCell !== null) {
 			if ((turn === 0 && selectedCell.innerHTML.includes("p1"))  ||(turn === 1 && selectedCell.innerHTML.includes("p2")))
@@ -96,7 +98,7 @@ function selectCell(cell) {
 	}
 }
 
-/*function doMove(origin, destination) {
+/*export function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
 
@@ -160,7 +162,7 @@ function selectCell(cell) {
 }
 */
 var last_move=null;
-function doMove(origin, destination) {
+export function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
 
@@ -241,7 +243,7 @@ function doMove(origin, destination) {
 	//var d = document.getElementById(str).innerHTML;
 	//var t = Math.abs(originId - destinationId);
 }
-function has_valid_captures(origin)
+export function has_valid_captures(origin)
 {
 	if(!origin) return false;
 
@@ -289,7 +291,7 @@ function has_valid_captures(origin)
 	return false;
 
 }
-function has_valid_capture()
+export function has_valid_capture()
 {
 	for(var y=0;y<8;y++){
 		for(var x =0;x<8;x++){
@@ -305,8 +307,8 @@ function has_valid_capture()
 	return false;
 
 }
-//function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
-function winner(player) {
+//export function has_valid_moves()//TODO export function that returns an array of valid move ids //TODO2 adjust the highlighting export function to turn valid move back grounds yellow
+export function winner(player) {
 	console.log("player " + player + " won!");
 	//update player stats (wins, losses)
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
