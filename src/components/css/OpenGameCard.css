@@ -1,20 +1,26 @@
 .center {
+    transition: 1s ease-in-out,
+                z-index 2s linear;
+    z-index: 1;
+    position: relative;
     margin-top: 2vw;
     height: 14vw;
     width: 16vw;
     background: #263238;
     border-radius: 8px;
     overflow: hidden;
-    transition: .5s ease-in-out;
     color: #FFA700;
     border-style: inset;
     padding-left: 1px;
 }
 
 .center:hover {
-    transition: .5s ease-in-out;
-    transition-delay: .5s;
+    transition: 1s ease-in-out;
+    transition-delay: 1s;
+    position: relative;
+    z-index: 3;
     width: 22vw;
+    transform: scale(1.25);
 }
 
 .profile {
@@ -126,16 +132,12 @@
 .stats .box {
     position: relative;
     overflow: hidden;
-
     height: 33.33%;
     background: #FFA700;
     transition: all .4s ease-in-out;
     font-size: .75vw;
     font-weight: 700;
-
 }
-
-
 
 .stats .box:hover {
     background: #f9e7d8;
