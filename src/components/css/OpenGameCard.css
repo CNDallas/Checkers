@@ -38,15 +38,15 @@
     width: 100%;
     height: auto;
     border-width: 2px;
-    transition: .7s ease-in-out;
     border-style: solid;
     border-radius: 50%;
+    transition: .7s ease-in-out;
 }
-.profile .image .circle-1:active{
-    transition: .3s ease-in-out;
+
+.profile .image:active .circle-1:active{
+    transition: .7s ease-in-out;
     width: 250%;
-    margin: auto;
-    height: auto;
+
 }
 
 .profile .image img {
@@ -54,6 +54,13 @@
     border-radius: 50%;
     background: #4f5b62;
     cursor: pointer;
+    height: auto;
+    transition: .7s ease-in-out;
+}
+.profile .image img:active{
+    transition: .7s ease-in-out;
+    width: 250%;
+    height: auto;
 }
 
 .profile .userInfo{
