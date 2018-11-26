@@ -19,7 +19,7 @@
     right: 15px;
     border: 3px solid #f1f1f1;
     z-index: 9;
-    opacity:.7;
+    opacity:.95;
     max-height:70vh;
     background: radial-gradient(#345EB0, #859ec8);
     min-width:16em;
@@ -29,6 +29,8 @@
 }
 
 .chat-header {
+    position: sticky;
+    top: 0;
     font-size: 1vw;
     font-weight: 600;
     padding: 5px;
@@ -50,7 +52,7 @@
     bottom: 0;
     min-width:16em;
     width: 25vw;
-    height: 1em;
+    height: 2em;
 
 }
 .chat-open .chat-line {
@@ -58,14 +60,6 @@
     list-style: none;
     margin-right: 5px;
     margin-left: 5px;
-}
-
-.chat-open .chat-line-user{
-    min-width:16vw;
-    list-style: none;
-    margin-right: 5px;
-    margin-left: 5px;
-    color: #ffa700;
 }
 
 .chat-open .chat-message {

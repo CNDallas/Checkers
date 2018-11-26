@@ -55,11 +55,10 @@
     width: 250%;
 }
 
-
-
 .profile .image img {
     display: block;
     border-radius: 50%;
+    width: 100%;
     background: #4f5b62;
     cursor: pointer;
     height: auto;

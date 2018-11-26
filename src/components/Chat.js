@@ -81,13 +81,15 @@ class Chat extends Component {
 	};
 
 	scrollToBottom = () => {
-		this.lastMessage.scrollIntoView({ behavior: "smooth" });
+		if(this.state.isChatOpen) {
+			this.lastMessage.scrollIntoView({behavior: "smooth"});
+		}
 	}
 
 	render() {
 		const {isChatOpen, sendMessage, chatMessages} = this.state;
 		let chat = chatMessages.map(m => (
-			<li key={m.id} className={m.userName === this.props.socket.username?"chat-line-user":"chat-line"}><span className="chat-username">{m.userName}</span><span className="chat-message">{m.message}</span></li>
+			<li key={m.id} style={{color:m.color}} className="chat-line"><span className="chat-username">{m.userName}</span><span className="chat-message">{m.message}</span></li>
 		));
 
 		return (

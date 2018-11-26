@@ -49,6 +49,9 @@ module.exports = function (socket) {
 			socket.lobbyId = joinGame(socket.username,id);
 			socket.join(socket.lobbyId);
 			socket.isHost = false;
+		} else {
+			const sysError = {id: uuidv4(), userName: "SYSTEM", message: "Game is no longer available", color: "#FF0000"};
+			io.to(socket.id).emit(RECEIVE_MESSAGE, sysError)
 		}
 		console.log(id + " isOpen: " + open);
 		callback(open);
@@ -68,8 +71,10 @@ module.exports = function (socket) {
 	});
 
 	socket.on(SEND_MESSAGE, (message, callback) => {
-		const recMessage = {id: uuidv4(), userName: socket.username, message: message}
-		callback(recMessage);
+		const genId = uuidv4();
+		const recMessage = {id: genId, userName: socket.username, message: message, color: "#FFFFFF"};
+		const toSender = {id: genId, userName: socket.username, message: message, color: "#ffa700"};
+		callback(toSender);
 		socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE, recMessage);
 		console.log("Message passed: " + message + " to lobby: " + socket.lobbyId);
 	});
