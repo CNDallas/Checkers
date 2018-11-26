@@ -1,15 +1,3 @@
-/*import react, {Component } from 'react';
-
-class checkers extends component {
-	render(){
-		//the webpage and what not
-	}
-}
-
-var socket = io('/checkers');
-
-export default checkers;*/
-
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
@@ -82,9 +70,9 @@ function update_board()
 		}
 	}
 	var t1=(turn)? "red":"blue";
-	
+
 	document.getElementById("turn").innerHTML=t1+"'s turn";
-	
+
 }
 function selectCell(cell) {
 	if (cell.style.backgroundColor == "black") {
@@ -110,7 +98,7 @@ function selectCell(cell) {
 
 /*function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
-	
+
 
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
@@ -174,7 +162,7 @@ function selectCell(cell) {
 var last_move=null;
 function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
-	
+
 
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
@@ -256,7 +244,7 @@ function doMove(origin, destination) {
 function has_valid_captures(origin)
 {
 	if(!origin) return false;
-	
+
 	var originY = origin.posY;
 	var originX = origin.posX;
 	var to_move=spaces[originY][originX];
@@ -280,7 +268,7 @@ function has_valid_captures(origin)
 			case 3:
 			tar=-18;
 			break;
-			
+
 		}
 	destinationId=(originY*8)+originX+tar;
 	if(destinationId<0||destinationId>62) continue;//if outside of valid cells
@@ -294,12 +282,12 @@ function has_valid_captures(origin)
 	if(to_killY===destinationY) return false;
 	if(typeof(spaces[destinationY][destinationX])===typeof(spaces[0][0]))return false;
 	if(!spaces[destinationY][destinationX]&&spaces[to_killY][to_killX]&&(spaces[to_killY][to_killX].isP1!==to_move.isP1))//if nothing in destination and their is a piece in capture squares and its the other players piece
-		{	
+		{
 			return true;
 		}
-	}	
+	}
 	return false;
-	
+
 }
 function has_valid_capture()
 {
@@ -311,11 +299,11 @@ function has_valid_capture()
 			if(has_valid_captures(spaces[y][x]))
 			{
 				return true;
-			}		
+			}
 		}
 	}
 	return false;
-	
+
 }
 //function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
 function winner(player) {

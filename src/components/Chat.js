@@ -50,7 +50,7 @@ class Chat extends Component {
 				this.setState({chatMessages});
 			}
 		});
-		const sendMessage = "Message Sent";
+		const sendMessage = "";
 		this.setState({sendMessage});
 	};
 
