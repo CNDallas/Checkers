@@ -60,6 +60,8 @@ module.exports = function (socket) {
 
 	socket.on(REFRESH_LOBBY, (callback) => {
 		const outgoing = getGames();
+		const recMessage = {id: uuidv4(), userName: "SYSTEM", message: "Lobby Refreshed", color: "#FF0000"};
+		io.to(socket.id).emit(RECEIVE_MESSAGE,recMessage)
 		callback({gameLobbies: outgoing});
 		console.log("Lobby Refresh Requested")
 	});

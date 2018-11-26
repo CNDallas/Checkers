@@ -13,7 +13,7 @@
     padding: 1vw;
     z-index: 1;
     color: #FFA700;
-    font-size: 2vw;
+    font-size: 1vw;
     display: inline;
     font-weight: 500;
     padding-inline-end: 1vmin;
@@ -39,11 +39,11 @@
 
 .navIcon {
     display: inline-block;
-    height: 2vw;
+
     vertical-align: middle;
-    font-size: 1.5vw;
-    padding-inline-end: 1.33vw;
-    padding-inline-start: 1.33vw;
+    font-size: 1vw;
+    padding-inline-end: .75vw;
+    padding-inline-start: .75vw;
     font-weight: 900;
     color: #FFA700;
 }
