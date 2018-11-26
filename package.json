@@ -1,8 +1,9 @@
 {
   "name": "checkers",
   "version": "0.1.0",
-  "private": true,
-  "proxy": "http://localhost:8081",
+  "private": false,
+  "homepage": "build",
+
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

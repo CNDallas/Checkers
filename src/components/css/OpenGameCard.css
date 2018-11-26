@@ -1,12 +1,11 @@
 .center {
-    margin: 32px;
-    height: 299px;
-    width: 320px;
+    margin-top: 2vw;
+    height: 14vw;
+    width: 16vw;
     background: #263238;
     border-radius: 8px;
     overflow: hidden;
     transition: .5s ease-in-out;
-    box-shadow: 10px 10px 15px 0 rgba(255, 167, 0, 0.3);
     color: #FFA700;
     border-style: inset;
     padding-left: 1px;
@@ -14,40 +13,40 @@
 
 .center:hover {
     transition: .5s ease-in-out;
-    box-shadow: 20px 20px 30px 0 rgba(255, 167, 0, 0.2);
+    transition-delay: .5s;
+    width: 22vw;
 }
 
 .profile {
     float: left;
-    width: 200px;
-    height: 320px;
+    width: 63%;
+    height: 100%;
+    top: 10%;
     text-align: center;
 }
 
 .profile .image {
-    position: relative;
-    width: 70px;
-    height: 70px;
-    margin: 38px auto 0 auto;
+    padding-top:5%;
+    width: 3.9vw;
+    height: 25%;
+    margin: auto;
 }
 
-.profile .image .circle-1, .profile .image .circle-2 {
-    position: absolute;
-    box-sizing: border-box;
-    width: 76px;
-    height: 76px;
-    top: -3px;
-    left: -3px;
-    border-width: 1px;
+.profile .image .circle-1 {
+    position:relative;
+    z-index: 2;
+    width: 100%;
+    height: auto;
+    border-width: 2px;
+    transition: .7s ease-in-out;
     border-style: solid;
     border-radius: 50%;
 }
-
-.profile .image .circle-2 {
-    width: 82px;
-    height: 82px;
-    top: -6px;
-    left: -6px;
+.profile .image .circle-1:active{
+    transition: .3s ease-in-out;
+    width: 250%;
+    margin: auto;
+    height: auto;
 }
 
 .profile .image img {
@@ -57,33 +56,51 @@
     cursor: pointer;
 }
 
-.profile .userName {
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 20px;
+.profile .userInfo{
+    height: 35%;
+    padding-top: 13%;
 }
 
-.profile .rank {
-    font-size: 11px;
-    line-height: 15px;
+.profile .userInfo .userName {
+    font-size: 1.25vw;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.profile .userInfo .rank {
+    padding-top: 5%;
+    font-size: 1vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
 }
 
 .profile .actions {
-    margin-top: 33px;
+    height: 40%;
+    padding-top: 5%;
+    padding-bottom:5%;
 }
 
 .profile .actions .btn {
     display: block;
-    width: 120px;
-    height: 30px;
-    margin: 0 auto 10px auto;
+    width: 75%;
+    height: 45%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
     background: none;
     border: 1px solid #FFA700;
     border-radius: 15px;
-    font-size: 12px;
+    font-size: 1vw;
     font-weight: 600;
     box-sizing: border-box;
     color: #FFA700;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .profile .actions .btn:hover {
@@ -93,23 +110,25 @@
 }
 
 .stats {
-    float: left;
+    float:right;
+    margin-left:1%;
+    width: 36%;
+    height: 100%;
 }
 
 .stats .box {
+    position: relative;
     overflow: hidden;
-    box-sizing: border-box;
-    width: 220%;
-    height: 99px;
+
+    height: 33.33%;
     background: #FFA700;
-    text-align: center;
-    padding-top: 28px;
     transition: all .4s ease-in-out;
-    font-size: 14px;
+    font-size: .75vw;
     font-weight: 700;
-    display: block;
-    line-height: 140%;
+
 }
+
+
 
 .stats .box:hover {
     background: #f9e7d8;
@@ -117,10 +136,17 @@
 }
 
 .stats .box:nth-child(2) {
-    margin: 2px 0;
+    margin-bottom: 1px;
+    margin-top: 1px;
 }
 
-.stats span {
-    display: block;
+
+
+.stats .boxInfo {
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+
 }
 

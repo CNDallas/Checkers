@@ -1,9 +1,15 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
+const path = require('path');
 const io = module.exports.io = require('socket.io')(server)
 
-const PORT = 8081
+const PORT = 8081;
+
+app.use(express.static(path.join('../../../build')));
+app.get('/', function(req, res) {
+	res.sendFile(path.join(__dirname+'../../../build/index.html'));
+});
 
 
 /* starts up the function to handle socket events */

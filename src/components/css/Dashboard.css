@@ -2,8 +2,8 @@
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	height: 100vh;
 	overflow-y: scroll;
+	flex-direction: row-reverse;
 }
 
 .cards::-webkit-scrollbar {
@@ -11,9 +11,12 @@
 }
 
 .card {
-	flex: 1 1 20%;
+	flex-basis: 18.5vw;
+
 
 }
+
+
 
 
 
