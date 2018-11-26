@@ -67,8 +67,9 @@ module.exports = function (socket) {
 		socket.to(socket.lobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
 	});
 
-	socket.on(SEND_MESSAGE, (message) => {
+	socket.on(SEND_MESSAGE, (message, callback) => {
 		const recMessage = {id: uuidv4(), userName: socket.username, message: message}
+		callback(recMessage);
 		socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE, recMessage);
 		console.log("Message passed: " + message + " to lobby: " + socket.lobbyId);
 	});

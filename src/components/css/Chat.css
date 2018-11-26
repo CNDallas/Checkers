@@ -53,12 +53,21 @@
     height: 1em;
 
 }
-.chat-open .chat-line{
+.chat-open .chat-line {
     min-width:16vw;
     list-style: none;
     margin-right: 5px;
     margin-left: 5px;
 }
+
+.chat-open .chat-line-user{
+    min-width:16vw;
+    list-style: none;
+    margin-right: 5px;
+    margin-left: 5px;
+    color: #ffa700;
+}
+
 .chat-open .chat-message {
     display: inline-block;
     text-align: right;

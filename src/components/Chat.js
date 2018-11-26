@@ -11,6 +11,11 @@ class Chat extends Component {
 				this.tick()
 			}, 1000
 		);
+		this.scrollToBottom();
+	};
+
+	componentDidUpdate() {
+		this.scrollToBottom();
 	};
 
 	componentWillUnmount() {
@@ -38,7 +43,13 @@ class Chat extends Component {
 		const {socket} = this.props;
 		const message = value;
 		console.log("Sending Message: " + message);
-		socket.emit(SEND_MESSAGE, message);
+		socket.emit(SEND_MESSAGE, message, (userMessage) => {
+			if (this.state.chatMessages.filter(e => e.id === userMessage.id).length === 0) {
+				const chatMessages = [...this.state.chatMessages];
+				chatMessages.push(userMessage);
+				this.setState({chatMessages});
+			}
+		});
 		const sendMessage = "Message Sent";
 		this.setState({sendMessage});
 	};
@@ -49,7 +60,7 @@ class Chat extends Component {
 			if (this.state.chatMessages.filter(e => e.id === recMessage.id).length === 0) {
 				console.log("Message Rec: " + recMessage.message);
 				const chatMessages = [...this.state.chatMessages];
-				chatMessages.push(recMessage)
+				chatMessages.push(recMessage);
 				this.setState({chatMessages});
 			}
 		});
@@ -69,10 +80,14 @@ class Chat extends Component {
 		}
 	};
 
+	scrollToBottom = () => {
+		this.lastMessage.scrollIntoView({ behavior: "smooth" });
+	}
+
 	render() {
 		const {isChatOpen, sendMessage, chatMessages} = this.state;
 		let chat = chatMessages.map(m => (
-			<li key={m.id} className="chat-line"><span className="chat-username">{m.userName}</span><span className="chat-message">{m.message}</span></li>
+			<li key={m.id} className={m.userName === this.props.socket.username?"chat-line-user":"chat-line"}><span className="chat-username">{m.userName}</span><span className="chat-message">{m.message}</span></li>
 		));
 
 		return (
@@ -85,10 +100,13 @@ class Chat extends Component {
 						</div>
 						<ul>{chat}</ul>
 						<input type="text" className="chat-box" onChange={this.onChangeHandler}
-						       onKeyDown={this.keyPressHandler} value={sendMessage}/>
+						       onKeyDown={this.keyPressHandler}  onClick={ () => this.setState({sendMessage: ""})} value={sendMessage}/>
+						<div style={ {float:"left", clear: "both" }} ref={(el) => { this.lastMessage = el; }}>
+						</div>
 					</div>
 					:
 					<button className="toggle-chat" onClick={this.toggleChatHandler}>Chat</button>
+
 				}
 			</React.Fragment>
 		)
