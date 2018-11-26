@@ -1,4 +1,4 @@
-Be sure to import ../api/Evens with something such as:
+Be sure to import ../api/Events with something such as:
 const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events')
 
 you can make a move with socket.emit(MAKE_MOVE, fromX, fromY, toX, toY)
