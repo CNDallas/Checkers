@@ -5,6 +5,8 @@ import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";
 import * as checkers_client from "./checkers_client.js"; //Leaving out as it throws a bunch of errors atm
 
+
+
 class Checkers extends Component {
 	constructor(props, context) {
 		super(props, context);
@@ -126,7 +128,10 @@ class Checkers extends Component {
 	};
 
 
-
+	imagesHTML = () => {
+		return(
+		<img id="checkerP1" src={require('./img/p1_img.png')} />)
+	};
 
 
 
@@ -137,7 +142,9 @@ class Checkers extends Component {
 			CHECKERS! - {lobbyId}
 				{this.turnHTML()}
 				{this.badHTML()}
+				{this.imagesHTML()}
 			</div>
+
 		)}
 }
 

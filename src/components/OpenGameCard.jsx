@@ -39,6 +39,7 @@ const openGameCard = (props) => {
 						<span id="strKing">King Me!</span></span>
 				</div>
 			</div>
+			<img id="image" src={require('./img/p1_img.png')} alt="" />
 		</div>
 
 	);
