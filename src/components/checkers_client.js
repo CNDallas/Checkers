@@ -40,7 +40,8 @@ function initBoard() {
 				else
 				{
 					//TODO
-						spaces[y][x] = new piece ("piece" + (y*8 + x),false,false,x,y);
+					spaces[y][x] = null;
+						//spaces[y][x] = new piece ("piece" + (y*8 + x),false,false,x,y);
 				}
 			} else {
 				cell.backgroundColor = "white";
