@@ -21,7 +21,7 @@ class Checkers extends Component {
 	navigationBarUpdater = () => {
 		const navItems = [
 			{func: this.props.exitGame, text: 'Exit Game', key: uuidv4()},
-			{func: this.viewStats, text: 'View Stats', key: uuidv4()},
+			{func: this.props.viewStatsHandler, text: 'View Stats', key: uuidv4()},
 			{func: this.props.logout, text: 'Logout', key: uuidv4()}
 		];
 		const nBar = <NavBar linkItems={navItems}/>;
