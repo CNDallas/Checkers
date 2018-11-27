@@ -1,7 +1,7 @@
 .navigation {
     top:0;
     list-style: none;
-    padding: 1vw;
+    padding: .5vw;
     margin: 0;
     position: sticky;
     z-index: 2;
@@ -10,7 +10,7 @@
 
 .nav_list_item {
     background: radial-gradient(circle farthest-side, rgba(11, 34, 82, 0.3), rgba(0, 0, 0, 0));
-    padding: 1vw;
+    padding: .5vw;
     z-index: 1;
     color: #FFA700;
     font-size: 1vw;
@@ -39,7 +39,6 @@
 
 .navIcon {
     display: inline-block;
-
     vertical-align: middle;
     font-size: 1vw;
     padding-inline-end: .75vw;

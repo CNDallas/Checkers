@@ -18,7 +18,7 @@ const openGameCard = (props) => {
 			</div>
 				<div className="actions">
 					<button onClick={props.joinGame} className="btn" id='join'>Join Game</button>
-					<button className="btn" id='message'>Send Message</button>
+					<button className="btn" id='message' onClick={props.pm} >Send Message</button>
 				</div>
 		</div>
 

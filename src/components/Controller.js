@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 import Dashboard from './Dashboard'
 import Checkers from './Checkers'
 import Chat from "./Chat";
+import Stats from"./Stats"
 import uuidv4 from 'uuid/v4'
 const socketUrl = "http://localhost:8081";
 
@@ -19,7 +20,9 @@ class Controller extends Component {
 		socket: null,
 		lobbyId: "Dashboard",
 		game: false,
-		navigationBar: null
+		navigationBar: null,
+		pmUsername: "Send Message",
+		showStats: false
 	};
 
 	componentWillMount() {
@@ -58,16 +61,36 @@ class Controller extends Component {
 		this.setState({game,lobbyId});
 	};
 
+	viewStatsHandler = () => {
+		console.log("Viewing Stats")
+		this.setState({showStats:true})
+	}
+
+	closeStatsHandler = () => {
+		this.setState({showStats:false})
+	}
+
+	pmHandler = (username) => {
+		console.log("PMING")
+		const pmUsername = "/w "+username + " ";
+		this.setState({pmUsername});
+	}
+
 
 	render() {
-		const {socket, navigationBar, lobbyId, game} = this.state;
-		let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout} updateNavigationBar={this.updateNavigationBar}/>;
+		const {socket, navigationBar, lobbyId, game, pmUsername, showStats} = this.state;
+		let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout} updateNavigationBar={this.updateNavigationBar} pm={this.pmHandler} viewStatsHandler={this.viewStatsHandler}/>;
 			if (game) {
-				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar} exitGame={this.exitGameHandler}/>;
+				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar} exitGame={this.exitGameHandler} viewStatsHandler={this.viewStatsHandler}/>;
 			}
 
 		return (
-			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>{navigationBar}<div className='main'>{mainDisplay}<Chat socket={socket}/></div></div>
+			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>
+				{navigationBar}
+			<div className='main'>
+				<Stats show={showStats} handleClose={this.closeStatsHandler}/>
+
+				{mainDisplay}<Chat socket={socket} pmUsername={pmUsername}/></div></div>
 		);
 	}
 

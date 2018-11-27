@@ -1,5 +1,4 @@
 import React from 'react'
-import "tachyons"
 import "./css/NavBar.css"
 
 const navBar = (props) =>  {

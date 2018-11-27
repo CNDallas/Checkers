@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {CREATE_GAME, IS_GAME_OPEN, REFRESH_LOBBY} from '../api/Events';
 import OpenGameCard from './OpenGameCard';
 import "./css/Dashboard.css";
-import "tachyons";
 import NavBar from "./NavBar";
 import "../App.css";
 import uuidv4 from 'uuid/v4';
@@ -43,12 +42,16 @@ class Dashboard extends Component {
 		console.log(Id);
 		socket.emit(IS_GAME_OPEN, Id, (isOpen) => {
 			if (isOpen) {
-				this.props.moveToGame(Id)
+				this.props.moveToGame(Id);
 			} else {
 				this.refreshLobbyHandler();
 			}
 		});
 	};
+
+	pmPassUp = (username) => {
+		this.props.pm(username);
+	}
 
 
 	viewStats = () => {
@@ -66,7 +69,8 @@ class Dashboard extends Component {
 				gameLobbies.map(games => (
 					<span className='card' key={games.Id + "span"}>
 							<OpenGameCard key={games.Id} host={games.hostname} id={games.Id}
-							              joinGame={this.joinGameHandler.bind(this, games.Id)}/>
+							              joinGame={this.joinGameHandler.bind(this, games.Id)}
+											pm={this.pmPassUp.bind(this, games.hostname)}/>
 						</span>
 				))
 			)
@@ -77,7 +81,7 @@ class Dashboard extends Component {
 		const navItems = [
 			{func: this.createGameHandler, text: 'Create Game', key: uuidv4()},
 			{func: this.refreshLobbyHandler, text: 'Refresh Lobby', key: uuidv4()},
-			{func: this.viewStats, text: 'View Stats', key: uuidv4()},
+			{func: this.props.viewStatsHandler, text: 'View Stats', key: uuidv4()},
 			{func: this.props.logout, text: 'Logout', key: uuidv4()}
 		];
 		const nBar = <NavBar linkItems={navItems}/>;

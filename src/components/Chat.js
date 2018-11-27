@@ -5,7 +5,6 @@ import "./css/Checkers.css"
 import "./css/Chat.css";
 
 class Chat extends Component {
-
 	componentDidMount() {
 		this.timerID = setInterval(() => {
 				this.tick()
@@ -37,6 +36,10 @@ class Chat extends Component {
 
 	tick() {
 		this.messageReceiver();
+		if (this.props.pmUsername){
+			console.log("PMING")
+			this.setState({sendMessage: this.props.pmUsername})
+		}
 	};
 
 	sendMessage = (value) => {
@@ -86,6 +89,12 @@ class Chat extends Component {
 		}
 	}
 
+	messageOnClickHandler = (e) => {
+		if (e.target.value === "Send Message"){
+			this.setState({sendMessage: ""})
+		}
+	}
+
 	render() {
 		const {isChatOpen, sendMessage, chatMessages} = this.state;
 		let chat = chatMessages.map(m => (
@@ -102,7 +111,7 @@ class Chat extends Component {
 						</div>
 						<ul>{chat}</ul>
 						<input type="text" className="chat-box" onChange={this.onChangeHandler}
-						       onKeyDown={this.keyPressHandler}  onClick={ () => this.setState({sendMessage: ""})} value={sendMessage}/>
+						       onKeyDown={this.keyPressHandler}  onClick={this.messageOnClickHandler} value={sendMessage}/>
 						<div style={ {float:"left", clear: "both" }} ref={(el) => { this.lastMessage = el; }}>
 						</div>
 					</div>
