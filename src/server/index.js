@@ -17,7 +17,7 @@ app.get('/', function(req, res) {
 const SocketManager = require('./SocketManager')
 io.on('connection', SocketManager)
 
-server.listen(PORT, function () {
+server.listen(PORT, '0.0.0.0',function () {
 	console.log('Successful Connection');
 });
 

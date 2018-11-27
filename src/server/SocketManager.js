@@ -15,12 +15,14 @@ module.exports = function (socket) {
 			addConnectedUser(sessionId, username);
 			socket.username = username;
 			socket.join(dashboard);
+			socket.join(username);
 			socket.lobbyId = dashboard;
 		} else {
 			console.log("New user with username: " + username + " and session ID: " + sessionId);
 			addConnectedUser(sessionId, username);
 			socket.username = username;
 			socket.join(dashboard);
+			socket.join(username);
 			socket.lobbyId = dashboard;
 		}
 		console.log("authentication finished");
@@ -50,8 +52,7 @@ module.exports = function (socket) {
 			socket.join(socket.lobbyId);
 			socket.isHost = false;
 		} else {
-			const sysError = {id: uuidv4(), userName: "SYSTEM", message: "Game is no longer available", color: "#FF0000"};
-			io.to(socket.id).emit(RECEIVE_MESSAGE, sysError)
+			io.to(socket.id).emit(RECEIVE_MESSAGE, systemMessage("Game is no longer available",uuidv4()))
 		}
 		console.log(id + " isOpen: " + open);
 		callback(open);
@@ -60,8 +61,7 @@ module.exports = function (socket) {
 
 	socket.on(REFRESH_LOBBY, (callback) => {
 		const outgoing = getGames();
-		const recMessage = {id: uuidv4(), userName: "SYSTEM", message: "Lobby Refreshed", color: "#FF0000"};
-		io.to(socket.id).emit(RECEIVE_MESSAGE,recMessage)
+		io.to(socket.id).emit(RECEIVE_MESSAGE,systemMessage("Lobby Refreshed",uuidv4()))
 		callback({gameLobbies: outgoing});
 		console.log("Lobby Refresh Requested")
 	});
@@ -72,15 +72,6 @@ module.exports = function (socket) {
 		socket.to(socket.lobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY)
 	});
 
-	socket.on(SEND_MESSAGE, (message, callback) => {
-		const genId = uuidv4();
-		const recMessage = {id: genId, userName: socket.username, message: message, color: "#FFFFFF"};
-		const toSender = {id: genId, userName: socket.username, message: message, color: "#ffa700"};
-		callback(toSender);
-		socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE, recMessage);
-		console.log("Message passed: " + message + " to lobby: " + socket.lobbyId);
-	});
-
 	socket.on(END_GAME, () => {
 		if (socket.isHost){
 			endGame(socket.lobbyId);
@@ -89,6 +80,64 @@ module.exports = function (socket) {
 		socket.lobbyId = dashboard;
 		socket.isHost = null;
 	});
+
+	//Chat listeners
+	socket.on(SEND_MESSAGE, (message, callback) => {
+		const genId = uuidv4();
+		if (message.charAt(0) === '/') { //Command initiated
+			let messageArray = message.split(" ");
+			messageArray = messageArray.filter(m => m !== "");
+			console.log("Command rec: " + messageArray);
+			if (messageArray[0].toLowerCase() === "/w") { //Sends private message
+				if (!messageArray[1]){
+					callback(systemMessage("No username given",genId))
+				} else 	if (!messageArray[2]){
+					callback(systemMessage("No message given",genId))
+				} else {
+					const toUser = messageArray[1];
+					const pm = messageArray.slice(2, messageArray.length + 1).join(" ");
+					const toSender = privateMessage(socket.username, toUser, pm,genId);
+					console.log("Private Message To: " + toUser + " Message: " + pm);
+					console.log("Private Message Return: " + toSender);
+					callback(toSender);
+				}
+			} else if (messageArray[0].toLowerCase() === "/all"){
+				const messageToAll = {id: genId, userName: "To All: " + socket.username, message: messageArray.slice(1, messageArray.length + 1).join(" "), color: "#FFFFFF"};
+				const toSender = {id: genId, userName: "To All: " + socket.username, message: messageArray.slice(1, messageArray.length + 1).join(" "), color: "#FFA700"};
+				socket.broadcast.emit(RECEIVE_MESSAGE,messageToAll);
+				callback(toSender)
+			} else {
+				const toSender = systemMessage(messageArray[0] + " is not a valid command",genId)
+				callback(toSender)
+			}
+		}else { //sends message to current lobby
+			const recMessage = {id: genId, userName: socket.username, message: message, color: "#FFFFFF"};
+			const toSender = {id: genId, userName: socket.username, message: message, color: "#ffa700"};
+			socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE, recMessage);
+			callback(toSender);
+			console.log("Message passed: " + message + " to lobby: " + socket.lobbyId);
+		}
+
+
+	});
+
+	function privateMessage(fromUser,toUser,pm,genId){
+		if (isUser(toUser)) {
+			const messageOut = {id: genId, userName: "PM from "+ fromUser, message: pm, color: "#0e495f"};
+			io.to(toUser).emit(RECEIVE_MESSAGE, messageOut);
+			return {id: genId, userName: "PM to "+ toUser, message: pm, color: "#ffe267"};
+		} else {
+			console.log("User not found for PM: " + toUser);
+			return systemMessage("The user: " + toUser + " was not found",genId);
+
+		}
+	}
+
+	function systemMessage(message,genId){
+		const output ={id: genId, userName: "SYSTEM", message: message, color: "#FF0000"};
+		console.log("System Message: " + output.message +"message Id: " + output.id);
+		return output;
+	}
 
 
 
@@ -146,11 +195,15 @@ const connectedUsers = new function () {
 	this.userCount = 0;
 	this.lobbyCount = 0;
 	this.inGameCount = 0;
-	this.userList = [];
+	this.userList = []; //Layout {Id: sessionId, username: userName, location: 'Location'}
 };
 
 function checkConnectedUsers(sessionId) {
 	return connectedUsers.userList.find(user => user.Id === sessionId);
+}
+
+function isUser(userName) {
+	return connectedUsers.userList.find(user => user.username === userName);
 }
 
 function addConnectedUser(sessionId, userName) {

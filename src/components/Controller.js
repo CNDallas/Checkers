@@ -10,10 +10,6 @@ import Stats from"./Stats"
 import uuidv4 from 'uuid/v4'
 const socketUrl = "http://localhost:8081";
 
-
-
-
-
 class Controller extends Component {
 
 	state = {
@@ -21,7 +17,7 @@ class Controller extends Component {
 		lobbyId: "Dashboard",
 		game: false,
 		navigationBar: null,
-		pmUsername: "Send Message",
+		message: "Send Message",
 		showStats: false
 	};
 
@@ -73,12 +69,26 @@ class Controller extends Component {
 	pmHandler = (username) => {
 		console.log("PMING")
 		const pmUsername = "/w "+username + " ";
-		this.setState({pmUsername});
+		this.setState({message:pmUsername});
+	}
+
+	onMessageChangeHandler = (event) => {
+		const sendMessage = event.target.value;
+		this.setState({message: sendMessage});
+	};
+
+	messageOnClickHandler = (e) => {
+		if (e.target.value === "Send Message"){
+			this.displayMessage("");
+		}
+	}
+	displayMessage = (message) => {
+		this.setState({message})
 	}
 
 
 	render() {
-		const {socket, navigationBar, lobbyId, game, pmUsername, showStats} = this.state;
+		const {socket, navigationBar, lobbyId, game, message, showStats} = this.state;
 		let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout} updateNavigationBar={this.updateNavigationBar} pm={this.pmHandler} viewStatsHandler={this.viewStatsHandler}/>;
 			if (game) {
 				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar} exitGame={this.exitGameHandler} viewStatsHandler={this.viewStatsHandler}/>;
@@ -89,8 +99,11 @@ class Controller extends Component {
 				{navigationBar}
 			<div className='main'>
 				<Stats show={showStats} handleClose={this.closeStatsHandler}/>
+				{mainDisplay}
+				<Chat socket={socket} message={message} onChange={this.onMessageChangeHandler} onClick={this.messageOnClickHandler} displayMessage={this.displayMessage}/>
+				</div>
 
-				{mainDisplay}<Chat socket={socket} pmUsername={pmUsername}/></div></div>
+			</div>
 		);
 	}
 
