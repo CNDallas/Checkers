@@ -1,3 +1,8 @@
+import * as checkerP1 from './img/p1_img.png';
+import * as checkerP2 from './img/p2_img.png';
+import * as kingP1 from './img/p1_king_img.PNG';
+import * as kingP2 from './img/p2_king_img.PNG';
+
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
@@ -34,7 +39,8 @@ function initBoard() {
 				}
 				else
 				{
-						spaces[y][x]
+					//TODO
+						spaces[y][x] = new piece ("piece" + (y*8 + x),false,false,x,y);
 				}
 			} else {
 				cell.backgroundColor = "white";
@@ -48,6 +54,7 @@ function update_board()
 {
 	var i;
 	var k;
+	var y,x;
 	for(y=0;y<8;y++)
 	{
 		for(x=0;x<8;x++)
@@ -58,9 +65,9 @@ function update_board()
 				spaces[y][x].posY=y;
 				spaces[y][x].posX=x;
 				if (spaces[y][x].isP1) {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = '<img src="img/p1_king_img.png"/>' : '<img src="img/p1_img.png"/>';
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP1.default + '/' + "/>" : "<img src=" + checkerP1.default + '/' + "/>";
 				} else {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = '<img src="img/p2_king_img.png"/>' : '<img src="img/p2_img.png"/>';
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP2.default + '/' + "/>" : "<img src=" + checkerP2.default + '/' + "/>";
 				}
 			}
 			else
@@ -313,3 +320,6 @@ function winner(player) {
 	//just something to freeze any moves
 	//maybe turn = 2?
 }
+
+export {winner, has_valid_capture, has_valid_captures, doMove, selectCell, update_board,
+				initBoard, piece, onCreate, spaces, selectedCell, turn, p1PiecesLeft, p2PiecesLeft};
