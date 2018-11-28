@@ -1,3 +1,7 @@
+.gameBoard {
+  width: 560px;
+  margin: auto;
+}
 
 h1 {
     color: white;
