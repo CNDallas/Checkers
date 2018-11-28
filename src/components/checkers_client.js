@@ -30,7 +30,7 @@ function initBoard() {
 			console.log(y);
 			var cell = document.getElementById("board").rows[y].cells[x];
 
-			if ((y % 2) != (x % 2)) {
+			if ((y % 2) !== (x % 2)) {
 				cell.style.backgroundColor = "black";
 				if (y <= 2) {
 					spaces[y][x] = new piece ("piece" + (y*8 + x),false,true,x,y);
@@ -51,10 +51,7 @@ function initBoard() {
 	}
 	update_board();
 }
-function update_board()
-{
-	var i;
-	var k;
+function update_board(){
 	var y,x;
 	for(y=0;y<8;y++)
 	{
@@ -83,12 +80,12 @@ function update_board()
 
 }
 function selectCell(cell) {
-	if (cell.style.backgroundColor == "black") {
+	if (cell.style.backgroundColor === "black") {
 		if (selectedCell !== null) {
 			if ((turn === 0 && selectedCell.innerHTML.includes("p1"))  ||(turn === 1 && selectedCell.innerHTML.includes("p2")))
 			{
 
-				if (selectedCell != cell) {
+				if (selectedCell !== cell) {
 					doMove(selectedCell, cell);
 				}
 			}
@@ -103,70 +100,6 @@ function selectCell(cell) {
 		selectedCell = null;
 	}
 }
-
-/*function doMove(origin, destination) {
-	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
-
-
-	var originId = parseInt(origin.id.substr(4));
-	var originY = Math.floor(originId / 8);
-	var originX = originId % 8;
-	var destinationId = parseInt(destination.id.substr(4));
-	var destinationY = Math.floor(destinationId / 8);
-	var destinationX = destinationId % 8;
-	var to_move=spaces[originY][originX];
-	var abs_dif=Math.abs(originId - destinationId)
-	if(spaces[destinationY][destinationX])return;
-	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
-	if (!spaces[destinationY][destinationY] && (abs_dif === 7 || abs_dif === 9)) {
-		spaces[destinationY][destinationX] = spaces[originY][originX];
-		spaces[originY][originX] = null;
-		if ((turn === 0 && destinationY == 7) || (turn === 1 && destinationY == 0)) {
-			spaces[destinationY][destinationX].isKing = true;
-		}
-
-		turn = 1 - turn;
-		update_board();
-		return;
-	}
-	var to_kill=originId + (destinationId - originId) / 2;
-	var to_killY=Math.floor(to_kill / 8);
-	var to_killX=Math.floor(to_kill%8);
-	to_kill =spaces[to_killY][to_killX];
-	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_kill && !to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
-		spaces[destinationY][destinationX] = spaces[originY][originX];
-		spaces[originY][originX] = null;
-		p2PiecesLeft--;
-		if (p2PiecesLeft === 0) {
-			winner(1);
-		}
-		if (destinationY === 7) {
-			spaces[destinationY][destinationX].isKing = true;
-		}
-
-		turn = 1 - turn;
-		update_board();
-	}
-	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_kill && to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
-		spaces[destinationY][destinationX] = spaces[originY][originX];
-		spaces[originY][originX] = null;
-		p1PiecesLeft--;
-		if (p1PiecesLeft == 0) {
-			winner(2);
-		}
-		if (destinationY == 0) {
-			spaces[destinationY][destinationX].isKing = true;
-		}
-
-		turn = 1 - turn;
-		update_board();
-	}
-	//var d = document.getElementById(str).innerHTML;
-	//var t = Math.abs(originId - destinationId);
-}
-*/
 var last_move=null;
 function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
@@ -183,12 +116,11 @@ function doMove(origin, destination) {
 	if(spaces[destinationY][destinationX])return;
 	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
 	if(last_move!==null&&last_move!==to_move) return; //exit if a player trys to move a piece who is not the last capture used while it still has captures avalible
-	var t=has_valid_capture();
 	if(has_valid_capture()&& (abs_dif !== 18&&abs_dif!==14))return; //if the palyer has valid captures and isn't trying to make one
 	if (!spaces[destinationY][destinationY] && (abs_dif === 7 || abs_dif === 9)) {
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
-		if ((turn === 0 && destinationY == 7) || (turn === 1 && destinationY == 0)) {
+		if ((turn === 0 && destinationY === 7) || (turn === 1 && destinationY === 0)) {
 			spaces[destinationY][destinationX].isKing = true;
 		}
 
@@ -228,10 +160,10 @@ function doMove(origin, destination) {
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
-		if (p1PiecesLeft == 0) {
+		if (p1PiecesLeft === 0) {
 			winner(2);
 		}
-		if (destinationY == 0) {
+		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
 		}
 		update_board();
@@ -276,7 +208,8 @@ function has_valid_captures(origin)
 			case 3:
 			tar=-18;
 			break;
-
+			default:
+			break;
 		}
 	destinationId=(originY*8)+originX+tar;
 	if(destinationId<0||destinationId>62) continue;//if outside of valid cells
