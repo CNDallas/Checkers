@@ -14,14 +14,15 @@ function onCreate() {
 	initBoard();
 }
 class piece {
-  constructor(id, isKing,isP1,posX,posY) {
-    this.id= id;
+  constructor(id, isKing, isP1, posX, posY) {
+  this.id= id;
 	this.isKing=isKing;
 	this.isP1=isP1;
 	this.posX=posX;
 	this.posY=posY;
   }
 }
+
 function initBoard() {
 	var x = 0;
 	var y = 0;
@@ -51,6 +52,7 @@ function initBoard() {
 	}
 	update_board();
 }
+
 function update_board(){
 	var y,x;
 	for(y=0;y<8;y++)
@@ -79,6 +81,7 @@ function update_board(){
 	document.getElementById("turn").innerHTML=t1+"'s turn";
 
 }
+
 function selectCell(cell) {
 	if (cell.style.backgroundColor === "black") {
 		if (selectedCell !== null) {
@@ -100,7 +103,9 @@ function selectCell(cell) {
 		selectedCell = null;
 	}
 }
+
 var last_move=null;
+
 function doMove(origin, destination) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
@@ -181,6 +186,7 @@ function doMove(origin, destination) {
 	//var d = document.getElementById(str).innerHTML;
 	//var t = Math.abs(originId - destinationId);
 }
+
 function has_valid_captures(origin)
 {
 	if(!origin) return false;
@@ -228,8 +234,8 @@ function has_valid_captures(origin)
 		}
 	}
 	return false;
-
 }
+
 function has_valid_capture()
 {
 	for(var y=0;y<8;y++){
@@ -244,8 +250,8 @@ function has_valid_capture()
 		}
 	}
 	return false;
-
 }
+
 //function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
 function winner(player) {
 	console.log("player " + player + " won!");

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import "./css/checkers.css"
+import "./css/Checkers.css"
 import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";
 import * as checkers_client from "./checkers_client.js"; //Leaving out as it throws a bunch of errors atm
