@@ -7,6 +7,8 @@ import Dashboard from './Dashboard'
 import Checkers from './Checkers'
 import Chat from "./Chat";
 import Stats from"./Stats"
+import Login from "./Login"
+import Register from "./Register"
 import uuidv4 from 'uuid/v4'
 const socketUrl = "http://localhost:8081";
 
@@ -19,10 +21,15 @@ class Controller extends Component {
 		navigationBar: null,
 		message: "Send Message",
 		showStats: false,
-		stats: {}
+		stats: {},
+		username: "unknown",
+		isLoaded: false,
+		login: true,
+		register: false,
+
 	};
 
-	componentWillMount() {
+	componentDidMount() {
 		this.initSocket()
 	}
 
@@ -34,10 +41,14 @@ class Controller extends Component {
 		socket.on('connect', () => {
 			console.log("Connected")
 		});
-		socket.emit(AUTHENTICATE, sessionID, username);
-		socket.username = username;
-		this.setState({socket})
-
+		this.setState({socket,  isLoaded: true})
+		// socket.emit(AUTHENTICATE, sessionID, username);
+		// socket.username = username;
+		// socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
+		// 	stats = {total_games: total_games,wins: wins,total_kings: total_kings};
+		// 	console.log("Stats have been loaded")
+		// 	this.setState({socket, username, stats, isLoaded: true})
+		// });
 	};
 
 	moveToGame = (lobbyId) => {
@@ -46,8 +57,46 @@ class Controller extends Component {
 		this.setState({game, lobbyId})
 	};
 
+	moveToRegister = () => {
+		const register = true;
+		const login = false;
+		console.log("Moving to Register page");
+		this.setState({register, login});
+	};
+
+	moveToLogin = () => {
+		const register = false;
+		const login = true;
+		console.log("Moving to Login page");
+		this.setState({register, login});
+	};
+
 	logout = () => {
 		//TODO
+		const login = true;
+		const {socket} = this.state;
+		console.log("User is logged out");
+
+		//socket.email(LOGOUT, username);
+		this.setState({login});
+	};
+
+	loginAccepted = (username) => {
+		const login = false;
+		const register = false;
+		console.log("Move to dashboard");
+		this.setState({login, register});
+		const {socket} = this.state;
+		const sessionID = uuidv4().substring(0,7);
+		socket.emit(AUTHENTICATE, sessionID, username);
+		socket.username = username;
+		//
+		let stats;
+		socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
+			stats = {total_games: total_games,wins: wins,total_kings: total_kings};
+			console.log("Stats have been loaded")
+			this.setState({socket, username, stats, isLoaded: true})
+		});
 	};
 
 	updateNavigationBar = (navigationBar) => {
@@ -61,13 +110,8 @@ class Controller extends Component {
 	};
 
 	viewStatsHandler = () => {
-		const {socket} = this.state
 		console.log("Viewing Stats")
-		socket.emit(REQUEST_STATS, socket.username, (total_games,wins,total_kings) => {
-			const stats = {total_games: total_games, wins: wins, total_kings: total_kings};
-			console.log("Stats have been loaded")
-			this.setState({showStats: true, stats})
-		});
+		this.setState({showStats:true})
 	}
 
 	closeStatsHandler = () => {
@@ -97,7 +141,7 @@ class Controller extends Component {
 
 	render() {
 
-			const {socket, navigationBar, lobbyId, game, message, showStats, username, stats} = this.state;
+			const {socket, navigationBar, lobbyId, game, message, showStats, username, stats, login, register} = this.state;
 			let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout}
 			                             updateNavigationBar={this.updateNavigationBar} pm={this.pmHandler}
 			                             viewStatsHandler={this.viewStatsHandler}/>;
@@ -105,9 +149,15 @@ class Controller extends Component {
 				mainDisplay = <Checkers socket={socket} lobbyId={lobbyId} updateNavigationBar={this.updateNavigationBar}
 				                        exitGame={this.exitGameHandler} viewStatsHandler={this.viewStatsHandler}/>;
 			}
+			if (login) {
+				mainDisplay = <Login socket={socket} updateNavigationBar={this.updateNavigationBar} loginAccepted={this.loginAccepted} moveToRegister={this.moveToRegister}/>;
+			}
+			if (register) {
+				mainDisplay = <Register socket={socket} updateNavigationBar={this.updateNavigationBar} loginAccepted={this.loginAccepted} moveToLogin={this.moveToLogin}/>;
+			}
 
 		return (
-
+			this.state.isLoaded?
 			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>
 				{navigationBar}
 			<div className='main'>
@@ -116,7 +166,7 @@ class Controller extends Component {
 				<Chat socket={socket} message={message} onChange={this.onMessageChangeHandler} onClick={this.messageOnClickHandler} displayMessage={this.displayMessage}/>
 				</div>
 
-			</div>
+			</div>:<div>Page is loading</div>
 		);
 	}
 

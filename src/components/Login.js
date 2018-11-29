@@ -12,26 +12,36 @@ class Login extends Component {
 		this.navigationBarUpdater();
 		this.state = {
       loginUsername: '',
-      loginPassword: ''
+      loginPassword: '',
+      error: '',
 		};
+    this.handleChangeEvents = this.handleChangeEvents.bind(this);
 	};
 
 
 	navigationBarUpdater = () => {
 		const navItems = [
-			{func: this.props.exitGame, text: 'Exit Game', key: uuidv4()},
-			{func: this.viewStats, text: 'View Stats', key: uuidv4()},
-			{func: this.props.logout, text: 'Logout', key: uuidv4()}
+			{func: this.props.moveToRegister, text: 'Register', key: uuidv4()},
+
 		];
 		const nBar = <NavBar linkItems={navItems}/>;
 		this.props.updateNavigationBar(nBar)
 	};
 
-  LoginFunction = () => {
+  handleChangeEvents(event) {
+    const targetName = event.target.name;
+    const value = event.target.value;
+    //console.log(targetName);
+    this.setState({[targetName]: value});
+  }
+
+  LoginFunction = e => {
+    e.preventDefault();
     const {loginUsername} = this.state;
     const {loginPassword} = this.state;
 
-    fetch('login.php', {
+    //console.log(e);
+    fetch('http://proj-319-048.misc.iastate.edu/js/login.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -45,59 +55,46 @@ class Login extends Component {
       .then((responseJSon) => {
         if(responseJSon === 'Data Matched'){
           console.log("match");
+          this.props.loginAccepted(loginUsername);
         }
         else {
           console.log(responseJSon);
+          this.setState({error: 'Incorrect username or password'});
         }
       }).catch((error) => {
         console.error(error);
       });
     }
 
+
     render(){
       return(
 
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8"></meta>
-            <title>Fact Checkers - Login</title>
-        </head>
         <body>
           <h1>Fact Checkers - Login</h1>
-          <p>Haven't created an account yet? <a href="new_account.php">Register now!</a></p>
 
-
-          <form action="" method="POST">
+          <form onSubmit={this.LoginFunction}>
             <fieldset>
               <legend>Login</legend>
-              <label for="username">Username:</label>
-              <input type="text" name="username" id="username" value="<?php echo $user; ?>" maxlength="16" required/>
+              <label htmlFor="username">Username:</label>
+              <input type="text" onChange={this.handleChangeEvents} name="loginUsername" id="username" defaultValue="" maxLength="16" required/>
 
-              <label for="password">Password:</label>
-              <input type="password" name="password" id="password" maxlength="16" required/>
+              <label htmlFor="password">Password:</label>
+              <input type="password" onChange={this.handleChangeEvents} name="loginPassword" id="password" maxLength="16" required/>
 
-              <input type="submit" value="Submit" />
+              <input type="submit" defaultValue="Submit" />
             </fieldset>
           </form>
-           <div style = "font-size:12px; color:#cc0000; margin-top:10px">
-             <p>
+           <div style ={{fontSize: '12px', color:'#cc0000',marginTop:' 10px'}}>
+             <p>{this.state.error}
 
              </p>
            </div>
 
-           <div id="backhome">
-             <br></br>
-             <br></br>
-             <a href="index.html">Home</a>
-           </div>
         </body>
-       </html>
+
       );
     }
   }
-
-
-
-
 
 export default Login;
