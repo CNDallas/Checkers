@@ -292,7 +292,7 @@ if(!origin)return;
 function has_valid_captures(origin)
 {
 	if(!origin) return false;
-
+	
 	var originY = origin.posY;
 	var originX = origin.posX;
 	var to_move=spaces[originY][originX];
@@ -320,7 +320,7 @@ function has_valid_captures(origin)
 			break;
 		}
 	destinationId=(originY*8)+originX+tar;
-	if(destinationId<0||destinationId>62) continue;//if outside of valid cells
+	if(destinationId<0||destinationId>63) continue;//if outside of valid cells
 	var destinationY = Math.floor(destinationId / 8);
 	var destinationX = destinationId % 8;
 	var originId=originY*8+originX
@@ -328,16 +328,16 @@ function has_valid_captures(origin)
 	var to_killY=Math.floor(to_kill / 8);
 	var to_killX=Math.floor(to_kill%8);
 	if(!origin.isKing&&((origin.isP1&&originId>destinationId)||(!origin.isP1&&originId<destinationId)))continue;
-	if(to_killY===destinationY) return false;
-	if(typeof(spaces[destinationY][destinationX])===typeof(spaces[0][0]))return false;
+	//if(to_killY===destinationY)  continue;
+	if(typeof(spaces[destinationY][destinationX])===typeof(spaces[0][0]))continue;
 	if(!spaces[destinationY][destinationX]&&spaces[to_killY][to_killX]&&(spaces[to_killY][to_killX].isP1!==to_move.isP1))//if nothing in destination and their is a piece in capture squares and its the other players piece
 		{
 			return true;
 		}
 	}
 	return false;
-}
 
+}
 function has_valid_capture()
 {
 	for(var y=0;y<8;y++){
