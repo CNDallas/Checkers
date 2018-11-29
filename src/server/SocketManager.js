@@ -1,4 +1,4 @@
-import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE} from "../api/Events";
+import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE, REQUEST_STATS} from "../api/Events";
 import uuidv4 from 'uuid/v4'
 const util = require('util')
 
@@ -29,6 +29,12 @@ module.exports = function (socket) {
 			socket.lobbyId = dashboard;
 		}
 		console.log("authentication finished");
+	});
+
+	socket.on(REQUEST_STATS, (username, callback) => {
+		dbGetStats(username,  (total_games,wins,total_kings) => {
+			callback(total_games,wins,total_kings)
+		});
 	});
 
 	socket.on('disconnect', () => {
