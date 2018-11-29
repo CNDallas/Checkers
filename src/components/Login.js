@@ -16,6 +16,7 @@ class Login extends Component {
       error: '',
 		};
     this.handleChangeEvents = this.handleChangeEvents.bind(this);
+    this.attemptAlreadyLoggedIn();
 	};
 
 
@@ -34,6 +35,36 @@ class Login extends Component {
     //console.log(targetName);
     this.setState({[targetName]: value});
   }
+
+  attemptAlreadyLoggedIn(){
+    console.log('check');
+    //console.log(e);
+    fetch('http://proj-319-048.misc.iastate.edu/js/login.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: JSON.stringify({
+        username: 'a',
+        password: 'a',
+      })
+    }).then((response) => response.json())
+      .then((responseJSon) => {
+        if(responseJSon === 'Invalid Username or Password Please Try Again'){
+          console.log("Not logged in already.");
+
+        }
+        else  {
+          console.log(responseJSon);
+          this.props.loginAccepted(responseJSon);
+        }
+
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+
 
   LoginFunction = e => {
     e.preventDefault();
@@ -57,10 +88,11 @@ class Login extends Component {
           console.log("match");
           this.props.loginAccepted(loginUsername);
         }
-        else {
+        else  {
           console.log(responseJSon);
-          this.setState({error: 'Incorrect username or password'});
+          this.setState({error: responseJSon});
         }
+
       }).catch((error) => {
         console.error(error);
       });
@@ -71,11 +103,11 @@ class Login extends Component {
       return(
 
         <body>
-          <h1>Fact Checkers - Login</h1>
+          <h1>Login</h1>
 
           <form onSubmit={this.LoginFunction}>
             <fieldset>
-              <legend>Login</legend>
+
               <label htmlFor="username">Username:</label>
               <input type="text" onChange={this.handleChangeEvents} name="loginUsername" id="username" defaultValue="" maxLength="16" required/>
 
