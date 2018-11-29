@@ -3,7 +3,7 @@ import "./css/checkers.css"
 import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";
 import * as checkers_client from "./checkers_client.js"; //Leaving out as it throws a bunch of errors atm
-
+const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events');
 
 
 class Checkers extends Component {
@@ -14,10 +14,26 @@ class Checkers extends Component {
 
 	componentDidMount() {
 			checkers_client.onCreate();
+			this.timerID = setInterval(() => {
+				this.tick()
+			}, 1000
+		);
+	};
+	tick() {
+		const {socket} = this.props;
+		socket.on(RECEIVE_MOVE,( fromX, fromY, toX,toY) => {
+			var tarFrom=document.getElementById("cell"+(fromY*8+fromX));
+			var tarTo=document.getElementById("cell"+(toY*8+toX));
+			checkers_client.doMove2(tarFrom,tarTo);
+			return;
+		});
 	};
 	selectCell(t)
 	{
-		checkers_client.selectCell(t);
+		const {socket} = this.props;
+		
+		
+		checkers_client.selectCell(t,socket);
 		//console.log('this is:', t);
 	}
 	navigationBarUpdater = () => {
