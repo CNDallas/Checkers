@@ -5,10 +5,14 @@ const stats = (props) => {
 	const { handleClose, show} = props;
 	const showHideClassName = show ? "modal display-block" : "modal display-none";
 	const {total_games, wins, total_kings} = props.stats;
+	var statsUsername = '';
+	if(props.socket){
+		statsUsername = props.socket.username;
+	}
 	return (
 		<div className={showHideClassName}>
 			<section className="modal-main">
-				<h1>STATS FOR {props.username}</h1>
+				<h1>STATS FOR {statsUsername}</h1>
 				Total Games: {total_games}<br/>
 				Wins: {wins}<br/>
 				Loses: {total_games - wins}<br/>

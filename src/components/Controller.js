@@ -97,7 +97,8 @@ class Controller extends Component {
 	viewStatsHandler = () => {
 		const {socket} = this.state
 		let stats;
-		console.log("Viewing Stats")
+		console.log("Viewing Stats");
+		console.log(socket.username);
 		socket.emit(REQUEST_STATS, socket.username, (total_games,wins,total_kings) => {
 			stats = {total_games: total_games,wins: wins,total_kings: total_kings};
 			console.log("Stats have been loaded")

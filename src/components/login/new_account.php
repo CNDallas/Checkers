@@ -63,10 +63,11 @@ header ("Access-Control-Allow-Headers: *");
     $userexists = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     if($userexists){
-      if($userexists['username'] === $user){
+      //array_push($error, (strcasecmp($userexists['username'], $user) == 0));
+      if((strcasecmp($userexists['username'], $user) == 0)){
         array_push($error, "Username taken already\r\n");
       }
-      if($userexists['email'] === $email){
+      if(strcasecmp($userexists['email'], $email) == 0){
         array_push($error, "Email already associated with an account\r\n");
       }
     }
@@ -76,12 +77,16 @@ header ("Access-Control-Allow-Headers: *");
       $passtostore = password_hash($pass, PASSWORD_DEFAULT);
       $sqlquery = "INSERT INTO users (username, password, email)
                    VALUES('$user', '$passtostore', '$email')";
-      mysqli_query($database, $sqlquery);
+      if(mysqli_query($database, $sqlquery)){
     //  $_SESSION['login'] = $user;
       //$_SESSION['message'] = "Added user to database";
   //    header('location: ../dashboard/userHome.php');
       $SuccessLoginMsg = 'User Registered';
-
+    }
+    else {
+      array_push($error, "Error\r\n");
+      $SuccessLoginMsg = $error;
+    }
 // Converting the message into JSON format.
       $SuccessLoginJSon = json_encode($SuccessLoginMsg);
 
