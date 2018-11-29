@@ -26,7 +26,7 @@ class Controller extends Component {
 		isLoaded: false,
 		login: true,
 		register: false,
-
+		sessionID: '',
 	};
 
 	componentDidMount() {
@@ -36,12 +36,12 @@ class Controller extends Component {
 	initSocket = () => {
 		const socket = io(socketUrl);
 		const sessionID = uuidv4().substring(0,7); //remove testing and make this work with the PHP cookie
-		const username = "Testing"; //remove testing and make this work with the PHP cookie
+		//const username = "Testing"; //remove testing and make this work with the PHP cookie
 		let stats;
 		socket.on('connect', () => {
 			console.log("Connected")
 		});
-		this.setState({socket,  isLoaded: true})
+		this.setState({socket,  isLoaded: true, sessionID})
 		// socket.emit(AUTHENTICATE, sessionID, username);
 		// socket.username = username;
 		// socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
@@ -87,7 +87,7 @@ class Controller extends Component {
 		console.log("Move to dashboard");
 		this.setState({login, register});
 		const {socket} = this.state;
-		const sessionID = uuidv4().substring(0,7);
+		const {sessionID} = this.state;
 		socket.emit(AUTHENTICATE, sessionID, username);
 		socket.username = username;
 		//
