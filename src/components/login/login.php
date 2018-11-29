@@ -1,12 +1,62 @@
 <?php
+header ("Access-Control-Allow-Origin: *");
+header ("Access-Control-Expose-Headers: Content-Length, X-JSON");
+header ("Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS");
+header ("Access-Control-Allow-Headers: *");
   include("config.php");
   session_start();
   #header("location: userHome.html");
-  if(isset($_SESSION['login'])){
-     header("Location: ../dashboard/userHome.php");
+
+  $json = file_get_contents('php://input');
+  $obj = json_decode($json, true);
+
+  $user = $obj['username'];
+  $textpass = $obj['password'];
+
+  $mysql = "SELECT * FROM users WHERE username = '$user'";
+  $result = mysqli_query($database, $mysql);
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  $matches = mysqli_num_rows($result);
+
+
+  if($matches == 1 && password_verify($textpass, $row['password'])){
+    #session_register("user");
+
+    $SuccessLoginMsg = 'Data Matched';
+
+ // Converting the message into JSON format.
+    $SuccessLoginJSon = json_encode($SuccessLoginMsg);
+
+// Echo the message.
+    echo $SuccessLoginJSon ;
+
+
+
+    $_SESSION['login'] = $user;
+    //header("Location: ../dashboard/userHome.php");
+
     die();
+    #$error = "correct";
+  }
+  else {
+    // If the record inserted successfully then show the message.
+    $userJSON =  json_encode($user);
+    echo $userJSON;
+    $InvalidMSG = 'Invalid Username or Password Please Try Again' ;
+
+// Converting the message into JSON format.
+    $InvalidMSGJSon = json_encode($InvalidMSG);
+
+// Echo the message.
+    //echo $InvalidMSGJSon ;
+    $error = "Incorrect username/password";
   }
 
+  if(isset($_SESSION['login'])){
+  //   header("Location: ../dashboard/userHome.php");
+    die();
+  }
+/*
   if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = mysqli_real_escape_string($database, $_POST['username']);
@@ -31,41 +81,5 @@
     }
 
   }
-
+*/
  ?>
- <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <title>Fact Checkers - Login</title>
- </head>
- <body>
-   <h1>Fact Checkers - Login</h1>
-   <p>Haven't created an account yet? <a href="new_account.php">Register now!</a></p>
-
-
-   <form action="" method="POST">
-     <fieldset>
-       <legend>Login</legend>
-       <label for="username">Username:</label>
-       <input type="text" name="username" id="username" value="<?php echo $user; ?>" maxlength="16" required/>
-
-       <label for="password">Password:</label>
-       <input type="password" name="password" id="password" maxlength="16" required/>
-
-       <input type="submit" value="Submit" />
-     </fieldset>
-   </form>
-    <div style = "font-size:12px; color:#cc0000; margin-top:10px">
-      <p>
-        <?php echo $error;?>
-      </p>
-    </div>
-
-    <div id="backhome">
-      <br>
-      <br>
-      <a href="index.html">Home</a>
-    </div>
- </body>
-</html>
