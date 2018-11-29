@@ -75,37 +75,37 @@ class Register extends Component {
       const passwordRegex = new RegExp('/([a-zA-Z0-9]+){6,16}/');
       return(
 
-        <body>
-          <h1>Register</h1>
+        <div>
+	        <span style={{display: 'block' , fontSize: '2em', paddingTop: '.5em', paddingBottom: '1em'}}>Register</span>
 
           <form onSubmit={this.RegisterFunction}>
             <fieldset>
 
               <label htmlFor="username">Username:</label>
               <input type="text" onChange={this.handleChangeEvents} name="registerUsername" id="username" maxLength="16" minLength="3" required validations={{matchRegexp:usernameRegex}}/>
-              <br></br>
+              <br/>
               <label htmlFor="password">Password:</label>
               <input type="password" onChange={this.handleChangeEvents} name="registerPassword" id="password" maxLength="16" minLength="6" required validations={{matchRegexp:passwordRegex}}/>
-              <br></br>
+              <br/>
               <label htmlFor="password2">Confirm Password:</label>
               <input type="password" onChange={this.handleChangeEvents} name="registerPassword2" id="password2" maxLength="16" minLength="6" required validations={{matchRegexp:passwordRegex}}/>
-              <br></br>
+              <br/>
               <label htmlFor="email">Email:</label>
               <input type="email" onChange={this.handleChangeEvents} name="registerEmail" id="email" maxLength ="80" required/>
-              <br></br>
+              <br/>
               <input type="submit" defaultValue="Submit" />
             </fieldset>
           </form>
-          <div style = {{fontSize: '12px', color:'#cc0000',marginTop:' 10px'}}>
+          <div style = {{fontSize: '12px', color:'#cc0000'}}>
             <p>{this.state.error && this.state.error.map(error => (
               <li>{error}</li>
             ))}
-
             </p>
           </div>
+        </div>
 
 
-        </body>
+
       );
     }
   }

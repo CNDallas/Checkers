@@ -102,12 +102,10 @@ class Login extends Component {
     render(){
       return(
 
-        <body>
-          <h1>Login</h1>
-
+        <div>
+	        <span style={{display: 'block' , fontSize: '2em', paddingTop: '.5em', paddingBottom: '1em'}}>Login</span>
           <form onSubmit={this.LoginFunction}>
             <fieldset>
-
               <label htmlFor="username">Username:</label>
               <input type="text" onChange={this.handleChangeEvents} name="loginUsername" id="username" defaultValue="" maxLength="16" required/>
 
@@ -119,11 +117,10 @@ class Login extends Component {
           </form>
            <div style ={{fontSize: '12px', color:'#cc0000',marginTop:' 10px'}}>
              <p>{this.state.error}
-
              </p>
            </div>
+        </div>
 
-        </body>
 
       );
     }
