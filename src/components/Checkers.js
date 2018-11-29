@@ -4,14 +4,17 @@ import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";
 import * as checkers_client from "./checkers_client.js"; //Leaving out as it throws a bunch of errors atm
 const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events');
-
+const {USER_JOINED_HOSTS_GAME}=require('../api/Events');
 
 class Checkers extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.navigationBarUpdater();
 	};
-
+	state = {
+		side: "none"
+		//test: false
+	}
 	componentDidMount() {
 			checkers_client.onCreate();
 			this.timerID = setInterval(() => {
@@ -21,18 +24,29 @@ class Checkers extends Component {
 	};
 	tick() {
 		const {socket} = this.props;
+		socket.on(USER_JOINED_HOSTS_GAME,() => {
+		this.setState({"side":"blue"});
+		});
+		//console.log(this.state);
 		socket.on(RECEIVE_MOVE,( fromX, fromY, toX,toY) => {
 			var tarFrom=document.getElementById("cell"+(fromY*8+fromX));
 			var tarTo=document.getElementById("cell"+(toY*8+toX));
 			checkers_client.doMove2(tarFrom,tarTo);
-			return;
+			if(this.state.side==="none")
+			{
+				this.setState({"side":"red"});
+			}
+		//	return;
 		});
+		
 	};
+	
 	selectCell(t)
 	{
 		const {socket} = this.props;
 		
-		
+		if(checkers_client.turn===0&&this.state.side!=="blue") return;
+		if(checkers_client.turn===1&&this.state.side!=="red") return;
 		checkers_client.selectCell(t,socket);
 		//console.log('this is:', t);
 	}
