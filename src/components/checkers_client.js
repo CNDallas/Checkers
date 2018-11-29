@@ -2,7 +2,7 @@ import * as checkerP1 from './img/p1_img.png';
 import * as checkerP2 from './img/p2_img.png';
 import * as kingP1 from './img/p1_king_img.PNG';
 import * as kingP2 from './img/p2_king_img.PNG';
-const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events');
+const {MAKE_MOVE, RECEIVE_MOVE, USER_WIN, USER_LOSE, USER_KING} = require('../api/Events');
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
@@ -24,6 +24,7 @@ class piece {
 }
 
 function initBoard() {
+	turn = 0;
 	var x = 0;
 	var y = 0;
 	for (y = 0; y < 8; y++) {
@@ -147,7 +148,7 @@ function doMove(origin, destination,socket) {
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
-			winner(1);
+			winner(1, socket);
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -171,7 +172,7 @@ function doMove(origin, destination,socket) {
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
-			winner(2);
+			winner(2, socket);
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -239,7 +240,7 @@ if(!origin)return;
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
-			winner(1);
+			winner(1, socket);
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -263,7 +264,7 @@ if(!origin)return;
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
-			winner(2);
+			winner(2, socket);
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -355,12 +356,18 @@ function has_valid_capture()
 }
 
 //function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
-function winner(player) {
+function winner(player, socket) {
 	console.log("player " + player + " won!");
-	//update player stats (wins, losses)
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
-	//maybe turn = 2?
+	turn = 2;
+	document.getElementById("turn").innerHTML = player + "won the game!";
+	if (1) {
+		socket.emit(USER_WIN);
+	} else {
+		socket.emit(USER_LOSE);
+	}
+	//rematch option- put player back in same game
 }
 
 export {winner, has_valid_capture, has_valid_captures, doMove, selectCell, update_board,

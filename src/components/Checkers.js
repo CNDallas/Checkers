@@ -149,7 +149,7 @@ class Checkers extends Component {
 		const {lobbyId} = this.props;
 		return (
 			<div>
-			CHECKERS! - {lobbyId}
+			CHECKERS! - Lobby ID: {lobbyId}
 				{this.turnHTML()}
 				{this.badHTML()}
 			</div>
