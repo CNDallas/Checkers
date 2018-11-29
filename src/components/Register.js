@@ -70,43 +70,17 @@ class Register extends Component {
       });
     }
 
-
-
-
     render(){
       const usernameRegex = new RegExp('/([a-zA-Z0-9]+){3,16}/');
       const passwordRegex = new RegExp('/([a-zA-Z0-9]+){6,16}/');
       return(
-        /*
+
         <body>
-          <h1>Fact Checkers - Login</h1>
-
-          <form onSubmit={this.LoginFunction}>
-            <fieldset>
-              <legend>Login</legend>
-              <label htmlFor="username">Username:</label>
-              <input type="text" onChange={this.handleChangeEvents} name="loginUsername" id="username" defaultValue="" maxLength="16" required/>
-
-              <label htmlFor="password">Password:</label>
-              <input type="password" onChange={this.handleChangeEvents} name="loginPassword" id="password" maxLength="16" required/>
-
-              <input type="submit" defaultValue="Submit" />
-            </fieldset>
-          </form>
-           <div style ={{fontSize: '12px', color:'#cc0000',marginTop:' 10px'}}>
-             <p>
-
-             </p>
-           </div>
-
-        </body>
-        */
-        <body>
-          <h1>Fact Checkers - Register</h1>
+          <h1>Register</h1>
 
           <form onSubmit={this.RegisterFunction}>
             <fieldset>
-              <legend>Register</legend>
+
               <label htmlFor="username">Username:</label>
               <input type="text" onChange={this.handleChangeEvents} name="registerUsername" id="username" maxLength="16" minLength="3" required validations={{matchRegexp:usernameRegex}}/>
               <br></br>
@@ -135,9 +109,6 @@ class Register extends Component {
       );
     }
   }
-
-
-
 
 
 export default Register;

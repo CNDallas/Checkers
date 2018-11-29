@@ -13,6 +13,7 @@ module.exports = function (socket) {
 	//Account control listeners
 	socket.on(AUTHENTICATE, (sessionId, username) => {
 		console.log("authenticating: ");
+
 		if (checkConnectedUsers(sessionId)) {
 			console.log("User is already connect with username: " + username + " and session ID: " + sessionId);
 			addConnectedUser(sessionId, username);
@@ -36,6 +37,8 @@ module.exports = function (socket) {
 			callback(total_games,wins,total_kings)
 		});
 	});
+
+//	socket.on(LOGOUT, (username))
 
 	socket.on('disconnect', () => {
 		//TODO
