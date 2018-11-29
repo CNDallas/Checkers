@@ -3,6 +3,7 @@ import * as checkerP2 from './img/p2_img.png';
 import * as kingP1 from './img/p1_king_img.PNG';
 import * as kingP2 from './img/p2_king_img.PNG';
 const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events');
+const {USER_WIN,USER_LOSE,USER_KING} = require('../api/Events');
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
@@ -148,9 +149,11 @@ function doMove(origin, destination,socket) {
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
 			winner(1);
+			socket.emit(USER_WIN);
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
+			socket.emit(USER_KING);
 		}
 			update_board();
 		if(has_valid_captures(to_move))
@@ -172,9 +175,11 @@ function doMove(origin, destination,socket) {
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
 			winner(2);
+			socket.emit(USER_WIN);
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
+		socket.emit(USER_KING);
 		}
 		update_board();
 		if(has_valid_captures(to_move))
@@ -196,7 +201,7 @@ function doMove(origin, destination,socket) {
 	//var d = document.getElementById(str).innerHTML;
 	//var t = Math.abs(originId - destinationId);
 }
-function doMove2(origin, destination) {
+function doMove2(origin, destination,socket) {
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
 if(!origin)return;
@@ -240,6 +245,7 @@ if(!origin)return;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
 			winner(1);
+			socket.emit(USER_LOSE);
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -263,7 +269,9 @@ if(!origin)return;
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
+			
 			winner(2);
+			socket.emit(USER_LOSE);
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
