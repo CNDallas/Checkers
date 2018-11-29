@@ -19,12 +19,10 @@ class Controller extends Component {
 		navigationBar: null,
 		message: "Send Message",
 		showStats: false,
-		stats: {},
-		username: "unknown",
-		isLoaded: false
+		stats: {}
 	};
 
-	componentDidMount() {
+	componentWillMount() {
 		this.initSocket()
 	}
 
@@ -38,11 +36,8 @@ class Controller extends Component {
 		});
 		socket.emit(AUTHENTICATE, sessionID, username);
 		socket.username = username;
-		socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
-			stats = {total_games: total_games,wins: wins,total_kings: total_kings};
-			console.log("Stats have been loaded")
-			this.setState({socket, username, stats, isLoaded: true})
-		});
+		this.setState({socket})
+
 	};
 
 	moveToGame = (lobbyId) => {
@@ -66,8 +61,13 @@ class Controller extends Component {
 	};
 
 	viewStatsHandler = () => {
+		const {socket} = this.state
 		console.log("Viewing Stats")
-		this.setState({showStats:true})
+		socket.emit(REQUEST_STATS, socket.username, (total_games,wins,total_kings) => {
+			const stats = {total_games: total_games, wins: wins, total_kings: total_kings};
+			console.log("Stats have been loaded")
+			this.setState({showStats: true, stats})
+		});
 	}
 
 	closeStatsHandler = () => {
@@ -107,7 +107,7 @@ class Controller extends Component {
 			}
 
 		return (
-			this.state.isLoaded?
+
 			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>
 				{navigationBar}
 			<div className='main'>
@@ -116,7 +116,7 @@ class Controller extends Component {
 				<Chat socket={socket} message={message} onChange={this.onMessageChangeHandler} onClick={this.messageOnClickHandler} displayMessage={this.displayMessage}/>
 				</div>
 
-			</div>:<div>Page is loading</div>
+			</div>
 		);
 	}
 

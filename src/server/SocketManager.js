@@ -1,4 +1,4 @@
-import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE, REQUEST_STATS} from "../api/Events";
+import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE, REQUEST_STATS, USER_WIN, USER_LOSE, USER_KING} from "../api/Events";
 import uuidv4 from 'uuid/v4'
 const util = require('util')
 
@@ -35,6 +35,15 @@ module.exports = function (socket) {
 		dbGetStats(username,  (total_games,wins,total_kings) => {
 			callback(total_games,wins,total_kings)
 		});
+	});
+	socket.on(USER_WIN, () =>{
+		dbAddWin(socket.username)
+	});
+	socket.on(USER_LOSE, () =>{
+		dbAddLose(socket.username)
+	});
+	socket.on(USER_KING, () =>{
+		dbAddKing(socket.username)
 	});
 
 	socket.on('disconnect', () => {
@@ -147,7 +156,10 @@ module.exports = function (socket) {
 
 				}
 
-			} else {
+			} else if (messageArray[0].toLowerCase() === "/addWin"){
+				dbAddWin(socket.username);
+			}
+			else {
 				const toSender = systemMessage(messageArray[0] + " is not a valid command",genId)
 				callback(toSender)
 
@@ -310,7 +322,12 @@ function dbIsUser(userName, callback) {
 			console.log(err);
 			return callback(false);
 		});
-
-
-
 }
+
+function dbAddWin(username){
+	database.execute('UPDATE users SET wins = wins + 1 WHERE username = ?',[username]);
+	}
+
+
+
+
