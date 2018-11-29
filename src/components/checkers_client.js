@@ -81,12 +81,8 @@ function update_board(){
 	document.getElementById("turn").innerHTML=t1+"'s turn";
 
 }
-<<<<<<< HEAD
 
-function selectCell(cell) {
-=======
 function selectCell(cell,socket) {
->>>>>>> fd3bca632a90094cf248dff4b49a7686c5aa976c
 	if (cell.style.backgroundColor === "black") {
 		if (selectedCell !== null) {
 			if ((turn === 0 && (selectedCell.innerHTML.includes(checkerP1)||selectedCell.innerHTML.includes(kingP1)))  ||(turn === 1 && (selectedCell.innerHTML.includes(checkerP2)||selectedCell.innerHTML.includes(kingP2))) )
@@ -109,12 +105,8 @@ function selectCell(cell,socket) {
 }
 
 var last_move=null;
-<<<<<<< HEAD
 
-function doMove(origin, destination) {
-=======
 function doMove(origin, destination,socket) {
->>>>>>> fd3bca632a90094cf248dff4b49a7686c5aa976c
 	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
 
@@ -142,8 +134,8 @@ function doMove(origin, destination,socket) {
 		update_board();
 		has_moved=true;
 		socket.emit(MAKE_MOVE, originX, originY, destinationX, destinationY);
-		return; 
-		
+		return;
+
 	}
 	var to_kill=originId + (destinationId - originId) / 2;
 	var to_killY=Math.floor(to_kill / 8);
@@ -234,8 +226,8 @@ if(!origin)return;
 		update_board();
 		has_moved=true;
 		//socket.emit(MAKE_MOVE, originX, originY, destinationX, destinationY);
-		return; 
-		
+		return;
+
 	}
 	var to_kill=originId + (destinationId - originId) / 2;
 	var to_killY=Math.floor(to_kill / 8);
