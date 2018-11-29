@@ -21,12 +21,11 @@ class Controller extends Component {
 		navigationBar: null,
 		message: "Send Message",
 		showStats: false,
-		stats: {},
-		username: "unknown",
 		isLoaded: false,
 		login: true,
 		register: false,
 		sessionID: '',
+		stats: {}
 	};
 
 	componentDidMount() {
@@ -35,21 +34,13 @@ class Controller extends Component {
 
 	initSocket = () => {
 		const socket = io(socketUrl);
-		const sessionID = uuidv4().substring(0,7); //remove testing and make this work with the PHP cookie
-		//const username = "Testing"; //remove testing and make this work with the PHP cookie
-		let stats;
+		const sessionID = uuidv4().substring(0, 7); //remove testing and make this work with the PHP cookie
 		socket.on('connect', () => {
 			console.log("Connected")
 		});
-		this.setState({socket,  isLoaded: true, sessionID})
-		// socket.emit(AUTHENTICATE, sessionID, username);
-		// socket.username = username;
-		// socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
-		// 	stats = {total_games: total_games,wins: wins,total_kings: total_kings};
-		// 	console.log("Stats have been loaded")
-		// 	this.setState({socket, username, stats, isLoaded: true})
-		// });
-	};
+		this.setState({socket})
+	}
+
 
 	moveToGame = (lobbyId) => {
 		const game = true;
@@ -90,13 +81,7 @@ class Controller extends Component {
 		const {sessionID} = this.state;
 		socket.emit(AUTHENTICATE, sessionID, username);
 		socket.username = username;
-		//
-		let stats;
-		socket.emit(REQUEST_STATS, username, (total_games,wins,total_kings) => {
-			stats = {total_games: total_games,wins: wins,total_kings: total_kings};
-			console.log("Stats have been loaded")
-			this.setState({socket, username, stats, isLoaded: true})
-		});
+
 	};
 
 	updateNavigationBar = (navigationBar) => {
@@ -110,8 +95,15 @@ class Controller extends Component {
 	};
 
 	viewStatsHandler = () => {
+		const {socket} = this.state
+		let stats;
 		console.log("Viewing Stats")
-		this.setState({showStats:true})
+		socket.emit(REQUEST_STATS, socket.username, (total_games,wins,total_kings) => {
+			stats = {total_games: total_games,wins: wins,total_kings: total_kings};
+			console.log("Stats have been loaded")
+			this.setState({showStats: true, stats})
+		});
+
 	}
 
 	closeStatsHandler = () => {
@@ -141,7 +133,7 @@ class Controller extends Component {
 
 	render() {
 
-			const {socket, navigationBar, lobbyId, game, message, showStats, username, stats, login, register} = this.state;
+			const {socket, navigationBar, lobbyId, game, message, showStats, login, stats, register} = this.state;
 			let mainDisplay = <Dashboard socket={socket} moveToGame={this.moveToGame} logout={this.logout}
 			                             updateNavigationBar={this.updateNavigationBar} pm={this.pmHandler}
 			                             viewStatsHandler={this.viewStatsHandler}/>;
@@ -157,16 +149,15 @@ class Controller extends Component {
 			}
 
 		return (
-			this.state.isLoaded?
 			<div className="App"><div className='banner'><span className="header"> Checkers</span></div>
 				{navigationBar}
 			<div className='main'>
-				<Stats show={showStats} handleClose={this.closeStatsHandler} username={username} stats={stats}/>
+				<Stats show={showStats} handleClose={this.closeStatsHandler} stats={stats}/>
 				{mainDisplay}
 				<Chat socket={socket} message={message} onChange={this.onMessageChangeHandler} onClick={this.messageOnClickHandler} displayMessage={this.displayMessage}/>
 				</div>
 
-			</div>:<div>Page is loading</div>
+			</div>
 		);
 	}
 
