@@ -38,10 +38,11 @@ module.exports = function (socket) {
 		});
 	});
 	socket.on(USER_WIN, () =>{
-		dbAddWin(socket.username)
+		dbAddWin(socket.username);
+		dbAddGame(socket.username);
 	});
 	socket.on(USER_LOSE, () =>{
-		dbAddLose(socket.username)
+		dbAddGame(socket.username)
 	});
 	socket.on(USER_KING, () =>{
 		dbAddKing(socket.username)
@@ -149,7 +150,8 @@ module.exports = function (socket) {
 					dbIsUser(userName, (isUser) => {
 						if (isUser) {
 							dbGetStats(userName, (total_games,wins,total_kings) => {
-								callback(systemMessage("Stats for User: " + userName + " -- Total Games: " + total_games + " Wins: " + wins + " Total Times Kinged: " + total_kings));
+								const message = "Stats for User: " + userName + " -- Total Games: " + total_games + " Wins: " + wins + " Total Times Kinged: " + total_kings
+								callback(systemMessage(message, genId));
 							})
 
 						} else {
@@ -159,8 +161,15 @@ module.exports = function (socket) {
 
 				}
 
-			} else if (messageArray[0].toLowerCase() === "/addWin"){
+			}else if (messageArray[0].toLowerCase() === "/addwin"){ // TODO remove but can be used for testing atm
 				dbAddWin(socket.username);
+				callback(systemMessage("Req to add win initiated", genId));
+			}else if (messageArray[0].toLowerCase() === "/addgame"){
+				dbAddGame(socket.username);
+				callback(systemMessage("Req to add game initiated", genId));
+			}else if (messageArray[0].toLowerCase() === "/addking"){
+				dbAddKing(socket.username);
+				callback(systemMessage("Req to add king initiated", genId));
 			}
 			else {
 				const toSender = systemMessage(messageArray[0] + " is not a valid command",genId)
@@ -327,9 +336,38 @@ function dbIsUser(userName, callback) {
 		});
 }
 
-function dbAddWin(username){
-	database.execute('UPDATE users SET wins = wins + 1 WHERE username = ?',[username]);
-	}
+function dbAddWin(userName){
+	database.execute('UPDATE users SET wins = wins + 1 WHERE username = ?',[userName])
+		.then( () => {
+			console.log("DB add win to user: " + userName);
+		})
+		.catch( (err)=>
+		{
+			console.log(err);
+		});
+}
+
+function dbAddGame(userName){
+	database.execute('UPDATE users SET total_games = total_games + 1 WHERE username = ?',[userName])
+		.then( () => {
+			console.log("DB add game to user: " + userName);
+		})
+		.catch( (err)=>
+		{
+			console.log(err);
+		});
+}
+
+function dbAddKing(userName){
+	database.execute('UPDATE users SET total_kings = total_kings + 1 WHERE username = ?',[userName])
+		.then( () => {
+			console.log("DB add kings to user: " + userName);
+		})
+		.catch( (err)=>
+		{
+			console.log(err);
+		});
+}
 
 
 
