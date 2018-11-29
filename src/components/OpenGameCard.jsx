@@ -25,17 +25,17 @@ const openGameCard = (props) => {
 			<div className="stats">
 				<div className="box">
 					<span className="boxInfo">
-					<span id='wins'>523<br/></span>
+					<span id='wins'>{props.wins}<br/></span>
 						<span id="strWins">Wins</span></span>
 				</div>
 				<div className="box">
 					<span className="boxInfo">
-					<span id='loses'>1387<br/></span>
-						<span id="strLoses">Loses</span></span>
+					<span id='loses'>{props.games}<br/></span>
+						<span id="strLoses">Total Games</span></span>
 				</div>
 				<div className="box">
 					<span className="boxInfo">
-					<span id="kings">146<br/></span>
+					<span id="kings">{props.kings}<br/></span>
 						<span id="strKing">King Me!</span></span>
 				</div>
 			</div>

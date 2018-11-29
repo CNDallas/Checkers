@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {RECEIVE_MESSAGE, SEND_MESSAGE} from '../api/Events';
-import 'tachyons'
-import "./css/Checkers.css"
 import "./css/Chat.css";
 import FullMessage from "./FullMessage"
 

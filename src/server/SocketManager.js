@@ -1,8 +1,11 @@
 import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE} from "../api/Events";
 import uuidv4 from 'uuid/v4'
+const util = require('util')
+
 
 const io = require('./index.js').io;
 const dashboard = "./dashboard";
+const database = require('./database.js');
 
 /* Handles communication with clients */
 module.exports = function (socket) {
@@ -84,10 +87,12 @@ module.exports = function (socket) {
 	//Chat listeners
 	socket.on(SEND_MESSAGE, (message, callback) => {
 		const genId = uuidv4();
+
 		if (message.charAt(0) === '/') { //Command initiated
 			let messageArray = message.split(" ");
 			messageArray = messageArray.filter(m => m !== "");
 			console.log("Command rec: " + messageArray);
+
 			if (messageArray[0].toLowerCase() === "/w") { //Sends private message
 				if (!messageArray[1]){
 					callback(systemMessage("No username given",genId))
@@ -101,14 +106,45 @@ module.exports = function (socket) {
 					console.log("Private Message Return: " + toSender);
 					callback(toSender);
 				}
-			} else if (messageArray[0].toLowerCase() === "/all"){
-				const messageToAll = {id: genId, userName: "To All: " + socket.username, message: messageArray.slice(1, messageArray.length + 1).join(" "), color: "#FFFFFF"};
-				const toSender = {id: genId, userName: "To All: " + socket.username, message: messageArray.slice(1, messageArray.length + 1).join(" "), color: "#FFA700"};
-				socket.broadcast.emit(RECEIVE_MESSAGE,messageToAll);
+
+			} else if (messageArray[0].toLowerCase() === "/all") {
+				const messageToAll = {
+					id: genId,
+					userName: "To All: " + socket.username,
+					message: messageArray.slice(1, messageArray.length + 1).join(" "),
+					color: "#FFFFFF"
+				};
+				const toSender = {
+					id: genId,
+					userName: "To All: " + socket.username,
+					message: messageArray.slice(1, messageArray.length + 1).join(" "),
+					color: "#FFA700"
+				};
+				socket.broadcast.emit(RECEIVE_MESSAGE, messageToAll);
 				callback(toSender)
+
+			}else if (messageArray[0].toLowerCase() === "/stats"){
+				if (!messageArray[1]) {
+					callback(systemMessage("No username given", genId));
+				}else {
+					const userName = messageArray[1];
+					dbIsUser(userName, (isUser) => {
+						if (isUser) {
+							dbGetStats(userName, (total_games,wins,total_kings) => {
+								callback(systemMessage("Stats for User: " + userName + " -- Total Games: " + total_games + " Wins: " + wins + " Total Times Kinged: " + total_kings));
+							})
+
+						} else {
+							callback(systemMessage("No such user found", genId));
+						}
+					})
+
+				}
+
 			} else {
 				const toSender = systemMessage(messageArray[0] + " is not a valid command",genId)
 				callback(toSender)
+
 			}
 		}else { //sends message to current lobby
 			const recMessage = {id: genId, userName: socket.username, message: message, color: "#FFFFFF"};
@@ -128,7 +164,7 @@ module.exports = function (socket) {
 			return {id: genId, userName: "PM to "+ toUser, message: pm, color: "#ffe267"};
 		} else {
 			console.log("User not found for PM: " + toUser);
-			return systemMessage("The user: " + toUser + " was not found",genId);
+			return systemMessage("The user: " + toUser + " is not online",genId);
 
 		}
 	}
@@ -138,9 +174,6 @@ module.exports = function (socket) {
 		console.log("System Message: " + output.message +"message Id: " + output.id);
 		return output;
 	}
-
-
-
 };
 
 
@@ -156,10 +189,11 @@ const gameCollection = new function () {
 
 function addGame(Creator, lobbyId) {
 	gameCollection.totalgameCount++;
-	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isOpen: true});
+	dbGetStats(Creator, (total_games,wins,total_kings) => {
+	gameCollection.gameList.push({Id:lobbyId, hostname: Creator, isOpen: true, total_games, wins , total_kings});
 	toGameConnectedUsers(Creator, lobbyId);
 	console.log(gameCollection.gameList.find(g => g.Id === lobbyId));
-	return lobbyId;
+	});
 }
 
 function joinGame(user, lobbyId) {
@@ -245,3 +279,32 @@ function getUserList (){
 	return connectedUsers.userList;
 }
 
+
+//DATABASE FUNCTIONS
+
+function dbGetStats(username, callback) {
+	database.execute('SELECT * FROM users WHERE users.username = ?', [username])
+		.then(([username]) =>{
+			const{total_games,wins,total_kings} = username[0];
+			console.log(total_games,wins,total_kings);
+			return callback(total_games,wins,total_kings);
+		})
+		.catch((err) =>{
+			console.log("Man Down: " + err);
+		});
+}
+
+function dbIsUser(userName, callback) {
+	database.execute('SELECT * FROM users WHERE users.username = ?', [userName])
+		.then(([username]) => {
+			console.log(username.length);
+			return callback(username.length)
+		})
+		.catch((err) => {
+			console.log(err);
+			return callback(false);
+		});
+
+
+
+}

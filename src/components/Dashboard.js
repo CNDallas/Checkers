@@ -70,7 +70,8 @@ class Dashboard extends Component {
 					<span className='card' key={games.Id + "span"}>
 							<OpenGameCard key={games.Id} host={games.hostname} id={games.Id}
 							              joinGame={this.joinGameHandler.bind(this, games.Id)}
-											pm={this.pmPassUp.bind(this, games.hostname)}/>
+											pm={this.pmPassUp.bind(this, games.hostname)}
+											wins={games.wins} games={games.total_games} kings={games.total_kings}/>
 						</span>
 				))
 			)

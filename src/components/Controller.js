@@ -28,7 +28,7 @@ class Controller extends Component {
 	initSocket = () => {
 		const socket = io(socketUrl);
 		const sessionID = uuidv4().substring(0,7); //remove testing and make this work with the PHP cookie
-		const username = "User" + uuidv4().substring(0,7); //remove testing and make this work with the PHP cookie
+		const username = "Testing"; //remove testing and make this work with the PHP cookie
 		socket.on('connect', () => {
 			console.log("Connected")
 		});
