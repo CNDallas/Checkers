@@ -1,4 +1,4 @@
-import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE, REQUEST_STATS, USER_WIN, USER_LOSE, USER_KING} from "../api/Events";
+import {AUTHENTICATE, CREATE_GAME, END_GAME, USER_DISCONNECTED, LOGOUT, REFRESH_LOBBY, MAKE_MOVE, RECEIVE_MOVE, IS_GAME_OPEN, RECEIVE_MESSAGE, SEND_MESSAGE, REQUEST_STATS, USER_WIN, USER_LOSE, USER_KING,USER_JOINED_HOSTS_GAME} from "../api/Events";
 import uuidv4 from 'uuid/v4'
 const util = require('util')
 
@@ -73,6 +73,8 @@ module.exports = function (socket) {
 			socket.lobbyId = joinGame(socket.username,id);
 			socket.join(socket.lobbyId);
 			socket.isHost = false;
+			socket.to(socket.lobbyId).emit(RECEIVE_MESSAGE,systemMessage(socket.username + " has joined the game!",uuidv4()));
+			socket.to(socket.lobbyId).emit(USER_JOINED_HOSTS_GAME, socket.username);
 		} else {
 			io.to(socket.id).emit(RECEIVE_MESSAGE, systemMessage("Game is no longer available",uuidv4()))
 		}
