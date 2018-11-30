@@ -11,9 +11,11 @@ var turn = 0;
 var p1PiecesLeft = 12;
 var p2PiecesLeft = 12;
 var won =0;
+
 function onCreate() {
 	initBoard();
 }
+
 class piece {
   constructor(id, isKing, isP1, posX, posY) {
   this.id= id;
@@ -82,7 +84,7 @@ function update_board(){
 	var t1=(turn)? "red":"blue";
 	if(won>=2)
 	{
-			
+
 	}
 	else{
 	document.getElementById("turn").innerHTML=t1+"'s turn";
@@ -390,6 +392,7 @@ function has_valid_captures(origin)
 	return false;
 
 }
+
 function has_valid_capture() //checks if player of current turn has a valid move available
 {
 	for(var y=0;y<8;y++){
@@ -443,11 +446,12 @@ function has_valid_move() //checks if player of current turn has a valid move av
 	return has_valid_capture() || false;
 }
 
-//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
+//TODO function that returns an array of valid move ids
+//TODO adjust the highlighting function to turn valid move back grounds yellow
+
 function winner(player) {
 	console.log("player " + player + " won!");
-	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
-	//just something to freeze any moves
+	//make rematch button
 	won=turn+2;
 	if(player===2)
 			{
