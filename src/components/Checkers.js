@@ -38,13 +38,13 @@ class Checkers extends Component {
 			}
 		//	return;
 		});
-		
+
 	};
-	
+
 	selectCell(t)
 	{
 		const {socket} = this.props;
-		
+
 		if(checkers_client.turn===0&&this.state.side!=="blue") return;
 		if(checkers_client.turn===1&&this.state.side!=="red") return;
 		checkers_client.selectCell(t,socket);
@@ -163,7 +163,7 @@ class Checkers extends Component {
 		const {lobbyId} = this.props;
 		return (
 			<div>
-			CHECKERS! - Lobby ID: {lobbyId}
+			CHECKERS! - Game ID: {lobbyId}
 				{this.turnHTML()}
 				{this.badHTML()}
 			</div>
