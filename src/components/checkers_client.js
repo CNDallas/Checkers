@@ -2,12 +2,8 @@ import * as checkerP1 from './img/p1_img.png';
 import * as checkerP2 from './img/p2_img.png';
 import * as kingP1 from './img/p1_king_img.PNG';
 import * as kingP2 from './img/p2_king_img.PNG';
-<<<<<<< HEAD
-const {MAKE_MOVE, RECEIVE_MOVE, USER_WIN, USER_LOSE, USER_KING} = require('../api/Events');
-=======
 const {MAKE_MOVE} = require('../api/Events');
 const {USER_WIN,USER_LOSE,USER_KING} = require('../api/Events');
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
@@ -126,14 +122,14 @@ function doMove(origin, destination,socket) {
 	var originY = Math.floor(originId / 8);
 	var originX = originId % 8;
 	var to_move=spaces[originY][originX];
-	
+
 	/*
 	destination info
 	*/
 	var destinationId = parseInt(destination.id.substr(4));
 	var destinationY = Math.floor(destinationId / 8);
 	var destinationX = destinationId % 8;
-	
+
 	/*
 	misc info
 	*/
@@ -171,7 +167,7 @@ function doMove(origin, destination,socket) {
 	var to_jump=originId + (destinationId - originId) / 2;
 	var to_jumpY=Math.floor(to_jump / 8);
 	var to_jumpX=Math.floor(to_jump%8);
-	
+
 	to_jump =spaces[to_jumpY][to_jumpX];
 	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_jump && !to_jump.isP1) {
 		spaces[to_jumpY][to_jumpX]=null;
@@ -179,12 +175,8 @@ function doMove(origin, destination,socket) {
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
-<<<<<<< HEAD
-			winner(1, socket);
-=======
 			winner(1);
 			socket.emit(USER_WIN);
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -209,12 +201,8 @@ function doMove(origin, destination,socket) {
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
-<<<<<<< HEAD
-			winner(2, socket);
-=======
 			winner(2);
 			socket.emit(USER_WIN);
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -251,7 +239,7 @@ if(!origin)return;
 	var originY = Math.floor(originId / 8);
 	var originX = originId % 8;
 	var to_move=spaces[originY][originX];
-	
+
 	/*
 	all the info for the destination
 	*/
@@ -259,12 +247,12 @@ if(!origin)return;
 	var destinationId = parseInt(destination.id.substr(4));
 	var destinationY = Math.floor(destinationId / 8);
 	var destinationX = destinationId % 8;
-	
-	
-	
+
+
+
 	var abs_dif=Math.abs(originId - destinationId);
-	
-	
+
+
 	if(spaces[destinationY][destinationX])return;
 	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
 	if(last_move!==null&&last_move!==to_move) return; //exit if a player trys to move a piece who is not the last capture used while it still has captures avalible
@@ -285,20 +273,16 @@ if(!origin)return;
 	var to_jumpY=Math.floor(to_jump / 8);
 	var to_jumpX=Math.floor(to_jump%8);
 	to_jump =spaces[to_jumpY][to_jumpX];
-	
-	
+
+
 	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_jump && !to_jump.isP1) {
 		spaces[to_jumpY][to_jumpX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
-<<<<<<< HEAD
-			winner(1, socket);
-=======
 			winner(1);
 			socket.emit(USER_LOSE);
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -321,13 +305,9 @@ if(!origin)return;
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
-<<<<<<< HEAD
-			winner(2, socket);
-=======
-			
+
 			winner(2);
 			socket.emit(USER_LOSE);
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -416,22 +396,9 @@ function winner(player, socket, function inside Checkers.js to call lines 365-36
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
-<<<<<<< HEAD
-	turn = 2;
-	document.getElementById("turn").innerHTML = player + "won the game!";
-	if (1) {
-		socket.emit(USER_WIN);
-	} else {
-		socket.emit(USER_LOSE);
-	}
-	//rematch option- put player back in same game
-	//update kings count above
-	//see what darron has working
-=======
 	//maybe turn = 2?
 	won = turn+2;
 	console.log(won);
->>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 }
 
 export {winner, has_valid_capture, has_valid_captures, doMove, selectCell, update_board,
