@@ -48,7 +48,9 @@ module.exports = function (socket) {
 		dbAddKing(socket.username)
 	});
 
-//	socket.on(LOGOUT, (username))
+	socket.on(LOGOUT, (username) => {
+		socket.username = '';
+	});
 
 	socket.on('disconnect', () => {
 		//TODO
@@ -370,7 +372,3 @@ function dbAddKing(userName){
 			console.log(err);
 		});
 }
-
-
-
-
