@@ -82,7 +82,7 @@ function update_board(){
 	var t1=(turn)? "red":"blue";
 	if(won>=2)
 	{
-			document.getElementById("turn").innerHTML= (turn==2)?"Red Wins!":"Blue Wins!";
+			
 	}
 	else{
 	document.getElementById("turn").innerHTML=t1+"'s turn";
@@ -448,7 +448,14 @@ function winner(player) {
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
-	won = turn+2;
+	won=turn+2;
+	if(player===2)
+			{
+				 document.getElementById("turn").innerHTML="Red Wins!";
+			}
+			else{
+				 document.getElementById("turn").innerHTML="Blue Wins!";
+			}
 	console.log(won);
 }
 
