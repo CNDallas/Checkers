@@ -84,7 +84,7 @@ header ("Access-Control-Allow-Headers: *");
       $SuccessLoginMsg = 'User Registered';
     }
     else {
-      array_push($error, "Error\r\n");
+      array_push($error, mysqli_error($database));
       $SuccessLoginMsg = $error;
     }
 // Converting the message into JSON format.
