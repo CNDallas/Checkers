@@ -293,7 +293,7 @@ if(!origin)return;
 function has_valid_captures(origin)
 {
 	if(!origin) return false;
-	
+
 	var originY = origin.posY;
 	var originX = origin.posX;
 	var to_move=spaces[originY][originX];
@@ -356,7 +356,7 @@ function has_valid_capture()
 }
 
 //function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
-function winner(player, socket) {
+function winner(player, socket, function inside Checkers.js to call lines 365-369) {
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
@@ -368,6 +368,8 @@ function winner(player, socket) {
 		socket.emit(USER_LOSE);
 	}
 	//rematch option- put player back in same game
+	//update kings count above
+	//see what darron has working
 }
 
 export {winner, has_valid_capture, has_valid_captures, doMove, selectCell, update_board,
