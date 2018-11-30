@@ -31,7 +31,7 @@ class Checkers extends Component {
 		socket.on(RECEIVE_MOVE,( fromX, fromY, toX,toY) => {
 			var tarFrom=document.getElementById("cell"+(fromY*8+fromX));
 			var tarTo=document.getElementById("cell"+(toY*8+toX));
-			checkers_client.doMove2(tarFrom,tarTo,socket);
+			checkers_client.process_move(tarFrom,tarTo,socket);
 			if(this.state.side==="none")
 			{
 				this.setState({"side":"red"});
