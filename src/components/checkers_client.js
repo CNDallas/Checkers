@@ -391,8 +391,9 @@ function has_valid_capture()
 	return false;
 }
 
-//function has_valid_moves()//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
-function winner(player, socket, function inside Checkers.js to call lines 365-369) {
+//function has_valid_moves()
+//TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
+function winner(player) {
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
