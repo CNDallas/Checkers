@@ -2,14 +2,19 @@ import * as checkerP1 from './img/p1_img.png';
 import * as checkerP2 from './img/p2_img.png';
 import * as kingP1 from './img/p1_king_img.PNG';
 import * as kingP2 from './img/p2_king_img.PNG';
+<<<<<<< HEAD
 const {MAKE_MOVE, RECEIVE_MOVE, USER_WIN, USER_LOSE, USER_KING} = require('../api/Events');
+=======
+const {MAKE_MOVE} = require('../api/Events');
+const {USER_WIN,USER_LOSE,USER_KING} = require('../api/Events');
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
 
 var selectedCell = null;
 var turn = 0;
 var p1PiecesLeft = 12;
 var p2PiecesLeft = 12;
-
+var won =0;
 function onCreate() {
 	initBoard();
 }
@@ -27,6 +32,7 @@ function initBoard() {
 	turn = 0;
 	var x = 0;
 	var y = 0;
+	turn=0;
 	for (y = 0; y < 8; y++) {
 		for (x = 0; x < 8; x++) {
 			console.log(y);
@@ -66,9 +72,9 @@ function update_board(){
 				spaces[y][x].posY=y;
 				spaces[y][x].posX=x;
 				if (spaces[y][x].isP1) {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP1.default + '/' + "/>" : "<img src=" + checkerP1.default + '/' + "/>";
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP1.default + "//>" : "<img src=" + checkerP1.default + "//>";
 				} else {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP2.default + '/' + "/>" : "<img src=" + checkerP2.default + '/' + "/>";
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP2.default + "//>" : "<img src=" + checkerP2.default + "//>";
 				}
 			}
 			else
@@ -78,9 +84,13 @@ function update_board(){
 		}
 	}
 	var t1=(turn)? "red":"blue";
-
+	if(won>=2)
+	{
+			document.getElementById("turn").innerHTML= (turn==2)?"Red Wins!":"Blue Wins!";
+	}
+	else{
 	document.getElementById("turn").innerHTML=t1+"'s turn";
-
+	}
 }
 
 function selectCell(cell,socket) {
@@ -108,22 +118,39 @@ function selectCell(cell,socket) {
 var last_move=null;
 
 function doMove(origin, destination,socket) {
-	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
 
-
+	/*
+	origin info
+	*/
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
 	var originX = originId % 8;
+	var to_move=spaces[originY][originX];
+	
+	/*
+	destination info
+	*/
 	var destinationId = parseInt(destination.id.substr(4));
 	var destinationY = Math.floor(destinationId / 8);
 	var destinationX = destinationId % 8;
-	var to_move=spaces[originY][originX];
+	
+	/*
+	misc info
+	*/
 	var abs_dif=Math.abs(originId - destinationId)
 	var has_moved=false;
+
+	/*
+	checks for validity
+	*/
 	if(spaces[destinationY][destinationX])return;
 	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
 	if(last_move!==null&&last_move!==to_move) return; //exit if a player trys to move a piece who is not the last capture used while it still has captures avalible
 	if(has_valid_capture()&& (abs_dif !== 18&&abs_dif!==14))return; //if the palyer has valid captures and isn't trying to make one
+
+	/*
+	move handling
+	*/
 	if (!spaces[destinationY][destinationY] && (abs_dif === 7 || abs_dif === 9)) {
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
@@ -138,20 +165,30 @@ function doMove(origin, destination,socket) {
 		return;
 
 	}
-	var to_kill=originId + (destinationId - originId) / 2;
-	var to_killY=Math.floor(to_kill / 8);
-	var to_killX=Math.floor(to_kill%8);
-	to_kill =spaces[to_killY][to_killX];
-	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_kill && !to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
+	/*
+	info on jumping
+	*/
+	var to_jump=originId + (destinationId - originId) / 2;
+	var to_jumpY=Math.floor(to_jump / 8);
+	var to_jumpX=Math.floor(to_jump%8);
+	
+	to_jump =spaces[to_jumpY][to_jumpX];
+	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_jump && !to_jump.isP1) {
+		spaces[to_jumpY][to_jumpX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
+<<<<<<< HEAD
 			winner(1, socket);
+=======
+			winner(1);
+			socket.emit(USER_WIN);
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
+			socket.emit(USER_KING);
 		}
 			update_board();
 		if(has_valid_captures(to_move))
@@ -166,16 +203,22 @@ function doMove(origin, destination,socket) {
 		has_moved=true;
 			update_board();
 	}
-	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_kill && to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
+	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_jump && to_jump.isP1) {
+		spaces[to_jumpY][to_jumpX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
+<<<<<<< HEAD
 			winner(2, socket);
+=======
+			winner(2);
+			socket.emit(USER_WIN);
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
+		socket.emit(USER_KING);
 		}
 		update_board();
 		if(has_valid_captures(to_move))
@@ -197,21 +240,31 @@ function doMove(origin, destination,socket) {
 	//var d = document.getElementById(str).innerHTML;
 	//var t = Math.abs(originId - destinationId);
 }
-function doMove2(origin, destination) {
-	//TODO clean this code up its really messy and has alot of things we dont need any more also probably comments as well.... i suppose
+function process_move(origin, destination,socket) {
 
 if(!origin)return;
+	/*
+	all the info for the origin
+	*/
 	var originName =origin.id.substr(4);
 	var originId = parseInt(origin.id.substr(4));
 	var originY = Math.floor(originId / 8);
 	var originX = originId % 8;
+	var to_move=spaces[originY][originX];
+	
+	/*
+	all the info for the destination
+	*/
 	var destName =destination.id.substr(4);
 	var destinationId = parseInt(destination.id.substr(4));
 	var destinationY = Math.floor(destinationId / 8);
 	var destinationX = destinationId % 8;
-	var to_move=spaces[originY][originX];
-	var abs_dif=Math.abs(originId - destinationId)
-	var has_moved=false;
+	
+	
+	
+	var abs_dif=Math.abs(originId - destinationId);
+	
+	
 	if(spaces[destinationY][destinationX])return;
 	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
 	if(last_move!==null&&last_move!==to_move) return; //exit if a player trys to move a piece who is not the last capture used while it still has captures avalible
@@ -225,22 +278,27 @@ if(!origin)return;
 
 		turn = 1 - turn;
 		update_board();
-		has_moved=true;
-		//socket.emit(MAKE_MOVE, originX, originY, destinationX, destinationY);
 		return;
 
 	}
-	var to_kill=originId + (destinationId - originId) / 2;
-	var to_killY=Math.floor(to_kill / 8);
-	var to_killX=Math.floor(to_kill%8);
-	to_kill =spaces[to_killY][to_killX];
-	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_kill && !to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
+	var to_jump=originId + (destinationId - originId) / 2;
+	var to_jumpY=Math.floor(to_jump / 8);
+	var to_jumpX=Math.floor(to_jump%8);
+	to_jump =spaces[to_jumpY][to_jumpX];
+	
+	
+	if (turn === 0 && (abs_dif === 18||abs_dif===14) && to_jump && !to_jump.isP1) {
+		spaces[to_jumpY][to_jumpX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p2PiecesLeft--;
 		if (p2PiecesLeft === 0) {
+<<<<<<< HEAD
 			winner(1, socket);
+=======
+			winner(1);
+			socket.emit(USER_LOSE);
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 7) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -255,16 +313,21 @@ if(!origin)return;
 		last_move=null;
 		turn = 1 - turn;
 		}
-		has_moved=true;
 			update_board();
 	}
-	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_kill && to_kill.isP1) {
-		spaces[to_killY][to_killX]=null;
+	else if (turn === 1 && (abs_dif === 18||abs_dif===14) && to_jump && to_jump.isP1) {
+		spaces[to_jumpY][to_jumpX]=null;
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
 		p1PiecesLeft--;
 		if (p1PiecesLeft === 0) {
+<<<<<<< HEAD
 			winner(2, socket);
+=======
+			
+			winner(2);
+			socket.emit(USER_LOSE);
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 		}
 		if (destinationY === 0) {
 			spaces[destinationY][destinationX].isKing = true;
@@ -279,15 +342,8 @@ if(!origin)return;
 		turn = 1 - turn;
 		last_move=null;
 		}
-		has_moved=true;
 		update_board();
 	}
-	if(has_moved)
-	{
-	//	socket.emit(MAKE_MOVE, originX, originY, destinationX, destinationY);
-	}
-	//var d = document.getElementById(str).innerHTML;
-	//var t = Math.abs(originId - destinationId);
 }
 
 function has_valid_captures(origin)
@@ -300,6 +356,7 @@ function has_valid_captures(origin)
 	var destinationId ;
 	var destinationY ;
 	var destinationX ;
+	var originId=originY*8+originX
 	for(var i=0;i<4;i++)
 	{
 		var tar;
@@ -322,16 +379,15 @@ function has_valid_captures(origin)
 		}
 	destinationId=(originY*8)+originX+tar;
 	if(destinationId<0||destinationId>63) continue;//if outside of valid cells
-	var destinationY = Math.floor(destinationId / 8);
-	var destinationX = destinationId % 8;
-	var originId=originY*8+originX
-	var to_kill=originId + (destinationId - originId) /2;
-	var to_killY=Math.floor(to_kill / 8);
-	var to_killX=Math.floor(to_kill%8);
+	 destinationY = Math.floor(destinationId / 8);
+	 destinationX = destinationId % 8;
+	var to_jump=originId + (destinationId - originId) /2;
+	var to_jumpY=Math.floor(to_jump / 8);
+	var to_jumpX=Math.floor(to_jump%8);
 	if(!origin.isKing&&((origin.isP1&&originId>destinationId)||(!origin.isP1&&originId<destinationId)))continue;
-	//if(to_killY===destinationY)  continue;
+	//if(to_jumpY===destinationY)  continue;
 	if(typeof(spaces[destinationY][destinationX])===typeof(spaces[0][0]))continue;
-	if(!spaces[destinationY][destinationX]&&spaces[to_killY][to_killX]&&(spaces[to_killY][to_killX].isP1!==to_move.isP1))//if nothing in destination and their is a piece in capture squares and its the other players piece
+	if(!spaces[destinationY][destinationX]&&spaces[to_jumpY][to_jumpX]&&(spaces[to_jumpY][to_jumpX].isP1!==to_move.isP1))//if nothing in destination and their is a piece in capture squares and its the other players piece
 		{
 			return true;
 		}
@@ -360,6 +416,7 @@ function winner(player, socket, function inside Checkers.js to call lines 365-36
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
+<<<<<<< HEAD
 	turn = 2;
 	document.getElementById("turn").innerHTML = player + "won the game!";
 	if (1) {
@@ -370,7 +427,12 @@ function winner(player, socket, function inside Checkers.js to call lines 365-36
 	//rematch option- put player back in same game
 	//update kings count above
 	//see what darron has working
+=======
+	//maybe turn = 2?
+	won = turn+2;
+	console.log(won);
+>>>>>>> 0ae7079dc5f18d0f4c972edcf0fb7d0fdad07d54
 }
 
 export {winner, has_valid_capture, has_valid_captures, doMove, selectCell, update_board,
-				initBoard, piece, onCreate, spaces, selectedCell, turn, p1PiecesLeft, p2PiecesLeft,doMove2};
+				initBoard, piece, onCreate, spaces, selectedCell, turn, p1PiecesLeft, p2PiecesLeft,process_move};
