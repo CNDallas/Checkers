@@ -227,8 +227,16 @@ function doMove(origin, destination,socket) {
 	}
 	//var d = document.getElementById(str).innerHTML;
 	//var t = Math.abs(originId - destinationId);
+
+	//check if this move resulted in the player of the current turn (recently updated) having no valid moves
+	var valid_moves = has_valid_move();
+	if (!valid_moves) {
+		winner(2 - turn);
+		socket.emit(USER_WIN);
+	}
 }
-function process_move(origin, destination,socket) {
+
+function process_move(origin, destination, socket) {
 
 if(!origin)return;
 	/*
@@ -254,9 +262,9 @@ if(!origin)return;
 
 
 	if(spaces[destinationY][destinationX])return;
-	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automaticly exit if a player trys to move a non king against its direction
+	if(!to_move.isKing&&((to_move.isP1&&originId>destinationId)||(!to_move.isP1&&originId<destinationId)))return;//automatically exit if a player trys to move a non king against its direction
 	if(last_move!==null&&last_move!==to_move) return; //exit if a player trys to move a piece who is not the last capture used while it still has captures avalible
-	if(has_valid_capture()&& (abs_dif !== 18&&abs_dif!==14))return; //if the palyer has valid captures and isn't trying to make one
+	if(has_valid_capture()&&(abs_dif !== 18&&abs_dif!==14))return; //if the player has valid captures and isn't trying to make one
 	if (!spaces[destinationY][destinationY] && (abs_dif === 7 || abs_dif === 9)) {
 		spaces[destinationY][destinationX] = spaces[originY][originX];
 		spaces[originY][originX] = null;
@@ -324,6 +332,13 @@ if(!origin)return;
 		}
 		update_board();
 	}
+
+	//check if this move resulted in the player of the current turn (recently updated) having no valid moves
+	var valid_moves = has_valid_move();
+	if (!valid_moves) {
+		winner(2 - turn);
+		socket.emit(USER_LOSE);
+	}
 }
 
 function has_valid_captures(origin)
@@ -375,10 +390,10 @@ function has_valid_captures(origin)
 	return false;
 
 }
-function has_valid_capture()
+function has_valid_capture() //checks if player of current turn has a valid move available
 {
 	for(var y=0;y<8;y++){
-		for(var x =0;x<8;x++){
+		for(var x=0;x<8;x++){
 			if(!spaces[y][x]||typeof(spaces[y][x]) === typeof(spaces[0][0])) continue;//if nothing there contine
 			if(spaces[y][x].isP1&&turn===1) continue;// if what is there is not the players piece
 			if(!spaces[y][x].isP1&&turn===0) continue;
@@ -391,13 +406,48 @@ function has_valid_capture()
 	return false;
 }
 
-//function has_valid_moves()
+function has_valid_move() //checks if player of current turn has a valid move available
+{
+	for(var y=0;y<8;y++){
+		for(var x=0;x<8;x++){
+			if(!spaces[y][x]||typeof(spaces[y][x]) === typeof(spaces[0][0])) continue; //nothing there
+			if(spaces[y][x].isP1&&turn===1) continue; //not concerned with other player's pieces
+			if(!spaces[y][x].isP1&&turn===0) continue;
+			if(spaces[y][x].isKing) { //kings can move anywhere
+				if(
+					(y+1<8 && x-1>=0 && !spaces[y+1][x-1]) ||		//down and left
+					(y+1<8 && x+1<8 && !spaces[y+1][x+1]) ||		//down and right
+					(y-1>=0 && x-1>=0 && !spaces[y-1][x-1]) ||	//up and left
+					(y-1>=0 && x+1<8 && !spaces[y-1][x+1])			//up and right
+				) {
+					return true;
+				}
+			} else if(spaces[y][x].isP1) { //P1 is generally moving down; already checked turn
+				if(
+					(y+1<8 && x-1>=0 && !spaces[y+1][x-1]) || //down and left
+					(y+1<8 && x+1<8 && !spaces[y+1][x+1])			//down and right
+				) {
+						return true;
+				}
+
+			} else if(!spaces[y][x].isP1) { //P2 is generally moving up; already checked turn
+				if(
+					(y-1>=0 && x-1>=0 && !spaces[y-1][x-1]) ||	//up and left
+					(y-1>=0 && x+1<8 && !spaces[y-1][x+1])			//up and right
+				) {
+						return true;
+				}
+			}
+		}
+	}
+	return has_valid_capture() || false;
+}
+
 //TODO function that returns an array of valid move ids //TODO2 adjust the highlighting function to turn valid move back grounds yellow
 function winner(player) {
 	console.log("player " + player + " won!");
 	//make some sort of while loop for until you navigate away //i would add an optional rematch button as well
 	//just something to freeze any moves
-	//maybe turn = 2?
 	won = turn+2;
 	console.log(won);
 }
