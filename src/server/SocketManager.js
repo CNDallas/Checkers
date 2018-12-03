@@ -35,6 +35,7 @@ module.exports = function (socket) {
 				.then(result => {
 					socket.lobbyId = result;
 					socket.join(result);
+					socket.join(username);
 					cb(socket.lobbyId);
 					console.log(
 						"User is already connect with username: " +
