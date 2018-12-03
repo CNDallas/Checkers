@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { AUTHENTICATE } from "../api/Events";
-import "tachyons";
+
 
 import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";

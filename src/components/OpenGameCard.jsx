@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/OpenGameCard.css";
-import "tachyons";
+
 
 const openGameCard = props => {
   return (

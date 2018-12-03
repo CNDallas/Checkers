@@ -23,7 +23,6 @@
     "shortid": "^2.2.14",
     "socket.io": "2.1.1",
     "socket.io-client": "2.1.1",
-    "tachyons": "^4.11.1",
     "uuid": "^3.3.2"
   },
   "scripts": {
@@ -36,6 +35,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "10.24.226.175:80",
   "browserslist": [
     ">0.2%",
     "not dead",

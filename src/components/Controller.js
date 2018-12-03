@@ -10,7 +10,8 @@ import Stats from "./Stats";
 import Login from "./Login";
 import Register from "./Register";
 import uuidv4 from "uuid/v4";
-const socketUrl = "http://localhost:8081";
+import path from "path";
+const socketUrl = path.join(__dirname);
 
 class Controller extends Component {
   state = {

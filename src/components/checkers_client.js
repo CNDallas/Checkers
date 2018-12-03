@@ -1,7 +1,7 @@
 import * as checkerP1 from './img/p1_img.png';
 import * as checkerP2 from './img/p2_img.png';
-import * as kingP1 from './img/p1_king_img.PNG';
-import * as kingP2 from './img/p2_king_img.PNG';
+import * as kingP1 from './img/p1_king_img.png';
+import * as kingP2 from './img/p2_king_img.png';
 const {MAKE_MOVE} = require('../api/Events');
 const {USER_WIN,USER_LOSE,USER_KING} = require('../api/Events');
 var spaces = [[],[],[],[],[],[],[],[]]; //each element is either a piece object or null
@@ -70,9 +70,9 @@ function update_board(){
 				spaces[y][x].posY=y;
 				spaces[y][x].posX=x;
 				if (spaces[y][x].isP1) {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP1.default + "//>" : "<img src=" + checkerP1.default + "//>";
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP1.default + ">" : "<img src=" + checkerP1.default + ">";
 				} else {
-					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP2.default + "//>" : "<img src=" + checkerP2.default + "//>";
+					cell.innerHTML = (spaces[y][x].isKing)?cell.innerHTML = "<img src=" + kingP2.default + ">" : "<img src=" + checkerP2.default + ">";
 				}
 			}
 			else
