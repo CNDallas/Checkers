@@ -1,6 +1,6 @@
 .center {
     transition: 1s ease-in-out,
-                z-index 2s linear;
+    z-index 2s linear;
     z-index: 1;
     position: relative;
     margin-top: 2vw;
@@ -32,14 +32,14 @@
 }
 
 .profile .image {
-    padding-top:5%;
+    padding-top: 5%;
     width: 3.9vw;
     height: 25%;
     margin: auto;
 }
 
 .profile .image .circle-1 {
-    position:relative;
+    position: relative;
     z-index: 1;
     width: 100%;
     height: auto;
@@ -50,7 +50,7 @@
 
 }
 
-.profile .image:active .circle-1:active{
+.profile .image:active .circle-1:active {
     transition: .7s ease-in-out;
     width: 250%;
 }
@@ -64,13 +64,14 @@
     height: auto;
     transition: .7s ease-in-out;
 }
-.profile .image img:active{
+
+.profile .image img:active {
     transition: .7s ease-in-out;
     width: 250%;
     height: auto;
 }
 
-.profile .userInfo{
+.profile .userInfo {
     height: 35%;
     padding-top: 13%;
 }
@@ -95,7 +96,7 @@
 .profile .actions {
     height: 40%;
     padding-top: 5%;
-    padding-bottom:5%;
+    padding-bottom: 5%;
 }
 
 .profile .actions .btn {
@@ -124,8 +125,8 @@
 }
 
 .stats {
-    float:right;
-    margin-left:1%;
+    float: right;
+    margin-left: 1%;
     width: 36%;
     height: 100%;
 }
@@ -151,11 +152,10 @@
 }
 
 
-
 .stats .boxInfo {
     position: absolute;
     top: 50%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 
 }

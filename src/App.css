@@ -1,63 +1,56 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
+html,
+body {
+  width: 100%;
+  height: 100%;
 }
 
 #root {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .App {
-    overflow-x: hidden;
-    text-align: center;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  overflow-x: hidden;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    width: 100%;
-    height: 100%;
-   background: linear-gradient(to top,#345EB0, #859ec8);
-    color: white;
-
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #345eb0, #859ec8);
+  color: white;
 }
 
 .banner {
-    background: radial-gradient(circle farthest-side, #0C3484, #0f41a1);
-    overflow: hidden;
-    width: 100%;
-    height: 15vh;
-    z-index: 1;
-    box-shadow: 0 4px 4px #082258;
+  background: radial-gradient(circle farthest-side, #0c3484, #0f41a1);
+  overflow: hidden;
+  width: 100%;
+  height: 15vh;
+  z-index: 1;
+  box-shadow: 0 4px 4px #082258;
 }
 
-
-
 .header {
-    position: relative;
-    font-size: 10vh;
-    font-weight: 700;
-    top: 2.5vh;
+  position: relative;
+  font-size: 10vh;
+  font-weight: 700;
+  top: 2.5vh;
 }
 
 .main {
-    background: radial-gradient(#345EB0, #113989);
-    z-index: 0;
-    width: 90vw;
-    padding-bottom: 2vw;
-    min-height: 100%;
-    height: auto;
-    margin: auto;
+  background: radial-gradient(#345eb0, #113989);
+  z-index: 0;
+  width: 90vw;
+  padding-bottom: 2vw;
+  min-height: 100%;
+  height: auto;
+  margin: auto;
 }
-
-
-
-
-

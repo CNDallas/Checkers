@@ -1,16 +1,16 @@
 .cards {
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-	flex-direction: row-reverse;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
 }
 
 .cards::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
 
 .card {
-	flex-basis: 18.5vw;
+    flex-basis: 18.5vw;
 
 
 }

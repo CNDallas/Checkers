@@ -1,29 +1,30 @@
 .gameBoard {
-  width: 560px;
-  margin: auto;
+    width: 560px;
+    margin: auto;
 }
 
 h1 {
     color: white;
 }
+
 table {
-  /*width: 600px;
-  height: 600px;*/
-  border: 1px solid black;
+    /*width: 600px;
+    height: 600px;*/
+    border: 1px solid black;
 }
 
 tr {
-  /*width: 600px;
-  height: 78px;*/
+    /*width: 600px;
+    height: 78px;*/
 }
 
 td {
-  width: 70px;
-  height: 70px;
-  border: 2px solid black;
+    width: 70px;
+    height: 70px;
+    border: 2px solid black;
 }
 
 img {
-  height: 70px;
-  width: 70px;
+    height: 70px;
+    width: 70px;
 }
