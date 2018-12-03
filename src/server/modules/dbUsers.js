@@ -49,12 +49,12 @@ exports.IsUserMember = userName => {
 };
 
 exports.AddWin = userName => {
-  Users.findAll({
+  Users.findOne({
     where: { username: userName }
   })
     .then(user => {
       user.wins++;
-      return user.save();
+      user.save();
     })
     .then(() => {
       console.log("AddWin Results");
@@ -65,12 +65,12 @@ exports.AddWin = userName => {
 };
 
 exports.AddGameTotal = userName => {
-  Users.findAll({
+  Users.findOne({
     where: { username: userName }
   })
     .then(user => {
       user.total_games++;
-      return user.save();
+      user.save();
     })
     .then(() => {
       console.log("AddGameTotal Results");
@@ -81,12 +81,12 @@ exports.AddGameTotal = userName => {
 };
 
 exports.AddKing = userName => {
-  Users.findAll({
+  Users.findOne({
     where: { username: userName }
   })
     .then(user => {
       user.total_kings++;
-      return user.save();
+      user.save();
     })
     .then(() => {
       console.log("AddKing Results");

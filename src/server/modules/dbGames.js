@@ -97,7 +97,6 @@ exports.JoinGame = (username, lobbyId) => {
 };
 
 exports.RemoveGame = lobbyId => {
-  //TODO create association w online users
   Games.findOne({
     where: { lobby_id: lobbyId }
   })
