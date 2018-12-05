@@ -1,5 +1,6 @@
 .gameBoard {
-    width: 608px;
+    width: 652px;
+    height:652px;
     margin: auto;
 }
 
@@ -19,8 +20,8 @@ tr {
 }
 
 td {
-    width: 70px;
-    height: 70px;
+    width: 77.5px;
+    height: 77.5px;
     border: 2px solid black;
 }
 
