@@ -80,16 +80,25 @@ module.exports = function (socket) {
 		Users.AddGameTotal(socket.username);
 		Games.OpponentLookUp(socket.username, socket.lobbyId)
 			.then(results => {
-				const rankChange = calculateRank(socket.username, results, true);
-				console.log("USER: "+ socket.username + " UPDATING RANK: " + rankChange);
-				const loserRankChange = calculateRank(results, socket.username, false);
-                console.log("USER: " + results + " LOSES UPDATING RANK: " + rankChange);
-				Users.UpdateRank(socket.username, rankChange);
-				Users.UpdateRank(results, loserRankChange);
+				calculateRank(socket.username, results, true)
+					.then(winnerRank=>{
+						console.log("USER: "+ socket.username + " UPDATING RANK: " + winnerRank);
+						calculateRank(results, socket.username, false)
+							.then(loserRank=>{
+								console.log("USER: " + results + " LOSES UPDATING RANK: " + loserRank);
+								Users.UpdateRank(socket.username, winnerRank);
+								Users.UpdateRank(results, loserRank);
+							})
+				});
+
+
 			});
 		Online.SetUserLocation(socket.username, dashboard);
-		Games.RemoveGame(socket.lobbyId);
-		socket.lobbyId = dashboard
+		Games.RemoveGame(socket.lobbyId)
+			.then(()=>{
+				socket.lobbyId = dashboard
+			})
+
 	});
 
 	socket.on(USER_LOSE, () => {
@@ -172,6 +181,7 @@ module.exports = function (socket) {
 
 	//Checker's game listeners
 	socket.on(MAKE_MOVE, (fromX, fromY, toX, toY) => {
+		console.log("Move Sent")
 		socket.to(socket.lobbyId).emit(RECEIVE_MOVE, fromX, fromY, toX, toY);
 	});
 
@@ -315,19 +325,21 @@ function systemMessage(message, genId) {
 }
 
 function calculateRank(p1, p2, isWinner) {
-	Users.GetStats(p1)
-		.then(results => {
-			const {ranking, total_games} = results;
-			const k = total_games < 30 ? 40 : ranking < 2400 ? 20 : 10;
-			Users.GetStats(p2)
-				.then(r2 => {
-					const prob1 = rankProbability(ranking, r2.ranking);
-					const prob2 = rankProbability(r2.ranking, ranking);
-					return isWinner ? p2 + k * (1 - prob1) : p2 + k * (0 - prob2);
-				})
-				.then(o => o);
-		})
-		.then(f => f);
+	return new Promise(resolve => {
+		Users.GetStats(p1)
+			.then(results => {
+				const {ranking, total_games} = results;
+				const k = total_games < 30 ? 40 : ranking < 2400 ? 20 : 10;
+				Users.GetStats(p2)
+					.then(r2 => {
+						const prob1 = rankProbability(ranking, r2.ranking);
+						const prob2 = rankProbability(r2.ranking, ranking);
+						const result = isWinner ?  k * (1 - prob1) : k * (0 - prob2);
+						console.log("Calc Rank: " + result);
+						resolve(result);
+					})
+			})
+	})
 }
 
 function rankProbability(rating1, rating2) {
