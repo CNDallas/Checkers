@@ -46,7 +46,7 @@ exports.OpponentLookUp = (userName, LobbyId) => {
 		})
 			.then(games => {
 				console.log("OpponentLookUp: Result");
-				if (userName.equals(games.host_username)) {
+				if (userName.valueOf() == games.host_username.valueOf()) {
 					resolve(games.opponent_username);
 				}
 				resolve(games.opponent_username);

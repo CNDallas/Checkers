@@ -45,7 +45,7 @@ module.exports = function (socket) {
 					);
 				}).catch((err) => {
 
-			})
+			});
 			socket.username = username;
 		} else {
 			Online.AddOnlineUser(username, sessionId, socket.id)
@@ -56,7 +56,7 @@ module.exports = function (socket) {
 						" and session ID: " +
 						sessionId
 					);
-				})
+				});
 			socket.username = username;
 			socket.join(dashboard);
 			socket.join(username);
@@ -64,7 +64,7 @@ module.exports = function (socket) {
 			cb(socket.lobbyId)
 		}
 		console.log("authentication finished");
-	})
+	});
 
 
 	socket.on(REQUEST_STATS, (username, callback) => {
@@ -81,18 +81,20 @@ module.exports = function (socket) {
 		Games.OpponentLookUp(socket.username, socket.lobbyId)
 			.then(results => {
 				const rankChange = calculateRank(socket.username, results, true);
+				console.log("USER: "+ socket.username + " UPDATING RANK: " + rankChange);
 				const loserRankChange = calculateRank(results, socket.username, false);
+                console.log("USER: " + results + " LOSES UPDATING RANK: " + rankChange);
 				Users.UpdateRank(socket.username, rankChange);
 				Users.UpdateRank(results, loserRankChange);
 			});
-		Online.SetUserLocation(socket.username, dashboard)
+		Online.SetUserLocation(socket.username, dashboard);
 		Games.RemoveGame(socket.lobbyId);
 		socket.lobbyId = dashboard
 	});
 
 	socket.on(USER_LOSE, () => {
 		Users.AddGameTotal(socket.username);
-		Online.SetUserLocation(socket.username, dashboard)
+		Online.SetUserLocation(socket.username, dashboard);
 		socket.lobbyId = dashboard
 	});
 
