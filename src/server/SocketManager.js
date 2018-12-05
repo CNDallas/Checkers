@@ -14,7 +14,9 @@ const {
 	USER_WIN,
 	USER_LOSE,
 	USER_KING,
-	USER_JOINED_HOSTS_GAME
+	USER_JOINED_HOSTS_GAME,
+	USER_WONR,
+	USER_LOSER
 } = require("../api/Events");
 const uuidv4 = require("uuid");
 const io = require("./index.js").io;
@@ -76,9 +78,10 @@ module.exports = function (socket) {
 	});
 
 	socket.on(USER_WIN, () => {
+		const id = socket.lobbyId
 		Users.AddWin(socket.username);
 		Users.AddGameTotal(socket.username);
-		Games.OpponentLookUp(socket.username, socket.lobbyId)
+		Games.OpponentLookUp(socket.username, id)
 			.then(results => {
 				calculateRank(socket.username, results, true)
 					.then(winnerRank=>{
@@ -98,6 +101,7 @@ module.exports = function (socket) {
 			.then(()=>{
 				socket.lobbyId = dashboard
 			})
+		io.to(socket.id).emit(USER_WONR);
 
 	});
 
@@ -105,6 +109,7 @@ module.exports = function (socket) {
 		Users.AddGameTotal(socket.username);
 		Online.SetUserLocation(socket.username, dashboard);
 		socket.lobbyId = dashboard
+		io.to(socket.id).emit(USER_LOSER);
 	});
 
 	socket.on(USER_KING, () => {

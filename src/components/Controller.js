@@ -12,6 +12,7 @@ import Register from "./Register";
 import uuidv4 from "uuid/v4";
 import path from "path";
 const socketUrl = path.join(__dirname);
+//const socketUrl = "localhost:8081"
 
 class Controller extends Component {
   state = {

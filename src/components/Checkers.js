@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import "./css/Checkers.css"
 import uuidv4 from "uuid/v4";
 import NavBar from "./NavBar";
-import * as checkers_client from "./checkers_client.js"; //Leaving out as it throws a bunch of errors atm
-const {MAKE_MOVE, RECEIVE_MOVE} = require('../api/Events');
-const {USER_JOINED_HOSTS_GAME}=require('../api/Events');
+import * as checkers_client from "./checkers_client.js";
+import GameOverMessage from "./GameOverMessage" //Leaving out as it throws a bunch of errors atm
+const {MAKE_MOVE, RECEIVE_MOVE, USER_WONR, USER_JOINED_HOSTS_GAME, USER_LOSER} = require('../api/Events');
 
 class Checkers extends Component {
 	constructor(props, context) {
@@ -12,8 +12,9 @@ class Checkers extends Component {
 		this.navigationBarUpdater();
 	};
 	state = {
-		side: "none"
-		//test: false
+		side: "none",
+		isGameOver: false,
+		isWinnerMessage: ""
 	}
 	componentDidMount() {
 			checkers_client.onCreate();
@@ -38,8 +39,18 @@ class Checkers extends Component {
 			}
 		//	return;
 		});
+		socket.on(USER_WONR, () => {
+			const isWinnerMessage = "Congratz You Won!";
+			const isGameOver = true;
+			this.setState({isGameOver,isWinnerMessage})
+		})
+		socket.on(USER_LOSER, () => {
+			const isWinnerMessage = "You Lost - Better Luck Next Time";
+			const isGameOver = true;
+			this.setState({isGameOver,isWinnerMessage})
+		})
 
-	};
+		};
 
 	selectCell(t)
 	{
@@ -158,12 +169,22 @@ class Checkers extends Component {
 		)
 	};
 
+	closeGameOverHandler = () => {
+		this.props.exitGame();
+	};
+
 
 	render(){
 		const {lobbyId} = this.props;
+		const {isGameOver, isWinnerMessage} = this.state;
 		return (
 			<div>
 			CHECKERS! - Game ID: {lobbyId}
+				<GameOverMessage
+					show={isGameOver}
+					handleClose={this.closeGameOverHandler}
+					isWinner = {isWinnerMessage}
+				/>
 				{this.turnHTML()}
 				{this.badHTML()}
 			</div>
