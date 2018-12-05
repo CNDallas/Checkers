@@ -46,10 +46,11 @@ exports.OpponentLookUp = (userName, LobbyId) => {
 		})
 			.then(games => {
 				console.log("OpponentLookUp: Result");
-				if (userName.valueOf() == games.host_username.valueOf()) {
+				if (userName.valueOf() === games.host_username.valueOf()) {
 					resolve(games.opponent_username);
+				} else {
+					resolve(games.host_username);
 				}
-				resolve(games.opponent_username);
 			})
 			.catch(err => {
 				console.log("OpponentLookUp: err:" + err);
@@ -97,18 +98,21 @@ exports.JoinGame = (username, lobbyId) => {
 };
 
 exports.RemoveGame = lobbyId => {
-  Games.findOne({
-    where: { lobby_id: lobbyId }
-  })
-    .then(games => {
-      games.destroy();
-    })
-    .then(() => {
-      console.log("RemoveGame Results");
-    })
-    .catch(err => {
-      console.log("RemoveGame err:" + err);
-    });
+	return new Promise(resolve => {
+		Games.findOne({
+			where: {lobby_id: lobbyId}
+		})
+			.then(games => {
+				games.destroy();
+			})
+			.then(() => {
+				console.log("RemoveGame Results");
+				resolve(true);
+			})
+			.catch(err => {
+				console.log("RemoveGame err:" + err);
+			});
+	})
 };
 
 exports.GetAllGames = () => {
